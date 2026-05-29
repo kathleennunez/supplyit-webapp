@@ -1,0 +1,48 @@
+<!doctype html>
+<html class="light" lang="en">
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>SupplyIT</title>
+  <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Hanken+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet"/>
+  <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
+  <script>
+    tailwind.config = { darkMode: 'class', theme: { extend: { colors: {primary:'#0d631b',background:'#f8f9ff',surface:'#f8f9ff','on-surface':'#121c2a','on-surface-variant':'#40493d','outline-variant':'#bfcaba','surface-container-low':'#eff4ff','surface-container-lowest':'#ffffff','surface-container-high':'#dee9fc','surface-container-highest':'#d9e3f6','primary-container':'#2e7d32','on-primary-container':'#cbffc2','primary-fixed':'#a3f69c','on-primary-fixed':'#002204',error:'#ba1a1a','error-container':'#ffdad6','on-error-container':'#93000a',secondary:'#0061a4',tertiary:'#794b00','tertiary-fixed':'#ffddb8','on-tertiary-fixed-variant':'#653e00'}, spacing:{gutter:'16px',lg:'24px',xl:'32px','container-margin':'20px'} } } }
+  </script>
+  <style>body{font-family:'Hanken Grotesk',sans-serif}.material-symbols-outlined{font-variation-settings:'FILL' 0,'wght' 400,'GRAD' 0,'opsz' 24}.soft-lift{box-shadow:0 4px 12px rgba(0,0,0,.05)}</style>
+</head>
+<body class="bg-background text-on-surface">
+  <header class="fixed top-0 left-0 right-0 z-50 bg-surface border-b border-outline-variant md:ml-64">
+    <div class="flex justify-between items-center w-full px-container-margin max-w-[1280px] mx-auto h-16">
+      <div class="flex items-center gap-4">
+        <span class="text-headline-md font-headline-md font-bold text-primary">SupplyIT</span>
+      </div>
+      <div class="flex items-center gap-4">
+        <button class="material-symbols-outlined text-on-surface-variant hover:text-primary transition-colors">account_circle</button>
+      </div>
+    </div>
+  </header>
+  <aside class="hidden md:flex flex-col fixed left-0 top-0 h-full w-64 bg-surface border-r border-outline-variant p-4 gap-2 z-[60]">
+    <div class="flex flex-col mb-8 px-4 py-2">
+      <span class="text-headline-sm font-headline-sm font-bold text-primary">SupplyIT</span>
+      <span class="text-label-sm font-label-sm text-on-surface-variant">Agricultural Trade Tool</span>
+    </div>
+    <nav id="side-nav" class="flex flex-col gap-1 flex-grow"></nav>
+    <div class="mt-auto flex flex-col gap-1 border-t border-outline-variant pt-4">
+      <button class="bg-primary text-on-primary w-full py-3 rounded-lg font-label-md mb-4 hover:opacity-90 transition-all">New Plan</button>
+      <button data-page="settings" class="mobile-nav hidden md:flex items-center gap-3 text-on-surface-variant px-4 py-2 text-label-sm hover:bg-surface-container-high transition-colors">
+        <span class="material-symbols-outlined">settings</span><span>Settings</span>
+      </button>
+    </div>
+  </aside>
+  <main class="md:ml-64 pt-24 pb-xl px-container-margin min-h-screen"><div id="app" class="max-w-[1280px] mx-auto"></div></main>
+  <nav class="md:hidden fixed bottom-0 left-0 right-0 bg-surface border-t border-outline-variant flex justify-around items-center h-16 px-4 z-50">
+    <button data-page="dashboard" class="mobile-nav flex flex-col items-center gap-1 text-primary"><span class="material-symbols-outlined">dashboard</span><span class="text-[10px] font-label-sm">Home</span></button>
+    <button data-page="products" class="mobile-nav flex flex-col items-center gap-1 text-on-surface-variant"><span class="material-symbols-outlined">inventory_2</span><span class="text-[10px] font-label-sm">Stock</span></button>
+    <button data-page="prices" class="mobile-nav flex flex-col items-center gap-1 text-on-surface-variant"><span class="material-symbols-outlined">trending_up</span><span class="text-[10px] font-label-sm">Prices</span></button>
+    <button data-page="settings" class="mobile-nav flex flex-col items-center gap-1 text-on-surface-variant"><span class="material-symbols-outlined">account_circle</span><span class="text-[10px] font-label-sm">Profile</span></button>
+  </nav>
+  <script type="module" src="/js/app.js"></script>
+</body>
+</html>

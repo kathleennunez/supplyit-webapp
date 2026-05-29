@@ -1,0 +1,14 @@
+{
+  "healthy": true,
+  "source": "https://www.da.gov.ph/price-monitoring/",
+  "lastSync": "2026-05-29T14:50:16.677Z",
+  "lastAttempt": "2026-05-29T14:50:16.677Z",
+  "coverage": {
+    "commodityGroups": [
+      "LOWLAND VEGETABLES",
+      "HIGHLAND VEGETABLES"
+    ],
+    "rows": 138
+  },
+  "errors": []
+}

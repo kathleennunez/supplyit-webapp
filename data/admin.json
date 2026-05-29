@@ -1,0 +1,6 @@
+{
+  "thresholds": {"highDemandDrop": -20, "lowDemandRise": 30},
+  "planningDefaults": {"region":"NCR", "scenario":"Base", "horizonDays":30},
+  "users": [],
+  "auditLog": []
+}

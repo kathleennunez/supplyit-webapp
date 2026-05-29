@@ -1,0 +1,1106 @@
+[
+  {
+    "weekStart": "2026-01-12",
+    "commodityGroup": "LOWLAND VEGETABLES",
+    "productId": "ampalaya4-5-pcs-kg",
+    "productName": "Ampalaya4-5 pcs/kg",
+    "region": "NCR",
+    "price": 157.08
+  },
+  {
+    "weekStart": "2026-01-19",
+    "commodityGroup": "LOWLAND VEGETABLES",
+    "productId": "ampalaya4-5-pcs-kg",
+    "productName": "Ampalaya4-5 pcs/kg",
+    "region": "NCR",
+    "price": 153.34
+  },
+  {
+    "weekStart": "2026-04-20",
+    "commodityGroup": "LOWLAND VEGETABLES",
+    "productId": "ampalaya4-5-pcs-kg",
+    "productName": "Ampalaya4-5 pcs/kg",
+    "region": "NCR",
+    "price": 116.06
+  },
+  {
+    "weekStart": "2026-05-04",
+    "commodityGroup": "LOWLAND VEGETABLES",
+    "productId": "ampalaya4-5-pcs-kg",
+    "productName": "Ampalaya4-5 pcs/kg",
+    "region": "NCR",
+    "price": 115.97
+  },
+  {
+    "weekStart": "2026-05-11",
+    "commodityGroup": "LOWLAND VEGETABLES",
+    "productId": "ampalaya4-5-pcs-kg",
+    "productName": "Ampalaya4-5 pcs/kg",
+    "region": "NCR",
+    "price": 118.32
+  },
+  {
+    "weekStart": "2026-05-18",
+    "commodityGroup": "LOWLAND VEGETABLES",
+    "productId": "ampalaya4-5-pcs-kg",
+    "productName": "Ampalaya4-5 pcs/kg",
+    "region": "NCR",
+    "price": 120.88
+  },
+  {
+    "weekStart": "2026-01-12",
+    "commodityGroup": "HIGHLAND VEGETABLES",
+    "productId": "bell-pepper-green-localmedium-pc",
+    "productName": "Bell Pepper Green LocalMedium /pc",
+    "region": "NCR",
+    "price": 285.47
+  },
+  {
+    "weekStart": "2026-01-19",
+    "commodityGroup": "HIGHLAND VEGETABLES",
+    "productId": "bell-pepper-green-localmedium-pc",
+    "productName": "Bell Pepper Green LocalMedium /pc",
+    "region": "NCR",
+    "price": 254.03
+  },
+  {
+    "weekStart": "2026-04-20",
+    "commodityGroup": "HIGHLAND VEGETABLES",
+    "productId": "bell-pepper-green-localmedium-pc",
+    "productName": "Bell Pepper Green LocalMedium /pc",
+    "region": "NCR",
+    "price": 241.34
+  },
+  {
+    "weekStart": "2026-05-04",
+    "commodityGroup": "HIGHLAND VEGETABLES",
+    "productId": "bell-pepper-green-localmedium-pc",
+    "productName": "Bell Pepper Green LocalMedium /pc",
+    "region": "NCR",
+    "price": 233.77
+  },
+  {
+    "weekStart": "2026-05-11",
+    "commodityGroup": "HIGHLAND VEGETABLES",
+    "productId": "bell-pepper-green-localmedium-pc",
+    "productName": "Bell Pepper Green LocalMedium /pc",
+    "region": "NCR",
+    "price": 240.3
+  },
+  {
+    "weekStart": "2026-05-18",
+    "commodityGroup": "HIGHLAND VEGETABLES",
+    "productId": "bell-pepper-green-localmedium-pc",
+    "productName": "Bell Pepper Green LocalMedium /pc",
+    "region": "NCR",
+    "price": 244.14
+  },
+  {
+    "weekStart": "2026-01-12",
+    "commodityGroup": "HIGHLAND VEGETABLES",
+    "productId": "bell-pepper-red-localmedium-pc",
+    "productName": "Bell Pepper Red LocalMedium /pc",
+    "region": "NCR",
+    "price": 300.01
+  },
+  {
+    "weekStart": "2026-01-19",
+    "commodityGroup": "HIGHLAND VEGETABLES",
+    "productId": "bell-pepper-red-localmedium-pc",
+    "productName": "Bell Pepper Red LocalMedium /pc",
+    "region": "NCR",
+    "price": 263.85
+  },
+  {
+    "weekStart": "2026-04-20",
+    "commodityGroup": "HIGHLAND VEGETABLES",
+    "productId": "bell-pepper-red-localmedium-pc",
+    "productName": "Bell Pepper Red LocalMedium /pc",
+    "region": "NCR",
+    "price": 245.1
+  },
+  {
+    "weekStart": "2026-05-04",
+    "commodityGroup": "HIGHLAND VEGETABLES",
+    "productId": "bell-pepper-red-localmedium-pc",
+    "productName": "Bell Pepper Red LocalMedium /pc",
+    "region": "NCR",
+    "price": 240.45
+  },
+  {
+    "weekStart": "2026-05-11",
+    "commodityGroup": "HIGHLAND VEGETABLES",
+    "productId": "bell-pepper-red-localmedium-pc",
+    "productName": "Bell Pepper Red LocalMedium /pc",
+    "region": "NCR",
+    "price": 243.85
+  },
+  {
+    "weekStart": "2026-05-18",
+    "commodityGroup": "HIGHLAND VEGETABLES",
+    "productId": "bell-pepper-red-localmedium-pc",
+    "productName": "Bell Pepper Red LocalMedium /pc",
+    "region": "NCR",
+    "price": 245.6
+  },
+  {
+    "weekStart": "2026-01-12",
+    "commodityGroup": "HIGHLAND VEGETABLES",
+    "productId": "broccoli-localmedium-diameter-bunch-hd",
+    "productName": "Broccoli LocalMedium diameter/bunch hd",
+    "region": "NCR",
+    "price": 196
+  },
+  {
+    "weekStart": "2026-01-19",
+    "commodityGroup": "HIGHLAND VEGETABLES",
+    "productId": "broccoli-localmedium-diameter-bunch-hd",
+    "productName": "Broccoli LocalMedium diameter/bunch hd",
+    "region": "NCR",
+    "price": 177.8
+  },
+  {
+    "weekStart": "2026-04-20",
+    "commodityGroup": "HIGHLAND VEGETABLES",
+    "productId": "broccoli-localmedium-diameter-bunch-hd",
+    "productName": "Broccoli LocalMedium diameter/bunch hd",
+    "region": "NCR",
+    "price": 168.76
+  },
+  {
+    "weekStart": "2026-05-04",
+    "commodityGroup": "HIGHLAND VEGETABLES",
+    "productId": "broccoli-localmedium-diameter-bunch-hd",
+    "productName": "Broccoli LocalMedium diameter/bunch hd",
+    "region": "NCR",
+    "price": 150.51
+  },
+  {
+    "weekStart": "2026-05-11",
+    "commodityGroup": "HIGHLAND VEGETABLES",
+    "productId": "broccoli-localmedium-diameter-bunch-hd",
+    "productName": "Broccoli LocalMedium diameter/bunch hd",
+    "region": "NCR",
+    "price": 165.16
+  },
+  {
+    "weekStart": "2026-05-18",
+    "commodityGroup": "HIGHLAND VEGETABLES",
+    "productId": "broccoli-localmedium-diameter-bunch-hd",
+    "productName": "Broccoli LocalMedium diameter/bunch hd",
+    "region": "NCR",
+    "price": 148.46
+  },
+  {
+    "weekStart": "2026-01-12",
+    "commodityGroup": "HIGHLAND VEGETABLES",
+    "productId": "cabbage-rare-ball-510-gm-1-kg-head",
+    "productName": "Cabbage Rare Ball 510 gm - 1 kg/head",
+    "region": "NCR",
+    "price": 93.56
+  },
+  {
+    "weekStart": "2026-01-19",
+    "commodityGroup": "HIGHLAND VEGETABLES",
+    "productId": "cabbage-rare-ball-510-gm-1-kg-head",
+    "productName": "Cabbage Rare Ball 510 gm - 1 kg/head",
+    "region": "NCR",
+    "price": 88.58
+  },
+  {
+    "weekStart": "2026-04-20",
+    "commodityGroup": "HIGHLAND VEGETABLES",
+    "productId": "cabbage-rare-ball-510-gm-1-kg-head",
+    "productName": "Cabbage Rare Ball 510 gm - 1 kg/head",
+    "region": "NCR",
+    "price": 65.17
+  },
+  {
+    "weekStart": "2026-05-04",
+    "commodityGroup": "HIGHLAND VEGETABLES",
+    "productId": "cabbage-rare-ball-510-gm-1-kg-head",
+    "productName": "Cabbage Rare Ball 510 gm - 1 kg/head",
+    "region": "NCR",
+    "price": 58.92
+  },
+  {
+    "weekStart": "2026-05-11",
+    "commodityGroup": "HIGHLAND VEGETABLES",
+    "productId": "cabbage-rare-ball-510-gm-1-kg-head",
+    "productName": "Cabbage Rare Ball 510 gm - 1 kg/head",
+    "region": "NCR",
+    "price": 58.85
+  },
+  {
+    "weekStart": "2026-05-18",
+    "commodityGroup": "HIGHLAND VEGETABLES",
+    "productId": "cabbage-rare-ball-510-gm-1-kg-head",
+    "productName": "Cabbage Rare Ball 510 gm - 1 kg/head",
+    "region": "NCR",
+    "price": 59.44
+  },
+  {
+    "weekStart": "2026-01-12",
+    "commodityGroup": "HIGHLAND VEGETABLES",
+    "productId": "cabbage-scorpio-750-gm-1-kg-head",
+    "productName": "Cabbage Scorpio 750 gm - 1 kg/head",
+    "region": "NCR",
+    "price": 90.4
+  },
+  {
+    "weekStart": "2026-01-19",
+    "commodityGroup": "HIGHLAND VEGETABLES",
+    "productId": "cabbage-scorpio-750-gm-1-kg-head",
+    "productName": "Cabbage Scorpio 750 gm - 1 kg/head",
+    "region": "NCR",
+    "price": 87.35
+  },
+  {
+    "weekStart": "2026-04-20",
+    "commodityGroup": "HIGHLAND VEGETABLES",
+    "productId": "cabbage-scorpio-750-gm-1-kg-head",
+    "productName": "Cabbage Scorpio 750 gm - 1 kg/head",
+    "region": "NCR",
+    "price": 76.27
+  },
+  {
+    "weekStart": "2026-05-04",
+    "commodityGroup": "HIGHLAND VEGETABLES",
+    "productId": "cabbage-scorpio-750-gm-1-kg-head",
+    "productName": "Cabbage Scorpio 750 gm - 1 kg/head",
+    "region": "NCR",
+    "price": 67.42
+  },
+  {
+    "weekStart": "2026-05-11",
+    "commodityGroup": "HIGHLAND VEGETABLES",
+    "productId": "cabbage-scorpio-750-gm-1-kg-head",
+    "productName": "Cabbage Scorpio 750 gm - 1 kg/head",
+    "region": "NCR",
+    "price": 65.33
+  },
+  {
+    "weekStart": "2026-05-18",
+    "commodityGroup": "HIGHLAND VEGETABLES",
+    "productId": "cabbage-scorpio-750-gm-1-kg-head",
+    "productName": "Cabbage Scorpio 750 gm - 1 kg/head",
+    "region": "NCR",
+    "price": 65
+  },
+  {
+    "weekStart": "2026-01-12",
+    "commodityGroup": "HIGHLAND VEGETABLES",
+    "productId": "cabbage-wonder-ball-510-gm-1-kg-head",
+    "productName": "Cabbage Wonder Ball 510 gm - 1 kg/head",
+    "region": "NCR",
+    "price": 91.13
+  },
+  {
+    "weekStart": "2026-01-19",
+    "commodityGroup": "HIGHLAND VEGETABLES",
+    "productId": "cabbage-wonder-ball-510-gm-1-kg-head",
+    "productName": "Cabbage Wonder Ball 510 gm - 1 kg/head",
+    "region": "NCR",
+    "price": 89.58
+  },
+  {
+    "weekStart": "2026-04-20",
+    "commodityGroup": "HIGHLAND VEGETABLES",
+    "productId": "cabbage-wonder-ball-510-gm-1-kg-head",
+    "productName": "Cabbage Wonder Ball 510 gm - 1 kg/head",
+    "region": "NCR",
+    "price": 63.26
+  },
+  {
+    "weekStart": "2026-05-04",
+    "commodityGroup": "HIGHLAND VEGETABLES",
+    "productId": "cabbage-wonder-ball-510-gm-1-kg-head",
+    "productName": "Cabbage Wonder Ball 510 gm - 1 kg/head",
+    "region": "NCR",
+    "price": 59.46
+  },
+  {
+    "weekStart": "2026-05-11",
+    "commodityGroup": "HIGHLAND VEGETABLES",
+    "productId": "cabbage-wonder-ball-510-gm-1-kg-head",
+    "productName": "Cabbage Wonder Ball 510 gm - 1 kg/head",
+    "region": "NCR",
+    "price": 58.82
+  },
+  {
+    "weekStart": "2026-05-18",
+    "commodityGroup": "HIGHLAND VEGETABLES",
+    "productId": "cabbage-wonder-ball-510-gm-1-kg-head",
+    "productName": "Cabbage Wonder Ball 510 gm - 1 kg/head",
+    "region": "NCR",
+    "price": 58.95
+  },
+  {
+    "weekStart": "2026-01-12",
+    "commodityGroup": "HIGHLAND VEGETABLES",
+    "productId": "carrots-local8-10-pcs-kg",
+    "productName": "Carrots Local8-10 pcs/kg",
+    "region": "NCR",
+    "price": 102.62
+  },
+  {
+    "weekStart": "2026-01-19",
+    "commodityGroup": "HIGHLAND VEGETABLES",
+    "productId": "carrots-local8-10-pcs-kg",
+    "productName": "Carrots Local8-10 pcs/kg",
+    "region": "NCR",
+    "price": 98.35
+  },
+  {
+    "weekStart": "2026-04-20",
+    "commodityGroup": "HIGHLAND VEGETABLES",
+    "productId": "carrots-local8-10-pcs-kg",
+    "productName": "Carrots Local8-10 pcs/kg",
+    "region": "NCR",
+    "price": 157.05
+  },
+  {
+    "weekStart": "2026-05-04",
+    "commodityGroup": "HIGHLAND VEGETABLES",
+    "productId": "carrots-local8-10-pcs-kg",
+    "productName": "Carrots Local8-10 pcs/kg",
+    "region": "NCR",
+    "price": 144.06
+  },
+  {
+    "weekStart": "2026-05-11",
+    "commodityGroup": "HIGHLAND VEGETABLES",
+    "productId": "carrots-local8-10-pcs-kg",
+    "productName": "Carrots Local8-10 pcs/kg",
+    "region": "NCR",
+    "price": 139.23
+  },
+  {
+    "weekStart": "2026-05-18",
+    "commodityGroup": "HIGHLAND VEGETABLES",
+    "productId": "carrots-local8-10-pcs-kg",
+    "productName": "Carrots Local8-10 pcs/kg",
+    "region": "NCR",
+    "price": 135.01
+  },
+  {
+    "weekStart": "2026-01-12",
+    "commodityGroup": "HIGHLAND VEGETABLES",
+    "productId": "cauliflower-localmedium-diameter-bunch-hd",
+    "productName": "Cauliflower LocalMedium diameter/bunch hd",
+    "region": "NCR",
+    "price": 134.65
+  },
+  {
+    "weekStart": "2026-01-19",
+    "commodityGroup": "HIGHLAND VEGETABLES",
+    "productId": "cauliflower-localmedium-diameter-bunch-hd",
+    "productName": "Cauliflower LocalMedium diameter/bunch hd",
+    "region": "NCR",
+    "price": 127.96
+  },
+  {
+    "weekStart": "2026-04-20",
+    "commodityGroup": "HIGHLAND VEGETABLES",
+    "productId": "cauliflower-localmedium-diameter-bunch-hd",
+    "productName": "Cauliflower LocalMedium diameter/bunch hd",
+    "region": "NCR",
+    "price": 122.55
+  },
+  {
+    "weekStart": "2026-05-04",
+    "commodityGroup": "HIGHLAND VEGETABLES",
+    "productId": "cauliflower-localmedium-diameter-bunch-hd",
+    "productName": "Cauliflower LocalMedium diameter/bunch hd",
+    "region": "NCR",
+    "price": 124.93
+  },
+  {
+    "weekStart": "2026-05-11",
+    "commodityGroup": "HIGHLAND VEGETABLES",
+    "productId": "cauliflower-localmedium-diameter-bunch-hd",
+    "productName": "Cauliflower LocalMedium diameter/bunch hd",
+    "region": "NCR",
+    "price": 129.48
+  },
+  {
+    "weekStart": "2026-05-18",
+    "commodityGroup": "HIGHLAND VEGETABLES",
+    "productId": "cauliflower-localmedium-diameter-bunch-hd",
+    "productName": "Cauliflower LocalMedium diameter/bunch hd",
+    "region": "NCR",
+    "price": 135.29
+  },
+  {
+    "weekStart": "2026-01-12",
+    "commodityGroup": "HIGHLAND VEGETABLES",
+    "productId": "celerymedium",
+    "productName": "CeleryMedium",
+    "region": "NCR",
+    "price": 177.21
+  },
+  {
+    "weekStart": "2026-01-19",
+    "commodityGroup": "HIGHLAND VEGETABLES",
+    "productId": "celerymedium",
+    "productName": "CeleryMedium",
+    "region": "NCR",
+    "price": 166.86
+  },
+  {
+    "weekStart": "2026-04-20",
+    "commodityGroup": "HIGHLAND VEGETABLES",
+    "productId": "celerymedium",
+    "productName": "CeleryMedium",
+    "region": "NCR",
+    "price": 148.59
+  },
+  {
+    "weekStart": "2026-05-04",
+    "commodityGroup": "HIGHLAND VEGETABLES",
+    "productId": "celerymedium",
+    "productName": "CeleryMedium",
+    "region": "NCR",
+    "price": 145.63
+  },
+  {
+    "weekStart": "2026-05-11",
+    "commodityGroup": "HIGHLAND VEGETABLES",
+    "productId": "celerymedium",
+    "productName": "CeleryMedium",
+    "region": "NCR",
+    "price": 147.41
+  },
+  {
+    "weekStart": "2026-05-18",
+    "commodityGroup": "HIGHLAND VEGETABLES",
+    "productId": "celerymedium",
+    "productName": "CeleryMedium",
+    "region": "NCR",
+    "price": 147.2
+  },
+  {
+    "weekStart": "2026-01-12",
+    "commodityGroup": "HIGHLAND VEGETABLES",
+    "productId": "chayotemedium",
+    "productName": "ChayoteMedium",
+    "region": "NCR",
+    "price": 62.03
+  },
+  {
+    "weekStart": "2026-01-19",
+    "commodityGroup": "HIGHLAND VEGETABLES",
+    "productId": "chayotemedium",
+    "productName": "ChayoteMedium",
+    "region": "NCR",
+    "price": 60.31
+  },
+  {
+    "weekStart": "2026-04-20",
+    "commodityGroup": "HIGHLAND VEGETABLES",
+    "productId": "chayotemedium",
+    "productName": "ChayoteMedium",
+    "region": "NCR",
+    "price": 61.51
+  },
+  {
+    "weekStart": "2026-05-04",
+    "commodityGroup": "HIGHLAND VEGETABLES",
+    "productId": "chayotemedium",
+    "productName": "ChayoteMedium",
+    "region": "NCR",
+    "price": 62.47
+  },
+  {
+    "weekStart": "2026-05-11",
+    "commodityGroup": "HIGHLAND VEGETABLES",
+    "productId": "chayotemedium",
+    "productName": "ChayoteMedium",
+    "region": "NCR",
+    "price": 64.62
+  },
+  {
+    "weekStart": "2026-05-18",
+    "commodityGroup": "HIGHLAND VEGETABLES",
+    "productId": "chayotemedium",
+    "productName": "ChayoteMedium",
+    "region": "NCR",
+    "price": 70.07
+  },
+  {
+    "weekStart": "2026-01-12",
+    "commodityGroup": "LOWLAND VEGETABLES",
+    "productId": "chilli-green-localhaba-panigang",
+    "productName": "Chilli Green LocalHaba/Panigang",
+    "region": "NCR",
+    "price": 120.23
+  },
+  {
+    "weekStart": "2026-01-19",
+    "commodityGroup": "LOWLAND VEGETABLES",
+    "productId": "chilli-green-localhaba-panigang",
+    "productName": "Chilli Green LocalHaba/Panigang",
+    "region": "NCR",
+    "price": 108.47
+  },
+  {
+    "weekStart": "2026-04-20",
+    "commodityGroup": "LOWLAND VEGETABLES",
+    "productId": "chilli-green-localhaba-panigang",
+    "productName": "Chilli Green LocalHaba/Panigang",
+    "region": "NCR",
+    "price": 96.59
+  },
+  {
+    "weekStart": "2026-05-04",
+    "commodityGroup": "LOWLAND VEGETABLES",
+    "productId": "chilli-green-localhaba-panigang",
+    "productName": "Chilli Green LocalHaba/Panigang",
+    "region": "NCR",
+    "price": 115.93
+  },
+  {
+    "weekStart": "2026-05-11",
+    "commodityGroup": "LOWLAND VEGETABLES",
+    "productId": "chilli-green-localhaba-panigang",
+    "productName": "Chilli Green LocalHaba/Panigang",
+    "region": "NCR",
+    "price": 120.54
+  },
+  {
+    "weekStart": "2026-05-18",
+    "commodityGroup": "LOWLAND VEGETABLES",
+    "productId": "chilli-green-localhaba-panigang",
+    "productName": "Chilli Green LocalHaba/Panigang",
+    "region": "NCR",
+    "price": 122.73
+  },
+  {
+    "weekStart": "2026-01-12",
+    "commodityGroup": "LOWLAND VEGETABLES",
+    "productId": "eggplant3-4-bundles",
+    "productName": "Eggplant3-4 Bundles",
+    "region": "NCR",
+    "price": 131.64
+  },
+  {
+    "weekStart": "2026-01-19",
+    "commodityGroup": "LOWLAND VEGETABLES",
+    "productId": "eggplant3-4-bundles",
+    "productName": "Eggplant3-4 Bundles",
+    "region": "NCR",
+    "price": 122
+  },
+  {
+    "weekStart": "2026-04-20",
+    "commodityGroup": "LOWLAND VEGETABLES",
+    "productId": "eggplant3-4-bundles",
+    "productName": "Eggplant3-4 Bundles",
+    "region": "NCR",
+    "price": 76.69
+  },
+  {
+    "weekStart": "2026-05-04",
+    "commodityGroup": "LOWLAND VEGETABLES",
+    "productId": "eggplant3-4-bundles",
+    "productName": "Eggplant3-4 Bundles",
+    "region": "NCR",
+    "price": 81.73
+  },
+  {
+    "weekStart": "2026-05-11",
+    "commodityGroup": "LOWLAND VEGETABLES",
+    "productId": "eggplant3-4-bundles",
+    "productName": "Eggplant3-4 Bundles",
+    "region": "NCR",
+    "price": 84.59
+  },
+  {
+    "weekStart": "2026-05-18",
+    "commodityGroup": "LOWLAND VEGETABLES",
+    "productId": "eggplant3-4-bundles",
+    "productName": "Eggplant3-4 Bundles",
+    "region": "NCR",
+    "price": 89.02
+  },
+  {
+    "weekStart": "2026-01-12",
+    "commodityGroup": "HIGHLAND VEGETABLES",
+    "productId": "habichuelas-baguio-beans-local",
+    "productName": "Habichuelas/Baguio Beans Local",
+    "region": "NCR",
+    "price": 100.28
+  },
+  {
+    "weekStart": "2026-01-19",
+    "commodityGroup": "HIGHLAND VEGETABLES",
+    "productId": "habichuelas-baguio-beans-local",
+    "productName": "Habichuelas/Baguio Beans Local",
+    "region": "NCR",
+    "price": 94.87
+  },
+  {
+    "weekStart": "2026-04-20",
+    "commodityGroup": "HIGHLAND VEGETABLES",
+    "productId": "habichuelas-baguio-beans-local",
+    "productName": "Habichuelas/Baguio Beans Local",
+    "region": "NCR",
+    "price": 124.31
+  },
+  {
+    "weekStart": "2026-05-04",
+    "commodityGroup": "HIGHLAND VEGETABLES",
+    "productId": "habichuelas-baguio-beans-local",
+    "productName": "Habichuelas/Baguio Beans Local",
+    "region": "NCR",
+    "price": 124.36
+  },
+  {
+    "weekStart": "2026-05-11",
+    "commodityGroup": "HIGHLAND VEGETABLES",
+    "productId": "habichuelas-baguio-beans-local",
+    "productName": "Habichuelas/Baguio Beans Local",
+    "region": "NCR",
+    "price": 123.6
+  },
+  {
+    "weekStart": "2026-05-18",
+    "commodityGroup": "HIGHLAND VEGETABLES",
+    "productId": "habichuelas-baguio-beans-local",
+    "productName": "Habichuelas/Baguio Beans Local",
+    "region": "NCR",
+    "price": 125.1
+  },
+  {
+    "weekStart": "2026-01-12",
+    "commodityGroup": "HIGHLAND VEGETABLES",
+    "productId": "lettuce-green-ice",
+    "productName": "Lettuce Green Ice",
+    "region": "NCR",
+    "price": 211.9
+  },
+  {
+    "weekStart": "2026-01-19",
+    "commodityGroup": "HIGHLAND VEGETABLES",
+    "productId": "lettuce-green-ice",
+    "productName": "Lettuce Green Ice",
+    "region": "NCR",
+    "price": 196.96
+  },
+  {
+    "weekStart": "2026-04-20",
+    "commodityGroup": "HIGHLAND VEGETABLES",
+    "productId": "lettuce-green-ice",
+    "productName": "Lettuce Green Ice",
+    "region": "NCR",
+    "price": 138.94
+  },
+  {
+    "weekStart": "2026-05-04",
+    "commodityGroup": "HIGHLAND VEGETABLES",
+    "productId": "lettuce-green-ice",
+    "productName": "Lettuce Green Ice",
+    "region": "NCR",
+    "price": 167.63
+  },
+  {
+    "weekStart": "2026-05-11",
+    "commodityGroup": "HIGHLAND VEGETABLES",
+    "productId": "lettuce-green-ice",
+    "productName": "Lettuce Green Ice",
+    "region": "NCR",
+    "price": 264.52
+  },
+  {
+    "weekStart": "2026-05-18",
+    "commodityGroup": "HIGHLAND VEGETABLES",
+    "productId": "lettuce-green-ice",
+    "productName": "Lettuce Green Ice",
+    "region": "NCR",
+    "price": 245.58
+  },
+  {
+    "weekStart": "2026-01-12",
+    "commodityGroup": "HIGHLAND VEGETABLES",
+    "productId": "lettuce-iceberg",
+    "productName": "Lettuce Iceberg",
+    "region": "NCR",
+    "price": 270.89
+  },
+  {
+    "weekStart": "2026-01-19",
+    "commodityGroup": "HIGHLAND VEGETABLES",
+    "productId": "lettuce-iceberg",
+    "productName": "Lettuce Iceberg",
+    "region": "NCR",
+    "price": 266.05
+  },
+  {
+    "weekStart": "2026-04-20",
+    "commodityGroup": "HIGHLAND VEGETABLES",
+    "productId": "lettuce-iceberg",
+    "productName": "Lettuce Iceberg",
+    "region": "NCR",
+    "price": 163.59
+  },
+  {
+    "weekStart": "2026-05-04",
+    "commodityGroup": "HIGHLAND VEGETABLES",
+    "productId": "lettuce-iceberg",
+    "productName": "Lettuce Iceberg",
+    "region": "NCR",
+    "price": 168.49
+  },
+  {
+    "weekStart": "2026-05-11",
+    "commodityGroup": "HIGHLAND VEGETABLES",
+    "productId": "lettuce-iceberg",
+    "productName": "Lettuce Iceberg",
+    "region": "NCR",
+    "price": 191.56
+  },
+  {
+    "weekStart": "2026-05-18",
+    "commodityGroup": "HIGHLAND VEGETABLES",
+    "productId": "lettuce-iceberg",
+    "productName": "Lettuce Iceberg",
+    "region": "NCR",
+    "price": 194.75
+  },
+  {
+    "weekStart": "2026-01-12",
+    "commodityGroup": "HIGHLAND VEGETABLES",
+    "productId": "lettuce-romaine",
+    "productName": "Lettuce Romaine",
+    "region": "NCR",
+    "price": 261.64
+  },
+  {
+    "weekStart": "2026-01-19",
+    "commodityGroup": "HIGHLAND VEGETABLES",
+    "productId": "lettuce-romaine",
+    "productName": "Lettuce Romaine",
+    "region": "NCR",
+    "price": 286.36
+  },
+  {
+    "weekStart": "2026-04-20",
+    "commodityGroup": "HIGHLAND VEGETABLES",
+    "productId": "lettuce-romaine",
+    "productName": "Lettuce Romaine",
+    "region": "NCR",
+    "price": 132.3
+  },
+  {
+    "weekStart": "2026-05-04",
+    "commodityGroup": "HIGHLAND VEGETABLES",
+    "productId": "lettuce-romaine",
+    "productName": "Lettuce Romaine",
+    "region": "NCR",
+    "price": 144.55
+  },
+  {
+    "weekStart": "2026-05-11",
+    "commodityGroup": "HIGHLAND VEGETABLES",
+    "productId": "lettuce-romaine",
+    "productName": "Lettuce Romaine",
+    "region": "NCR",
+    "price": 236.89
+  },
+  {
+    "weekStart": "2026-05-18",
+    "commodityGroup": "HIGHLAND VEGETABLES",
+    "productId": "lettuce-romaine",
+    "productName": "Lettuce Romaine",
+    "region": "NCR",
+    "price": 224.93
+  },
+  {
+    "weekStart": "2026-01-12",
+    "commodityGroup": "LOWLAND VEGETABLES",
+    "productId": "native-pechay3-4-bundles",
+    "productName": "Native Pechay3-4 Bundles",
+    "region": "NCR",
+    "price": 81.62
+  },
+  {
+    "weekStart": "2026-01-19",
+    "commodityGroup": "LOWLAND VEGETABLES",
+    "productId": "native-pechay3-4-bundles",
+    "productName": "Native Pechay3-4 Bundles",
+    "region": "NCR",
+    "price": 76.78
+  },
+  {
+    "weekStart": "2026-04-20",
+    "commodityGroup": "LOWLAND VEGETABLES",
+    "productId": "native-pechay3-4-bundles",
+    "productName": "Native Pechay3-4 Bundles",
+    "region": "NCR",
+    "price": 74.42
+  },
+  {
+    "weekStart": "2026-05-04",
+    "commodityGroup": "LOWLAND VEGETABLES",
+    "productId": "native-pechay3-4-bundles",
+    "productName": "Native Pechay3-4 Bundles",
+    "region": "NCR",
+    "price": 77.15
+  },
+  {
+    "weekStart": "2026-05-11",
+    "commodityGroup": "LOWLAND VEGETABLES",
+    "productId": "native-pechay3-4-bundles",
+    "productName": "Native Pechay3-4 Bundles",
+    "region": "NCR",
+    "price": 78.55
+  },
+  {
+    "weekStart": "2026-05-18",
+    "commodityGroup": "LOWLAND VEGETABLES",
+    "productId": "native-pechay3-4-bundles",
+    "productName": "Native Pechay3-4 Bundles",
+    "region": "NCR",
+    "price": 80.96
+  },
+  {
+    "weekStart": "2026-01-12",
+    "commodityGroup": "HIGHLAND VEGETABLES",
+    "productId": "pechay-baguio",
+    "productName": "Pechay Baguio",
+    "region": "NCR",
+    "price": 94.61
+  },
+  {
+    "weekStart": "2026-01-19",
+    "commodityGroup": "HIGHLAND VEGETABLES",
+    "productId": "pechay-baguio",
+    "productName": "Pechay Baguio",
+    "region": "NCR",
+    "price": 90.65
+  },
+  {
+    "weekStart": "2026-04-20",
+    "commodityGroup": "HIGHLAND VEGETABLES",
+    "productId": "pechay-baguio",
+    "productName": "Pechay Baguio",
+    "region": "NCR",
+    "price": 74.98
+  },
+  {
+    "weekStart": "2026-05-04",
+    "commodityGroup": "HIGHLAND VEGETABLES",
+    "productId": "pechay-baguio",
+    "productName": "Pechay Baguio",
+    "region": "NCR",
+    "price": 75.25
+  },
+  {
+    "weekStart": "2026-05-11",
+    "commodityGroup": "HIGHLAND VEGETABLES",
+    "productId": "pechay-baguio",
+    "productName": "Pechay Baguio",
+    "region": "NCR",
+    "price": 74.59
+  },
+  {
+    "weekStart": "2026-05-18",
+    "commodityGroup": "HIGHLAND VEGETABLES",
+    "productId": "pechay-baguio",
+    "productName": "Pechay Baguio",
+    "region": "NCR",
+    "price": 75.98
+  },
+  {
+    "weekStart": "2026-01-12",
+    "commodityGroup": "LOWLAND VEGETABLES",
+    "productId": "pole-sitao3-4-bundles",
+    "productName": "Pole Sitao3-4 Bundles",
+    "region": "NCR",
+    "price": 145.61
+  },
+  {
+    "weekStart": "2026-01-19",
+    "commodityGroup": "LOWLAND VEGETABLES",
+    "productId": "pole-sitao3-4-bundles",
+    "productName": "Pole Sitao3-4 Bundles",
+    "region": "NCR",
+    "price": 144.34
+  },
+  {
+    "weekStart": "2026-04-20",
+    "commodityGroup": "LOWLAND VEGETABLES",
+    "productId": "pole-sitao3-4-bundles",
+    "productName": "Pole Sitao3-4 Bundles",
+    "region": "NCR",
+    "price": 103.29
+  },
+  {
+    "weekStart": "2026-05-04",
+    "commodityGroup": "LOWLAND VEGETABLES",
+    "productId": "pole-sitao3-4-bundles",
+    "productName": "Pole Sitao3-4 Bundles",
+    "region": "NCR",
+    "price": 102.9
+  },
+  {
+    "weekStart": "2026-05-11",
+    "commodityGroup": "LOWLAND VEGETABLES",
+    "productId": "pole-sitao3-4-bundles",
+    "productName": "Pole Sitao3-4 Bundles",
+    "region": "NCR",
+    "price": 107.37
+  },
+  {
+    "weekStart": "2026-05-18",
+    "commodityGroup": "LOWLAND VEGETABLES",
+    "productId": "pole-sitao3-4-bundles",
+    "productName": "Pole Sitao3-4 Bundles",
+    "region": "NCR",
+    "price": 110.85
+  },
+  {
+    "weekStart": "2026-01-12",
+    "commodityGroup": "LOWLAND VEGETABLES",
+    "productId": "squashsuprema-variety",
+    "productName": "SquashSuprema Variety",
+    "region": "NCR",
+    "price": 60.36
+  },
+  {
+    "weekStart": "2026-01-19",
+    "commodityGroup": "LOWLAND VEGETABLES",
+    "productId": "squashsuprema-variety",
+    "productName": "SquashSuprema Variety",
+    "region": "NCR",
+    "price": 60.58
+  },
+  {
+    "weekStart": "2026-04-20",
+    "commodityGroup": "LOWLAND VEGETABLES",
+    "productId": "squashsuprema-variety",
+    "productName": "SquashSuprema Variety",
+    "region": "NCR",
+    "price": 66.32
+  },
+  {
+    "weekStart": "2026-05-04",
+    "commodityGroup": "LOWLAND VEGETABLES",
+    "productId": "squashsuprema-variety",
+    "productName": "SquashSuprema Variety",
+    "region": "NCR",
+    "price": 64.49
+  },
+  {
+    "weekStart": "2026-05-11",
+    "commodityGroup": "LOWLAND VEGETABLES",
+    "productId": "squashsuprema-variety",
+    "productName": "SquashSuprema Variety",
+    "region": "NCR",
+    "price": 63.82
+  },
+  {
+    "weekStart": "2026-05-18",
+    "commodityGroup": "LOWLAND VEGETABLES",
+    "productId": "squashsuprema-variety",
+    "productName": "SquashSuprema Variety",
+    "region": "NCR",
+    "price": 63.25
+  },
+  {
+    "weekStart": "2026-01-12",
+    "commodityGroup": "LOWLAND VEGETABLES",
+    "productId": "tomato15-18-pcs-kg",
+    "productName": "Tomato15-18 pcs/kg",
+    "region": "NCR",
+    "price": 161.5
+  },
+  {
+    "weekStart": "2026-01-19",
+    "commodityGroup": "LOWLAND VEGETABLES",
+    "productId": "tomato15-18-pcs-kg",
+    "productName": "Tomato15-18 pcs/kg",
+    "region": "NCR",
+    "price": 126.63
+  },
+  {
+    "weekStart": "2026-04-20",
+    "commodityGroup": "LOWLAND VEGETABLES",
+    "productId": "tomato15-18-pcs-kg",
+    "productName": "Tomato15-18 pcs/kg",
+    "region": "NCR",
+    "price": 62.82
+  },
+  {
+    "weekStart": "2026-05-04",
+    "commodityGroup": "LOWLAND VEGETABLES",
+    "productId": "tomato15-18-pcs-kg",
+    "productName": "Tomato15-18 pcs/kg",
+    "region": "NCR",
+    "price": 62.61
+  },
+  {
+    "weekStart": "2026-05-11",
+    "commodityGroup": "LOWLAND VEGETABLES",
+    "productId": "tomato15-18-pcs-kg",
+    "productName": "Tomato15-18 pcs/kg",
+    "region": "NCR",
+    "price": 62.24
+  },
+  {
+    "weekStart": "2026-05-18",
+    "commodityGroup": "LOWLAND VEGETABLES",
+    "productId": "tomato15-18-pcs-kg",
+    "productName": "Tomato15-18 pcs/kg",
+    "region": "NCR",
+    "price": 63.92
+  },
+  {
+    "weekStart": "2026-01-12",
+    "commodityGroup": "HIGHLAND VEGETABLES",
+    "productId": "white-potato-local10-12-pcs-kg",
+    "productName": "White Potato Local10-12 pcs/kg",
+    "region": "NCR",
+    "price": 154.99
+  },
+  {
+    "weekStart": "2026-01-19",
+    "commodityGroup": "HIGHLAND VEGETABLES",
+    "productId": "white-potato-local10-12-pcs-kg",
+    "productName": "White Potato Local10-12 pcs/kg",
+    "region": "NCR",
+    "price": 148.82
+  },
+  {
+    "weekStart": "2026-04-20",
+    "commodityGroup": "HIGHLAND VEGETABLES",
+    "productId": "white-potato-local10-12-pcs-kg",
+    "productName": "White Potato Local10-12 pcs/kg",
+    "region": "NCR",
+    "price": 97.47
+  },
+  {
+    "weekStart": "2026-05-04",
+    "commodityGroup": "HIGHLAND VEGETABLES",
+    "productId": "white-potato-local10-12-pcs-kg",
+    "productName": "White Potato Local10-12 pcs/kg",
+    "region": "NCR",
+    "price": 95.81
+  },
+  {
+    "weekStart": "2026-05-11",
+    "commodityGroup": "HIGHLAND VEGETABLES",
+    "productId": "white-potato-local10-12-pcs-kg",
+    "productName": "White Potato Local10-12 pcs/kg",
+    "region": "NCR",
+    "price": 97.04
+  },
+  {
+    "weekStart": "2026-05-18",
+    "commodityGroup": "HIGHLAND VEGETABLES",
+    "productId": "white-potato-local10-12-pcs-kg",
+    "productName": "White Potato Local10-12 pcs/kg",
+    "region": "NCR",
+    "price": 97.29
+  }
+]
