@@ -1,21 +1,251 @@
-const pages = [
-  ["dashboard", "dashboard", "Dashboard"],
-  ["products", "inventory_2", "Products"],
-  ["plan", "shopping_cart", "Buy Plan"],
-  ["prices", "trending_up", "Prices"],
-  ["recommendations", "lightbulb", "Suggestions"],
-  ["settings", "settings", "Settings"]
+let state = { page: "dashboard", currentPlanId: null };
+const WATCHLIST_KEY = "supplyit_watchlist";
+const SIDEBAR_STATE_KEY = "supplyit_sidebar_collapsed";
+const LANG_KEY = "supplyit_lang";
+const UI_I18N = {
+  en: {
+    nav: { dashboard: "Dashboard", products: "Products", plan: "Buy Plan", plans: "Plans", prices: "Prices", recommendations: "Suggestions", settings: "Settings" },
+    dashboardTitle: "Dashboard",
+    productsTitle: "Products",
+    planTitle: "Create Buy Plan",
+    pricesTitle: "Market Price Movements",
+    suggestionsTitle: "Suggestions",
+    savedPlansTitle: "Saved Plans"
+  },
+  tl: {
+    nav: { dashboard: "Dashboard", products: "Mga Produkto", plan: "Buy Plan", plans: "Mga Plano", prices: "Mga Presyo", recommendations: "Mga Mungkahi", settings: "Settings" },
+    dashboardTitle: "Dashboard",
+    productsTitle: "Mga Produkto",
+    planTitle: "Gumawa ng Buy Plan",
+    pricesTitle: "Paggalaw ng Presyo sa Merkado",
+    suggestionsTitle: "Mga Mungkahi",
+    savedPlansTitle: "Mga Nai-save na Plano"
+  }
+};
+const lang = () => localStorage.getItem(LANG_KEY) || "en";
+const t = () => UI_I18N[lang()] || UI_I18N.en;
+const TL_MAP = {
+  "Dashboard": "Dashboard",
+  "Products": "Mga Produkto",
+  "Buy Plan": "Buy Plan",
+  "Plans": "Mga Plano",
+  "Prices": "Mga Presyo",
+  "Suggestions": "Mga Mungkahi",
+  "Settings": "Settings",
+  "Manage monitored DA commodities and act on buy/hold/delay signals.": "Pamahalaan ang mga mino-monitor na commodity ng DA at kumilos gamit ang buy/hold/delay signals.",
+  "Logout": "Mag-logout",
+  "Search...": "Maghanap...",
+  "Bulk actions:": "Maramihang aksyon:",
+  "Tracked Commodities": "Mga Mino-monitor na Commodity",
+  "Average Weekly Change": "Average na Lingguhang Pagbabago",
+  "Price Gainers": "Mga Tumaas ang Presyo",
+  "Actionable Buys": "Mga Maaaring Bilhin",
+  "From DA vegetables feed": "Mula sa DA vegetables feed",
+  "Across monitored products": "Sa lahat ng mino-monitor na produkto",
+  "Open positive movers": "Buksan ang mga tumataas",
+  "Open BUY suggestions": "Buksan ang BUY suggestions",
+  "Top Recommendations": "Nangungunang Rekomendasyon",
+  "Market Summary": "Buod ng Merkado",
+  "Product Name": "Pangalan ng Produkto",
+  "Price (₱)": "Presyo (₱)",
+  "Stock Status": "Katayuan ng Stock",
+  "Trend": "Trend",
+  "Archived Products": "Naka-archive na Produkto",
+  "Review archived commodities and restore them when needed.": "Suriin ang mga naka-archive na commodity at ibalik kung kinakailangan.",
+  "Unarchive": "Ibalik mula archive",
+  "Back to Products": "Bumalik sa Mga Produkto",
+  "Saved Plans": "Mga Nai-save na Plano",
+  "Create Plan": "Gumawa ng Plano",
+  "Open/Edit": "Buksan/I-edit",
+  "Duplicate": "Kopyahin",
+  "Archive": "I-archive",
+  "Delete": "Burahin",
+  "Created": "Ginawa",
+  "Updated": "Na-update",
+  "Actions": "Mga Aksyon",
+  "No saved plans yet.": "Wala pang nai-save na plano.",
+  "No archived products.": "Walang naka-archive na produkto.",
+  "Create Buy Plan": "Gumawa ng Buy Plan",
+  "Open Saved Plans": "Buksan ang Nai-save na Plano",
+  "Step 1: Set Budget": "Hakbang 1: Itakda ang Badyet",
+  "Choose your plan style and let auto-allocation prepare quantities.": "Piliin ang estilo ng plano at hayaang auto-allocation ang maghanda ng dami.",
+  "Step 2: Review Recommended Items": "Hakbang 2: Suriin ang Inirekumendang Items",
+  "Adjust only what you need. Default view shows the highest-priority products.": "Ayusin lang ang kailangan. Ang default na view ay nagpapakita ng pinaka-prayoridad na produkto.",
+  "Plan Name": "Pangalan ng Plano",
+  "Budget": "Badyet",
+  "Plan Style": "Estilo ng Plano",
+  "Sort": "Ayos",
+  "Auto Allocate": "Awtomatikong Hati",
+  "Reset Recommended": "Ibalik sa Rekomendado",
+  "Show more products": "Ipakita pa ang produkto",
+  "Show fewer products": "Ipakita nang kaunti",
+  "Plan Details": "Detalye ng Plano",
+  "Plan Summary": "Buod ng Plano",
+  "Plan Tip": "Tip sa Plano",
+  "Draft not saved yet": "Hindi pa nai-save ang draft",
+  "Saving draft...": "Sine-save ang draft...",
+  "Draft auto-saved": "Awtomatikong na-save ang draft",
+  "Draft autosave failed": "Hindi na-save ang draft",
+  "Total": "Kabuuan",
+  "Remaining": "Natitira",
+  "Export CSV": "I-export CSV",
+  "Export PDF": "I-export PDF",
+  "Save Plan": "I-save ang Plano",
+  "Confirm Save Plan": "Kumpirmahin ang Pag-save",
+  "Cancel": "Kanselahin",
+  "Confirm Save": "Kumpirmahin",
+  "Within budget": "Pasok sa badyet",
+  "Over budget by": "Lumampas sa badyet ng",
+  "Fix Budget to Save": "Ayusin ang badyet para ma-save",
+  "Saved": "Nai-save",
+  "Save failed": "Nabigo ang pag-save",
+  "Checking plan...": "Sinusuri ang plano...",
+  "Market Price Movements": "Paggalaw ng Presyo sa Merkado",
+  "Decision-first price monitoring for vegetable commodities.": "Pagmo-monitor ng presyo para sa vegetable commodities na nakatuon sa desisyon.",
+  "Selected Commodity Trend": "Trend ng Napiling Commodity",
+  "All": "Lahat",
+  "Buy": "Bili",
+  "Hold": "I-hold",
+  "Delay": "I-delay",
+  "BUY Now": "BILI Ngayon",
+  "Search products...": "Maghanap ng produkto...",
+  "Data week:": "Linggo ng data:",
+  "4 weeks": "4 linggo",
+  "8 weeks": "8 linggo",
+  "12 weeks": "12 linggo",
+  "Watch": "Subaybayan",
+  "Product": "Produkto",
+  "Category": "Kategorya",
+  "Stock": "Stock",
+  "Region": "Rehiyon",
+  "Last": "Huling",
+  "Current": "Kasalukuyan",
+  "Trend": "Trend",
+  "To Plan": "Sa Plano",
+  "High Volatility": "Mataas ang galaw",
+  "No series data.": "Walang series data.",
+  "No series available": "Walang available na series",
+  "Current Action:": "Kasalukuyang Aksyon:",
+  "Recommended Action:": "Inirekomendang Aksyon:",
+  "Recent Weekly Prices:": "Kamakailang Lingguhang Presyo:",
+  "Market Signal:": "Signal sa Merkado:",
+  "Final Action:": "Pinal na Aksyon:",
+  "Demand Estimation": "Pagtataya ng Demand",
+  "Demand": "Demand",
+  "Action-ready recommendations from DA prices + model voting.": "Handang aksyon na rekomendasyon mula sa presyo ng DA at model voting.",
+  "Data Week:": "Linggo ng Data:",
+  "Urgent Actions": "Agarang Aksyon",
+  "urgent": "agarang",
+  "More filters": "Mas maraming filter",
+  "High confidence only": "Mataas na kumpiyansa lang",
+  "High impact only": "Mataas na epekto lang",
+  "Search suggestions...": "Maghanap ng mungkahi...",
+  "No matching suggestions.": "Walang tumugmang mungkahi.",
+  "Show 10 more": "Magpakita pa ng 10",
+  "Set BUY": "Itakda sa BILI",
+  "Set HOLD": "Itakda sa HOLD",
+  "Set DELAY": "Itakda sa DELAY",
+  "Show details": "Ipakita ang detalye",
+  "Send to Buy Plan": "Ipadala sa Buy Plan",
+  "Apply Hold": "Ilapat ang Hold",
+  "Apply Delay": "Ilapat ang Delay",
+  "Price falling": "Bumababa ang presyo",
+  "Low stock": "Mababa ang stock",
+  "Trend up": "Pataas ang trend",
+  "Rising": "Pataas",
+  "Rising fast": "Mabilis na pagtaas",
+  "Cooling": "Pababa",
+  "Cooling fast": "Mabilis na pagbaba",
+  "Stable": "Stable",
+  "Prices are moving up": "Pataas ang presyo",
+  "Prices are easing down": "Bumababa ang presyo",
+  "Prices are mostly stable": "Kadalasang stable ang presyo",
+  "Expect higher buy cost soon.": "Posibleng tumaas ang gastos sa pagbili.",
+  "Good timing to monitor buys.": "Magandang panahon para bantayan ang bili.",
+  "No major price pressure now.": "Walang malaking pressure sa presyo ngayon.",
+  "horizontal_rule": "",
+  "trending_up": "",
+  "trending_down": "",
+  "Stable trend": "Stable na trend",
+  "Unchanged": "Walang pagbabago",
+  "New signal": "Bagong signal",
+  "Changed from": "Nagbago mula",
+  "Confidence:": "Kumpiyansa:",
+  "Impact:": "Epekto:",
+  "Urgency:": "Agarang Kailangan:",
+  "Regression:": "Regression:",
+  "Estimated volume:": "Tinatayang dami:",
+  "How to use SupplyIT (Quick Steps)": "Paano Gamitin ang SupplyIT (Mabilis na Hakbang)",
+  "No recommendation data yet.": "Wala pang recommendation data.",
+  "No market data yet.": "Wala pang market data."
+};
+function localizeAppShell() {
+  const appRoot = document.getElementById("app-shell");
+  if (!appRoot) return;
+  const toTL = lang() === "tl";
+  const pairs = Object.entries(TL_MAP);
+  const replacements = toTL ? pairs : pairs.map(([en, tl]) => [tl, en]);
+
+  const walker = document.createTreeWalker(appRoot, NodeFilter.SHOW_TEXT);
+  const textNodes = [];
+  while (walker.nextNode()) textNodes.push(walker.currentNode);
+  textNodes.forEach((node) => {
+    let txt = node.nodeValue;
+    if (!txt || !txt.trim()) return;
+    replacements.forEach(([from, to]) => {
+      if (txt.includes(from)) txt = txt.replaceAll(from, to);
+    });
+    node.nodeValue = txt;
+  });
+  document.querySelectorAll("#app-shell input[placeholder]").forEach((el) => {
+    let ph = el.getAttribute("placeholder");
+    if (!ph) return;
+    replacements.forEach(([from, to]) => { if (ph.includes(from)) ph = ph.replaceAll(from, to); });
+    el.setAttribute("placeholder", ph);
+  });
+}
+const getPages = () => [
+  ["dashboard", "dashboard", t().nav.dashboard],
+  ["products", "inventory_2", t().nav.products],
+  ["plan", "shopping_cart", t().nav.plan],
+  ["plans", "folder_open", t().nav.plans],
+  ["prices", "trending_up", t().nav.prices],
+  ["recommendations", "lightbulb", t().nav.recommendations],
+  ["settings", "settings", t().nav.settings]
 ];
 
-let state = { page: "dashboard" };
-const WATCHLIST_KEY = "supplyit_watchlist";
+function initSidebarCollapse() {
+  const toggle = document.getElementById("sidebar-toggle");
+  const label = document.getElementById("sidebar-toggle-label");
+  const icon = document.getElementById("sidebar-toggle-icon");
+  if (!toggle) return;
+  const syncToggleUI = (collapsed) => {
+    if (label) label.textContent = collapsed ? "Expand" : "Collapse";
+    if (icon) icon.textContent = collapsed ? "left_panel_open" : "left_panel_close";
+    const hint = collapsed ? "Expand sidebar" : "Collapse sidebar";
+    toggle.title = hint;
+    toggle.setAttribute("aria-label", hint);
+  };
+  const isCollapsed = localStorage.getItem(SIDEBAR_STATE_KEY) === "1";
+  document.body.classList.toggle("nav-collapsed", isCollapsed);
+  syncToggleUI(isCollapsed);
+  toggle.onclick = () => {
+    const next = !document.body.classList.contains("nav-collapsed");
+    document.body.classList.toggle("nav-collapsed", next);
+    localStorage.setItem(SIDEBAR_STATE_KEY, next ? "1" : "0");
+    syncToggleUI(next);
+  };
+}
 
 function nav() {
+  const pages = getPages();
   const el = document.getElementById("side-nav");
-  const mainPages = pages.filter(([key]) => key !== "settings");
-  el.innerHTML = mainPages.map(([key, icon, label]) => `<button data-page="${key}" class="nav-item flex items-center gap-3 ${state.page===key?"bg-primary-container text-on-primary-container rounded-lg px-4 py-3 scale-[0.98] transition-transform":"text-on-surface-variant px-4 py-3 hover:bg-surface-container-high transition-colors"}"><span class="material-symbols-outlined" ${state.page===key?"style=\"font-variation-settings: 'FILL' 1;\"":""}>${icon}</span><span class="font-label-md text-label-md">${label}</span></button>`).join("");
+  const mainPages = pages.filter(([key]) => key !== "settings" && key !== "plans");
+  el.innerHTML = mainPages.map(([key, icon, label]) => `<button data-page="${key}" class="nav-item flex items-center gap-3 ${state.page===key?"bg-primary-container text-on-primary-container rounded-lg px-4 py-3 scale-[0.98] transition-transform":"text-on-surface-variant px-4 py-3 hover:bg-surface-container-high transition-colors"}"><span class="material-symbols-outlined" ${state.page===key?"style=\"font-variation-settings: 'FILL' 1;\"":""}>${icon}</span><span class="nav-label font-label-md text-label-md">${label}</span></button>`).join("");
   el.querySelectorAll(".nav-item").forEach((b)=>b.addEventListener("click",()=>route(b.dataset.page)));
   document.querySelectorAll(".mobile-nav").forEach((b)=>b.addEventListener("click",()=>route(b.dataset.page)));
+  const plansBtn = document.getElementById("open-plans-btn");
+  if (plansBtn) plansBtn.onclick = () => route("plans");
 }
 
 async function api(path, options) { const r = await fetch(`/api/${path}`, options); return r.json(); }
@@ -65,7 +295,7 @@ async function renderDashboard() {
     <button data-drill="buys" class="text-left bg-surface border border-outline-variant p-lg rounded-xl soft-lift"><div class="flex items-center justify-between"><div class="text-xs text-on-surface-variant uppercase">Actionable Buys</div><span class="material-symbols-outlined text-primary">shopping_basket</span></div><div class="text-2xl font-semibold mt-2">${buys}</div><div class="mt-2 text-sm text-on-surface-variant">Open BUY suggestions</div></button>
   </section>
   <div class="grid grid-cols-1 lg:grid-cols-2 gap-gutter">
-    <div class="bg-surface border border-outline-variant rounded-xl p-lg soft-lift"><h2 class="text-xl font-semibold mb-3 inline-flex items-center gap-2"><span class="material-symbols-outlined text-primary">lightbulb</span>Top Recommendations</h2>${recs.slice(0,4).map(r=>{ const chip = actionChip(r.action); return `<div class="p-3 border border-outline-variant rounded-lg mb-2"><div class="flex justify-between items-center"><div class="inline-flex items-center gap-2"><span class="material-symbols-outlined text-primary">${productIcon({name:r.productName,commodityGroup:r.productName})}</span><strong>${r.productName}</strong></div><span class="px-2 py-1 rounded-full text-xs font-semibold ${chip.cls}">${chip.label}</span></div><p class="text-sm text-on-surface-variant mb-2">Qty: ${r.quantity} | ${verbalMarketSignal(r.changePct)}</p><div class="flex flex-wrap gap-2"><button data-rec-action="${r.productId}|BUY" class="inline-flex items-center gap-1 px-2.5 py-1.5 rounded-full bg-primary-fixed text-on-primary-fixed text-xs"><span class="material-symbols-outlined text-[14px]">check_circle</span>Approve</button><button data-rec-action="${r.productId}|HOLD" class="inline-flex items-center gap-1 px-2.5 py-1.5 rounded-full bg-surface-container-high text-on-surface-variant text-xs"><span class="material-symbols-outlined text-[14px]">pause_circle</span>Hold</button><button data-rec-action="${r.productId}|DELAY" class="inline-flex items-center gap-1 px-2.5 py-1.5 rounded-full bg-tertiary-fixed text-on-tertiary-fixed-variant text-xs"><span class="material-symbols-outlined text-[14px]">schedule</span>Delay</button><button data-send-plan="${r.productId}" class="inline-flex items-center gap-1 px-2.5 py-1.5 rounded-full border border-outline-variant text-xs"><span class="material-symbols-outlined text-[14px]">send</span>Send to Buy Plan</button></div></div>`;}).join("") || `<p class="text-sm text-on-surface-variant">No recommendation data yet.</p>`}</div>
+    <div class="bg-surface border border-outline-variant rounded-xl p-lg soft-lift"><h2 class="text-xl font-semibold mb-3 inline-flex items-center gap-2"><span class="material-symbols-outlined text-primary">lightbulb</span>Top Recommendations</h2>${recs.slice(0,4).map(r=>{ const chip = actionChip(r.action); return `<div class="p-3 border border-outline-variant rounded-lg mb-2"><div class="flex justify-between items-center"><div class="inline-flex items-center gap-2"><span class="material-symbols-outlined text-primary">${productIcon({name:r.productName,commodityGroup:r.productName})}</span><strong>${r.productName}</strong></div><span class="px-2 py-1 rounded-full text-xs font-semibold ${chip.cls}">${chip.label}</span></div><p class="text-sm text-on-surface-variant mb-2">Qty: ${r.quantity} | ${verbalMarketSignal(r.changePct)}</p><div class="flex flex-wrap gap-2"><button data-rec-action="${r.productId}|BUY" class="inline-flex items-center gap-1 px-2 py-1 rounded-full text-xs bg-primary-fixed text-on-primary-fixed"><span class="material-symbols-outlined text-[14px]">shopping_cart</span>Buy</button><button data-rec-action="${r.productId}|HOLD" class="inline-flex items-center gap-1 px-2 py-1 rounded-full text-xs bg-surface-container-high text-on-surface-variant"><span class="material-symbols-outlined text-[14px]">pause_circle</span>Hold</button><button data-rec-action="${r.productId}|DELAY" class="inline-flex items-center gap-1 px-2 py-1 rounded-full text-xs bg-tertiary-fixed text-on-tertiary-fixed-variant"><span class="material-symbols-outlined text-[14px]">schedule</span>Delay</button><button data-send-plan="${r.productId}" class="inline-flex items-center gap-1 px-2 py-1 rounded-full text-xs border border-outline-variant"><span class="material-symbols-outlined text-[14px]">send</span>To Plan</button></div></div>`;}).join("") || `<p class="text-sm text-on-surface-variant">No recommendation data yet.</p>`}</div>
     <div class="bg-surface border border-outline-variant rounded-xl p-lg soft-lift"><h2 class="text-xl font-semibold mb-3 inline-flex items-center gap-2"><span class="material-symbols-outlined text-secondary">query_stats</span>Market Summary</h2><div class="space-y-2">${(d.market || []).slice(0,5).map(m=>{ const full=[...(prices.rows||[])].find(p=>p.productName===m.productName); return `<div class="p-3 border border-outline-variant rounded-lg"><div class="flex items-center justify-between"><div class="inline-flex items-center gap-2"><span class="material-symbols-outlined text-primary">${productIcon({name:m.productName,commodityGroup:m.productName})}</span><span class="font-semibold">${m.productName}</span></div><span class="text-sm font-semibold">₱${Number(m.currentPrice||0).toFixed(2)}</span></div><div class="mt-2 flex items-center justify-between"><span class="text-xs text-on-surface-variant">${verbalMarketSignal(m.changePct)}</span><span>${sparklineSvg(full?.series||[])}</span></div></div>`;}).join("") || `<div class="text-sm text-on-surface-variant">No market data yet.</div>`}</div></div>
   </div>`;
 }
@@ -102,6 +332,32 @@ function verbalMarketSignal(changePct) {
   return "Prices are mostly stable";
 }
 
+function guidanceMeta(changePct) {
+  const v = Number(changePct || 0);
+  if (v >= 3) {
+    return {
+      icon: "trending_up",
+      short: "Rising",
+      detail: "Expect higher buy cost soon.",
+      cls: "bg-error-container/40 text-on-error-container border-error-container"
+    };
+  }
+  if (v <= -3) {
+    return {
+      icon: "trending_down",
+      short: "Cooling",
+      detail: "Good timing to monitor buys.",
+      cls: "bg-primary-fixed/60 text-on-primary-fixed border-primary-fixed-dim"
+    };
+  }
+  return {
+    icon: "horizontal_rule",
+    short: "Stable",
+    detail: "No major price pressure now.",
+    cls: "bg-surface-container-high text-on-surface-variant border-outline-variant"
+  };
+}
+
 function actionChip(action) {
   if (action === "BUY") return { label: "BUY", cls: "bg-primary-fixed text-on-primary-fixed" };
   if (action === "DELAY") return { label: "DELAY", cls: "bg-tertiary-fixed text-on-tertiary-fixed-variant" };
@@ -118,6 +374,10 @@ function categoryChip(category) {
 async function render() {
   nav();
   const app = document.getElementById("app");
+  app.classList.remove("page-enter");
+  // Restart entry animation on every route render.
+  void app.offsetWidth;
+  app.classList.add("page-enter");
   if (state.page === "dashboard") {
     app.innerHTML = await renderDashboard();
     const updateProduct = async (id, patch) => api(`products/${id}`, { method: "PUT", headers: { "Content-Type": "application/json" }, body: JSON.stringify(patch) });
@@ -168,11 +428,13 @@ async function render() {
     ];
     app.innerHTML = `
       <header class="mb-xl">
-        <h1 class="text-headline-lg font-headline-lg text-on-surface">Products</h1>
+        <h1 class="text-headline-lg font-headline-lg text-on-surface">${t().productsTitle}</h1>
         <p class="text-body-lg text-on-surface-variant">Manage monitored DA commodities and act on buy/hold/delay signals.</p>
       </header>
-      <div class="mb-4 flex flex-wrap gap-2" id="decision-filters">
-        ${decisionFilterChips.map((f, idx) => `<button data-filter="${f.key}" class="decision-filter px-3 py-1.5 rounded-full text-sm ${idx === 0 ? "bg-primary text-white" : "bg-surface-container-high text-on-surface-variant"}">${f.label}</button>`).join("")}
+      <div class="mb-4" id="decision-filters">
+        <div class="inline-flex rounded-xl border border-outline-variant overflow-hidden bg-surface">
+          ${decisionFilterChips.map((f, idx) => `<button data-filter="${f.key}" class="decision-filter px-4 py-2 text-sm ${idx === 0 ? "bg-primary text-white" : "text-on-surface-variant"}">${f.label}</button>`).join("")}
+        </div>
       </div>
       <div class="mb-4 bg-surface border border-outline-variant rounded-xl p-3 flex flex-wrap items-center gap-2" id="bulk-bar">
         <span class="text-sm text-on-surface-variant mr-2">Bulk actions:</span>
@@ -207,6 +469,7 @@ async function render() {
               ${data.map((p) => {
                 const rec = recMap.get(p.id);
                 const chip = actionChip(rec?.action);
+                const guide = guidanceMeta(rec?.changePct);
                 const lowStock = Number(p.stockQty || 0) <= Number(p.lowStockThreshold || 0);
                 const priceRow = priceMap.get(p.id);
                 const actionText = rec?.action || "HOLD";
@@ -224,7 +487,15 @@ async function render() {
                   <td class="px-lg py-4 text-body-md text-on-surface">${p.stockQty} ${p.unit} <span class="text-xs text-on-surface-variant">(Reorder ${p.lowStockThreshold})</span></td>
                   <td class="px-lg py-4 text-body-md text-on-surface">₱${Number(p.pricePerUnit).toFixed(2)}</td>
                   <td class="px-lg py-4"><button data-explain="${p.id}" class="explain-chip inline-flex items-center px-3 py-1 rounded-full text-label-sm font-bold ${chip.cls}">${chip.label}</button></td>
-                  <td class="px-lg py-4 text-body-md text-on-surface-variant">${verbalMarketSignal(rec?.changePct)}</td>
+                  <td class="px-lg py-4">
+                    <div class="inline-flex items-start gap-2 px-2.5 py-2 rounded-lg border ${guide.cls}">
+                      <span class="material-symbols-outlined text-[16px] mt-[1px]">${guide.icon}</span>
+                      <div class="leading-tight">
+                        <div class="text-xs font-semibold">${guide.short}</div>
+                        <div class="text-[11px] opacity-90">${guide.detail}</div>
+                      </div>
+                    </div>
+                  </td>
                   <td class="px-lg py-4 text-right">
                     <div class="inline-flex gap-1">
                       <button data-detail="${p.id}" class="p-2 hover:bg-surface-container-high rounded-full transition-colors text-on-surface-variant" title="Details"><span class="material-symbols-outlined">visibility</span></button>
@@ -322,7 +593,7 @@ async function render() {
       btn.addEventListener("click", () => {
         activeFilter = btn.dataset.filter;
         document.querySelectorAll(".decision-filter").forEach((b) => {
-          b.className = `decision-filter px-3 py-1.5 rounded-full text-sm ${b.dataset.filter === activeFilter ? "bg-primary text-white" : "bg-surface-container-high text-on-surface-variant"}`;
+          b.className = `decision-filter px-4 py-2 text-sm ${b.dataset.filter === activeFilter ? "bg-primary text-white" : "text-on-surface-variant"}`;
         });
         rows.forEach((row) => evaluateRowVisibility(row));
       });
@@ -486,345 +757,665 @@ async function render() {
     });
     document.getElementById("back-products")?.addEventListener("click", () => route("products"));
   }
+  if (state.page === "plans") {
+    const plans = await api("plans");
+    const fmt = (iso) => iso ? new Date(iso).toLocaleString() : "-";
+    const badge = (status) => {
+      if (status === "approved") return `<span class="px-2 py-1 rounded-full text-xs bg-primary-fixed text-on-primary-fixed">Approved</span>`;
+      if (status === "archived") return `<span class="px-2 py-1 rounded-full text-xs bg-surface-container-high text-on-surface-variant">Archived</span>`;
+      return `<span class="px-2 py-1 rounded-full text-xs bg-tertiary-fixed text-on-tertiary-fixed-variant">Draft</span>`;
+    };
+    app.innerHTML = `
+      <header class="mb-xl">
+        <h1 class="text-headline-lg font-headline-lg text-on-surface">${t().savedPlansTitle}</h1>
+        <p class="text-body-lg text-on-surface-variant">Create, edit, duplicate, archive, and delete buying plans.</p>
+      </header>
+      <div class="mb-4">
+        <button id="create-plan" class="bg-primary text-white px-4 py-2.5 rounded-lg inline-flex items-center gap-2">
+          <span class="material-symbols-outlined text-[18px]">add</span>Create Plan
+        </button>
+      </div>
+      <div class="bg-surface-container-lowest border border-outline-variant rounded-xl overflow-hidden shadow-sm">
+        <div class="overflow-x-auto">
+          <table class="w-full text-left border-collapse">
+            <thead>
+              <tr class="bg-surface-container-low border-b border-outline-variant">
+                <th class="px-lg py-4 text-label-md text-on-surface-variant uppercase tracking-wider">Name</th>
+                <th class="px-lg py-4 text-label-md text-on-surface-variant uppercase tracking-wider">Status</th>
+                <th class="px-lg py-4 text-label-md text-on-surface-variant uppercase tracking-wider">Updated</th>
+                <th class="px-lg py-4 text-label-md text-on-surface-variant uppercase tracking-wider text-right">Actions</th>
+              </tr>
+            </thead>
+            <tbody class="divide-y divide-outline-variant">
+              ${plans.length ? plans.map((p) => `
+                <tr class="hover:bg-surface-container-low transition-colors">
+                  <td class="px-lg py-4">
+                    <div class="font-label-md text-on-surface">${p.name || "Untitled Plan"}</div>
+                    <div class="text-xs text-on-surface-variant">Created ${fmt(p.createdAt)}</div>
+                  </td>
+                  <td class="px-lg py-4">${badge(p.status)}</td>
+                  <td class="px-lg py-4 text-sm text-on-surface-variant">${fmt(p.updatedAt)}</td>
+                  <td class="px-lg py-4">
+                    <div class="flex justify-end gap-2">
+                      <button data-plan-open="${p.id}" class="px-3 py-1.5 rounded-lg border border-outline-variant text-sm inline-flex items-center gap-1"><span class="material-symbols-outlined text-[16px]">edit</span>Open/Edit</button>
+                      <button data-plan-dup="${p.id}" class="px-3 py-1.5 rounded-lg border border-outline-variant text-sm inline-flex items-center gap-1"><span class="material-symbols-outlined text-[16px]">content_copy</span>Duplicate</button>
+                      <button data-plan-archive="${p.id}" class="px-3 py-1.5 rounded-lg border border-outline-variant text-sm inline-flex items-center gap-1"><span class="material-symbols-outlined text-[16px]">archive</span>Archive</button>
+                      <button data-plan-delete="${p.id}" class="px-3 py-1.5 rounded-lg border border-error-container text-on-error-container text-sm inline-flex items-center gap-1"><span class="material-symbols-outlined text-[16px]">delete</span>Delete</button>
+                    </div>
+                  </td>
+                </tr>
+              `).join("") : `<tr><td colspan="4" class="px-lg py-8 text-center text-on-surface-variant">No saved plans yet.</td></tr>`}
+            </tbody>
+          </table>
+        </div>
+      </div>
+    `;
+    document.getElementById("create-plan")?.addEventListener("click", () => {
+      localStorage.removeItem("plan_edit_id");
+      state.currentPlanId = null;
+      route("plan");
+    });
+    document.querySelectorAll("[data-plan-open]").forEach((btn) => btn.addEventListener("click", () => {
+      const id = btn.dataset.planOpen;
+      localStorage.setItem("plan_edit_id", id);
+      state.currentPlanId = id;
+      route("plan");
+    }));
+    document.querySelectorAll("[data-plan-dup]").forEach((btn) => btn.addEventListener("click", async () => {
+      await api(`plans/${btn.dataset.planDup}/duplicate`, { method: "POST" });
+      route("plans");
+    }));
+    document.querySelectorAll("[data-plan-archive]").forEach((btn) => btn.addEventListener("click", async () => {
+      await api(`plans/${btn.dataset.planArchive}`, {
+        method: "PUT",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ status: "archived" })
+      });
+      route("plans");
+    }));
+    document.querySelectorAll("[data-plan-delete]").forEach((btn) => btn.addEventListener("click", async () => {
+      await api(`plans/${btn.dataset.planDelete}`, { method: "DELETE" });
+      route("plans");
+    }));
+  }
   if (state.page === "plan") {
     const products = await api("products");
     const recPayload = await api("recommendations");
     const recMap = new Map((recPayload.rows || []).map((r) => [r.productId, r]));
-    const savedBudget = Number(localStorage.getItem("plan_budget_php") || 150000);
-    const savedRegion = localStorage.getItem("plan_region") || "NCR";
-    const savedScenario = localStorage.getItem("plan_scenario") || "Base";
-    const versions = JSON.parse(localStorage.getItem("plan_versions") || "[]");
-    const focusProductId = localStorage.getItem("plan_focus_product");
-    localStorage.removeItem("plan_focus_product");
+    const planList = await api("plans");
+    const editingPlanId = localStorage.getItem("plan_edit_id");
+    const editingPlan = editingPlanId ? (planList || []).find((p) => p.id === editingPlanId) : null;
+    if (editingPlanId && !editingPlan) localStorage.removeItem("plan_edit_id");
+    const payload = editingPlan?.payload || {};
+    const savedBudget = Number(payload.budget ?? localStorage.getItem("plan_budget_php") ?? 150000);
+    const savedScenario = payload.scenario || localStorage.getItem("plan_scenario") || "Balanced";
+    const savedPlanName = editingPlan?.name || payload.planName || `Plan ${new Date().toLocaleDateString()}`;
+    const scenarioMultiplier = { Safe: 0.85, Balanced: 1, Growth: 1.15 };
 
-    const scenarioMultiplier = { Base: 1, Conservative: 0.85, Aggressive: 1.15 };
-    const makeItems = (scenario) => products.map((prod) => {
+    const seedItems = products.map((prod) => {
       const rec = recMap.get(prod.id);
       const action = rec?.action || "HOLD";
       const base = Math.max(Number(prod.lowStockThreshold || 100), 80);
       const actionBoost = action === "BUY" ? 1.4 : action === "DELAY" ? 0.6 : 1;
-      const suggested = Math.round(base * actionBoost * (scenarioMultiplier[scenario] || 1));
-      const qty = focusProductId === prod.id ? Math.max(suggested, 250) : suggested;
-      return { ...prod, qty, suggested, action };
-    });
-    const items = makeItems(savedScenario);
+      const suggested = Math.round(base * actionBoost);
+      return { ...prod, action, suggested, qty: suggested, priority: action === "BUY" ? 3 : action === "HOLD" ? 2 : 1 };
+    }).sort((a, b) => b.priority - a.priority || a.name.localeCompare(b.name));
+
+    let working = seedItems.map((x) => ({ ...x }));
+    if (Array.isArray(payload.items) && payload.items.length) {
+      const map = new Map(payload.items.map((it) => [it.id, it]));
+      working = seedItems.map((x) => {
+        const prev = map.get(x.id);
+        return prev ? { ...x, qty: Number(prev.qty ?? x.qty), suggested: Number(prev.suggested ?? x.suggested), action: prev.action || x.action } : x;
+      });
+    }
+    let expanded = Boolean(payload.expanded);
+    let sortMode = payload.sortMode || "priority";
+    let currentPlanId = editingPlan?.id || state.currentPlanId || null;
+    state.currentPlanId = currentPlanId;
 
     app.innerHTML = `
-      <div class="max-w-[1100px] mx-auto p-container-margin md:p-xl space-y-xl pb-36">
-        <section class="flex items-start justify-between gap-4 flex-wrap">
-          <div>
-            <h1 class="font-headline-lg text-headline-lg text-on-background">Create Buy Plan</h1>
-            <p class="font-body-md text-body-md text-on-surface-variant">Strategize your stock purchases using budget + demand signals.</p>
+      <div class="max-w-[1280px] mx-auto space-y-xl pb-[26rem] md:pb-[22rem]">
+        <section class="mb-xl">
+          <div class="flex flex-wrap items-center justify-between gap-3">
+            <h1 class="font-headline-lg text-headline-lg text-on-background">${t().planTitle}</h1>
+            <button id="open-plans-inline" class="px-3 py-2 rounded-lg border border-outline-variant text-sm inline-flex items-center gap-1">
+              <span class="material-symbols-outlined text-[16px]">folder_open</span>Open Saved Plans
+            </button>
           </div>
-          <div class="flex items-center gap-2">
-            <button id="auto-allocate" class="px-4 py-2 rounded-lg bg-primary text-white text-sm inline-flex items-center gap-1"><span class="material-symbols-outlined text-[16px]">auto_awesome</span>Auto Allocate</button>
-            <button id="save-version" class="px-4 py-2 rounded-lg border border-outline-variant text-sm inline-flex items-center gap-1"><span class="material-symbols-outlined text-[16px]">bookmark_add</span>Save Version</button>
-            <select id="version-select" class="px-3 py-2 rounded-lg border border-outline-variant text-sm bg-surface">
-              <option value="">Load Version</option>
-              ${versions.map((v, i) => `<option value="${i}">${v.name}</option>`).join("")}
-            </select>
+          <p class="font-body-md text-body-md text-on-surface-variant">Set budget, review top BUY items, then save when status is green.</p>
+        </section>
+        <section class="bg-surface-container-lowest border border-outline-variant p-lg rounded-xl">
+          <h2 class="font-semibold text-on-surface">Step 1: Set Budget</h2>
+          <p class="text-sm text-on-surface-variant mb-3">Choose your plan style and let auto-allocation prepare quantities.</p>
+          <div class="grid grid-cols-1 md:grid-cols-6 gap-5 items-end">
+            <div><label class="text-sm text-on-surface-variant">Plan Name</label><input id="plan-name" class="w-full mt-1 px-3 py-2.5 rounded-lg border border-outline bg-white" value="${savedPlanName}"></div>
+            <div><label class="text-sm text-on-surface-variant">Budget</label><div class="relative mt-1"><span class="absolute left-3 top-1/2 -translate-y-1/2 text-on-surface-variant">₱</span><input id="plan-budget" class="w-full pl-8 pr-3 py-2.5 rounded-lg border border-outline bg-white" value="${savedBudget.toLocaleString()}"></div></div>
+            <div><label class="text-sm text-on-surface-variant">Plan Style</label><select id="plan-scenario" class="w-full mt-1 px-3 py-2.5 rounded-lg border border-outline bg-white"><option ${savedScenario === "Safe" ? "selected" : ""}>Safe</option><option ${savedScenario === "Balanced" ? "selected" : ""}>Balanced</option><option ${savedScenario === "Growth" ? "selected" : ""}>Growth</option></select></div>
+            <div><label class="text-sm text-on-surface-variant">Sort</label><select id="plan-sort" class="w-full mt-1 px-3 py-2.5 rounded-lg border border-outline bg-white"><option value="priority">Priority</option><option value="cost">Cost</option><option value="name">Name</option></select></div>
+            <button id="auto-allocate" class="px-4 py-2.5 rounded-lg bg-primary text-white text-sm inline-flex items-center justify-center gap-1"><span class="material-symbols-outlined text-[16px]">auto_awesome</span>Auto Allocate</button>
+            <button id="reset-plan" class="px-4 py-2.5 rounded-lg border border-outline-variant text-sm inline-flex items-center justify-center gap-1"><span class="material-symbols-outlined text-[16px]">restart_alt</span>Reset Recommended</button>
           </div>
         </section>
-        <section class="grid grid-cols-1 lg:grid-cols-12 gap-gutter items-start">
-          <div class="lg:col-span-8 bg-surface-container-lowest border border-outline-variant p-lg rounded-xl shadow-sm space-y-md">
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-md">
-              <div class="space-y-unit"><label class="text-label-md font-label-md text-on-surface-variant">Current Budget</label><div class="relative"><span class="absolute left-4 top-1/2 -translate-y-1/2 text-on-surface-variant">₱</span><input id="plan-budget" class="w-full pl-8 pr-4 py-3 rounded-lg border border-outline focus:border-primary focus:ring-1 focus:ring-primary bg-white text-body-md" type="text" value="${savedBudget.toLocaleString()}" placeholder="Enter budget"></div></div>
-              <div class="space-y-unit"><label class="text-label-md font-label-md text-on-surface-variant">Target Region</label><select id="plan-region" class="w-full px-4 py-3 rounded-lg border border-outline focus:border-primary focus:ring-1 focus:ring-primary bg-white text-body-md"><option ${savedRegion === "NCR" ? "selected" : ""}>NCR</option><option ${savedRegion === "CAR" ? "selected" : ""}>CAR</option></select></div>
-              <div class="space-y-unit"><label class="text-label-md font-label-md text-on-surface-variant">Scenario</label><select id="plan-scenario" class="w-full px-4 py-3 rounded-lg border border-outline focus:border-primary focus:ring-1 focus:ring-primary bg-white text-body-md"><option ${savedScenario === "Base" ? "selected" : ""}>Base</option><option ${savedScenario === "Conservative" ? "selected" : ""}>Conservative</option><option ${savedScenario === "Aggressive" ? "selected" : ""}>Aggressive</option></select></div>
+        <section>
+          <h2 class="font-semibold text-on-surface">Step 2: Review Recommended Items</h2>
+          <p class="text-sm text-on-surface-variant mb-3">Adjust only what you need. Default view shows the highest-priority products.</p>
+          <div id="plan-cards" class="grid grid-cols-1 md:grid-cols-2 gap-5"></div>
+          <div class="mt-4 flex justify-center">
+            <button id="show-more-plan" class="inline-flex items-center gap-2 px-4 py-2 rounded-full border border-outline-variant bg-surface hover:bg-surface-container-high text-sm text-on-surface-variant">
+              <span id="show-more-label">Show more products</span>
+              <span id="show-more-icon" class="material-symbols-outlined text-[18px]">keyboard_arrow_down</span>
+            </button>
+          </div>
+        </section>
+        <section class="bg-surface border border-outline-variant rounded-xl p-4 soft-lift">
+          <details open class="group">
+            <summary class="cursor-pointer flex items-center justify-between">
+              <div class="inline-flex items-center gap-2">
+                <span class="material-symbols-outlined text-secondary">summarize</span>
+                <span class="text-base font-semibold text-on-surface">Plan Details</span>
+              </div>
+              <span class="material-symbols-outlined text-on-surface-variant transition-transform group-open:rotate-180">expand_more</span>
+            </summary>
+            <div class="mt-3 grid grid-cols-1 md:grid-cols-2 gap-3">
+              <div class="rounded-lg border border-outline-variant bg-surface-container-low p-3">
+                <div class="text-sm uppercase text-on-surface-variant mb-1">Plan Summary</div>
+                <div id="plan-breakdown" class="text-base text-on-surface-variant leading-relaxed"></div>
+              </div>
+              <div class="rounded-lg border border-outline-variant bg-surface-container-low p-3">
+                <div class="text-sm uppercase text-on-surface-variant mb-1">Plan Tip</div>
+                <div id="plan-ai" class="text-base text-on-surface-variant leading-relaxed"></div>
+              </div>
             </div>
-          </div>
-          <div class="lg:col-span-4 bg-surface-container border border-outline-variant p-lg rounded-xl">
-            <div class="flex items-center gap-2 mb-2 text-primary"><span class="material-symbols-outlined">psychology</span><span class="font-label-md">AI Plan Insight</span></div>
-            <p id="plan-ai-insight" class="font-body-md text-body-md text-on-surface-variant">Preparing insight...</p>
-          </div>
-        </section>
-        <section class="bg-surface-container-lowest border border-outline-variant rounded-xl overflow-hidden shadow-sm">
-          <div class="overflow-x-auto">
-            <table class="w-full border-collapse">
-              <thead><tr class="bg-surface-container border-b border-outline-variant"><th class="px-md py-4 text-left font-label-md text-on-surface-variant tracking-wider uppercase text-[12px]">Product</th><th class="px-md py-4 text-left font-label-md text-on-surface-variant tracking-wider uppercase text-[12px]">Signal</th><th class="px-md py-4 text-left font-label-md text-on-surface-variant tracking-wider uppercase text-[12px]">Suggested</th><th class="px-md py-4 text-left font-label-md text-on-surface-variant tracking-wider uppercase text-[12px]">My Qty</th><th class="px-md py-4 text-right font-label-md text-on-surface-variant tracking-wider uppercase text-[12px]">Cost</th><th class="px-md py-4 text-center font-label-md text-on-surface-variant tracking-wider uppercase text-[12px]">Quick Actions</th></tr></thead>
-              <tbody id="plan-body" class="divide-y divide-outline-variant">
-                ${items.map((i) => {
-                  const chip = actionChip(i.action);
-                  return `<tr class="hover:bg-surface-container-low transition-colors group" data-item="${i.id}">
-                    <td class="px-md py-md"><div class="flex items-center gap-3"><div class="w-12 h-12 rounded-lg bg-surface-container flex-shrink-0 flex items-center justify-center"><span class="material-symbols-outlined text-primary text-[24px]">${productIcon(i)}</span></div><div><div class="font-label-md text-on-surface">${i.name}</div><div class="text-label-sm text-on-surface-variant">₱ ${Number(i.pricePerUnit).toFixed(2)} / ${i.unit}</div></div></div></td>
-                    <td class="px-md py-md"><span class="inline-flex items-center px-2.5 py-1 rounded-full text-xs font-semibold ${chip.cls}">${chip.label}</span></td>
-                    <td class="px-md py-md"><div class="inline-flex items-center px-2 py-1 bg-primary-fixed text-on-primary-fixed rounded text-label-sm font-semibold">${i.suggested} ${i.unit}</div></td>
-                    <td class="px-md py-md"><input data-product="${i.id}" class="plan-qty w-24 px-3 py-1.5 border border-outline rounded focus:ring-1 focus:ring-primary text-body-md" type="number" min="0" value="${i.qty}"></td>
-                    <td class="px-md py-md text-right font-label-md text-on-surface plan-cost" data-cost="${i.id}">₱ ${(i.qty * Number(i.pricePerUnit)).toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</td>
-                    <td class="px-md py-md"><div class="flex justify-center gap-1"><button data-qaction="${i.id}|SUGGESTED" class="w-8 h-8 rounded border border-outline text-xs">S</button><button data-qaction="${i.id}|ZERO" class="w-8 h-8 rounded border border-outline text-xs">0</button><button data-qaction="${i.id}|PLUS10" class="w-8 h-8 rounded border border-outline text-xs">+10</button><button data-qaction="${i.id}|MINUS10" class="w-8 h-8 rounded border border-outline text-xs">-10</button></div></td>
-                  </tr>`;
-                }).join("")}
-              </tbody>
-            </table>
-          </div>
+          </details>
         </section>
       </div>
-      <footer class="fixed bottom-0 left-0 right-0 bg-surface-container-lowest border-t border-outline-variant z-40 shadow-[0_-4px_12px_rgba(0,0,0,0.05)]">
-        <div class="max-w-[1100px] mx-auto px-container-margin py-4 space-y-3">
-          <div id="budget-warning" class="hidden px-3 py-2 rounded-lg bg-error-container text-on-error-container text-sm inline-flex items-center gap-1"><span class="material-symbols-outlined text-[16px]">warning</span>Plan exceeds budget. Reduce quantities before saving.</div>
-          <div class="flex flex-col md:flex-row justify-between items-center gap-4">
-            <div class="flex gap-8 items-center flex-wrap">
-              <div class="flex flex-col"><span class="text-label-sm text-on-surface-variant uppercase">Total Cost</span><span id="plan-total" class="text-headline-sm font-bold text-on-background">₱ 0.00</span></div>
-              <div class="h-10 w-[1px] bg-outline-variant hidden md:block"></div>
-              <div class="flex flex-col"><span class="text-label-sm text-on-surface-variant uppercase">Budget Remaining</span><span id="plan-remaining" class="text-headline-sm font-bold text-primary">₱ 0.00</span></div>
-              <div class="h-10 w-[1px] bg-outline-variant hidden md:block"></div>
-              <div class="flex flex-col"><span class="text-label-sm text-on-surface-variant uppercase">Approval Summary</span><span id="approval-summary" class="text-sm text-on-surface-variant">-</span></div>
+      <footer id="plan-sticky" class="fixed bottom-0 left-0 right-0 md:left-64 md:w-[calc(100%-16rem)] bg-surface border-t border-outline-variant z-40">
+        <div class="w-full px-5 md:px-8 py-4">
+          <div id="save-status" class="mb-2 px-3.5 py-2 rounded-full text-sm inline-flex items-center gap-1 bg-surface-container-high text-on-surface-variant"><span class="material-symbols-outlined text-[16px]">info</span>Checking plan...</div>
+          <div id="autosave-status" class="mb-3 text-xs text-on-surface-variant">Draft not saved yet</div>
+          <div class="flex justify-between items-center gap-4 flex-wrap">
+            <div class="flex gap-10 items-center">
+              <div><div class="text-sm text-on-surface-variant">Total</div><div id="plan-total" class="text-xl font-bold text-on-surface tabular-nums">₱ 0.00</div></div>
+              <div><div class="text-sm text-on-surface-variant">Remaining</div><div id="plan-remaining" class="text-xl font-bold text-primary tabular-nums">₱ 0.00</div></div>
             </div>
-            <div class="flex gap-4 w-full md:w-auto">
-              <button class="flex-1 md:flex-none px-6 py-3 rounded-xl border border-outline font-label-md text-on-surface-variant hover:bg-surface-container transition-colors">Export PDF</button>
-              <button class="flex-1 md:flex-none px-10 py-3 rounded-xl bg-primary text-white font-headline-sm shadow-md hover:bg-primary-container active:scale-95 transition-all flex items-center justify-center gap-2" id="savePlan"><span class="material-symbols-outlined">save</span>Save Plan</button>
+            <div class="flex items-center gap-2">
+              <button id="export-csv" class="px-4 py-2.5 rounded-lg border border-outline-variant text-sm inline-flex items-center gap-1"><span class="material-symbols-outlined text-[16px]">download</span>Export CSV</button>
+              <button id="export-pdf" class="px-4 py-2.5 rounded-lg border border-outline-variant text-sm inline-flex items-center gap-1"><span class="material-symbols-outlined text-[16px]">picture_as_pdf</span>Export PDF</button>
+              <button id="savePlan" class="px-7 py-3 rounded-lg bg-primary text-white font-semibold inline-flex items-center gap-2"><span class="material-symbols-outlined">save</span>Save Plan</button>
             </div>
           </div>
         </div>
       </footer>
+      <div id="save-confirm" class="hidden fixed inset-0 z-[90] bg-black/30 items-center justify-center p-4">
+        <div class="bg-surface w-full max-w-lg rounded-xl border border-outline-variant p-5">
+          <h3 class="text-lg font-semibold mb-2">Confirm Save Plan</h3>
+          <div id="confirm-body" class="text-sm text-on-surface-variant mb-4"></div>
+          <div class="flex justify-end gap-2">
+            <button id="confirm-cancel" class="px-4 py-2 rounded-lg border border-outline-variant">Cancel</button>
+            <button id="confirm-save" class="px-4 py-2 rounded-lg bg-primary text-white">Confirm Save</button>
+          </div>
+        </div>
+      </div>
     `;
 
-    let working = items.map((x) => ({ ...x }));
-    const qtyInputs = [...document.querySelectorAll(".plan-qty")];
     const budgetInput = document.getElementById("plan-budget");
+    const planNameInput = document.getElementById("plan-name");
+    const scenarioEl = document.getElementById("plan-scenario");
+    const cardsEl = document.getElementById("plan-cards");
+    const showMoreBtn = document.getElementById("show-more-plan");
+    const showMoreLabel = document.getElementById("show-more-label");
+    const showMoreIcon = document.getElementById("show-more-icon");
+    const sortEl = document.getElementById("plan-sort");
     const totalEl = document.getElementById("plan-total");
     const remEl = document.getElementById("plan-remaining");
-    const warningEl = document.getElementById("budget-warning");
-    const summaryEl = document.getElementById("approval-summary");
-    const aiInsightEl = document.getElementById("plan-ai-insight");
+    const saveStatusEl = document.getElementById("save-status");
+    const breakdownEl = document.getElementById("plan-breakdown");
+    const aiEl = document.getElementById("plan-ai");
+    const saveBtn = document.getElementById("savePlan");
+    const confirmModal = document.getElementById("save-confirm");
+    const confirmBody = document.getElementById("confirm-body");
+    const stickyEl = document.getElementById("plan-sticky");
+    const autosaveStatusEl = document.getElementById("autosave-status");
+    let autosaveTimer = null;
+    sortEl.value = sortMode;
 
     const getBudget = () => Number(String(budgetInput.value).replace(/,/g, "")) || 0;
-    const scenario = () => document.getElementById("plan-scenario").value;
+    const buildPlanPayload = () => ({
+      planName: planNameInput.value.trim() || `Plan ${new Date().toLocaleDateString()}`,
+      budget: getBudget(),
+      scenario: scenarioEl.value,
+      sortMode,
+      expanded,
+      items: working.map((it) => ({
+        id: it.id,
+        name: it.name,
+        qty: Number(it.qty || 0),
+        suggested: Number(it.suggested || 0),
+        action: it.action,
+        pricePerUnit: Number(it.pricePerUnit || 0),
+        unit: it.unit
+      }))
+    });
+    const persistPlan = async (status = "draft") => {
+      const payloadSave = buildPlanPayload();
+      const body = { name: payloadSave.planName, status, payload: payloadSave };
+      let row;
+      if (currentPlanId) {
+        row = await api(`plans/${currentPlanId}`, {
+          method: "PUT",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(body)
+        });
+      } else {
+        row = await api("plans", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(body)
+        });
+        currentPlanId = row?.id || currentPlanId;
+        state.currentPlanId = currentPlanId;
+        if (currentPlanId) localStorage.setItem("plan_edit_id", currentPlanId);
+      }
+      return row;
+    };
+    const scheduleAutosave = () => {
+      autosaveStatusEl.textContent = "Saving draft...";
+      if (autosaveTimer) clearTimeout(autosaveTimer);
+      autosaveTimer = setTimeout(async () => {
+        try {
+          await persistPlan("draft");
+          autosaveStatusEl.textContent = `Draft auto-saved ${new Date().toLocaleTimeString()}`;
+        } catch {
+          autosaveStatusEl.textContent = "Draft autosave failed";
+        }
+      }, 1200);
+    };
+    const getSorted = () => {
+      const list = [...working];
+      if (sortMode === "name") return list.sort((a, b) => a.name.localeCompare(b.name));
+      if (sortMode === "cost") return list.sort((a, b) => (b.qty * Number(b.pricePerUnit)) - (a.qty * Number(a.pricePerUnit)));
+      return list.sort((a, b) => b.priority - a.priority || a.name.localeCompare(b.name));
+    };
 
-    const recompute = () => {
+    function renderCards() {
+      const sorted = getSorted();
+      const visible = expanded ? sorted : sorted.slice(0, 8);
+      const budget = Math.max(1, getBudget());
+      cardsEl.innerHTML = visible.map((it) => {
+        const chip = actionChip(it.action);
+        const cost = it.qty * Number(it.pricePerUnit);
+        const recSpend = it.suggested * Number(it.pricePerUnit);
+        const share = cost / budget;
+        const impact = share >= 0.2 ? { label: "High impact", cls: "bg-error-container text-on-error-container" }
+          : share >= 0.1 ? { label: "Medium impact", cls: "bg-tertiary-fixed text-on-tertiary-fixed-variant" }
+          : { label: "Low impact", cls: "bg-primary-fixed text-on-primary-fixed" };
+        const minQ = Math.max(0, Math.round(it.suggested * 0.5));
+        const maxQ = Math.round(it.suggested * 1.5);
+        const outOfRange = it.qty < minQ || it.qty > maxQ;
+        return `<div class="bg-surface border border-outline-variant rounded-xl p-5" data-card="${it.id}">
+          <div class="flex items-center justify-between">
+            <div class="inline-flex items-center gap-2"><span class="material-symbols-outlined text-primary">${productIcon(it)}</span><strong>${it.name}</strong></div>
+            <div class="inline-flex items-center gap-1"><span class="px-2 py-1 rounded-full text-xs font-semibold ${impact.cls}">${impact.label}</span><span class="px-2 py-1 rounded-full text-xs font-semibold ${chip.cls}">${chip.label}</span></div>
+          </div>
+          <div class="mt-2 text-sm text-on-surface-variant">₱ ${Number(it.pricePerUnit).toFixed(2)} / ${it.unit}</div>
+          <div class="mt-1 text-xs text-on-surface-variant">Recommended spend: ₱ ${recSpend.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</div>
+          <div class="mt-3 flex items-center gap-2">
+            <button data-step="${it.id}|-1" class="w-8 h-8 rounded border border-outline-variant text-sm">-</button>
+            <input data-qty="${it.id}" type="number" min="0" class="w-28 px-3 py-2 border border-outline rounded" value="${it.qty}">
+            <button data-step="${it.id}|1" class="w-8 h-8 rounded border border-outline-variant text-sm">+</button>
+            <span class="text-sm text-on-surface-variant">Cost: ₱ <span data-cost="${it.id}">${cost.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</span></span>
+          </div>
+          <div class="mt-1 text-xs ${outOfRange ? "text-tertiary" : "text-on-surface-variant"}">${outOfRange ? `Suggested range: ${minQ}-${maxQ} ${it.unit}` : `Good range: ${minQ}-${maxQ} ${it.unit}`}</div>
+        </div>`;
+      }).join("");
+
+      cardsEl.querySelectorAll("[data-qty]").forEach((inp) => inp.addEventListener("input", () => {
+        const row = working.find((x) => x.id === inp.dataset.qty);
+        if (!row) return;
+        row.qty = Number(inp.value || 0);
+        recompute();
+      }));
+      cardsEl.querySelectorAll("[data-step]").forEach((btn) => btn.addEventListener("click", () => {
+        const [id, dir] = btn.dataset.step.split("|");
+        const row = working.find((x) => x.id === id);
+        if (!row) return;
+        row.qty = Math.max(0, row.qty + Number(dir || 0));
+        renderCards();
+        recompute();
+      }));
+      showMoreLabel.textContent = expanded ? "Show fewer products" : "Show more products";
+      showMoreIcon.textContent = expanded ? "keyboard_arrow_up" : "keyboard_arrow_down";
+    }
+
+    function recompute() {
       const budget = getBudget();
       localStorage.setItem("plan_budget_php", String(budget));
-      localStorage.setItem("plan_region", document.getElementById("plan-region").value);
-      localStorage.setItem("plan_scenario", scenario());
-      let total = 0;
-      let buyCount = 0;
-      let holdCount = 0;
-      let delayCount = 0;
-      const expensive = [];
-
-      working.forEach((it) => {
-        const input = qtyInputs.find((x) => x.dataset.product === it.id);
-        it.qty = Number(input?.value || 0);
-        const cost = it.qty * Number(it.pricePerUnit);
-        total += cost;
-        if (it.action === "BUY") buyCount += 1;
-        if (it.action === "HOLD") holdCount += 1;
-        if (it.action === "DELAY") delayCount += 1;
-        expensive.push({ name: it.name, cost });
-        const costNode = document.querySelector(`[data-cost="${it.id}"]`);
-        if (costNode) costNode.textContent = `₱ ${cost.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
-      });
-
+      const total = working.reduce((s, it) => s + it.qty * Number(it.pricePerUnit), 0);
       const remaining = budget - total;
       totalEl.textContent = `₱ ${total.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
       remEl.textContent = `₱ ${Math.max(0, remaining).toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
-      remEl.className = `text-headline-sm font-bold ${remaining < 0 ? "text-error" : "text-primary"}`;
-      warningEl.classList.toggle("hidden", remaining >= 0);
+      remEl.className = `text-xl font-bold ${remaining < 0 ? "text-error" : "text-primary"}`;
 
-      const topDrivers = expensive.sort((a, b) => b.cost - a.cost).slice(0, 3).map((x) => x.name).join(", ");
-      summaryEl.textContent = `BUY ${buyCount} | HOLD ${holdCount} | DELAY ${delayCount} | Top cost: ${topDrivers || "-"}`;
+      const drivers = [...working].map((x) => ({ name: x.name, cost: x.qty * Number(x.pricePerUnit) })).sort((a, b) => b.cost - a.cost).slice(0, 3);
+      const buy = working.filter((x) => x.action === "BUY").length;
+      const hold = working.filter((x) => x.action === "HOLD").length;
+      const delay = working.filter((x) => x.action === "DELAY").length;
+      breakdownEl.textContent = `Plan Summary: BUY ${buy}, HOLD ${hold}, DELAY ${delay}. Top cost drivers: ${drivers.map((d) => d.name).join(", ") || "-"}.`;
+      aiEl.textContent = remaining < 0
+        ? `Plan Tip: Reduce top costly items (${drivers.slice(0, 2).map((d) => d.name).join(", ")}) to get back within budget.`
+        : "Plan Tip: You are within budget. Prioritize executing BUY items first.";
 
-      const utilization = budget > 0 ? (total / budget) : 0;
-      const risk = delayCount > buyCount ? "lower-risk posture" : "growth posture";
-      aiInsightEl.textContent = utilization > 1
-        ? `Plan is over budget with a ${risk}. Cut high-cost items first: ${topDrivers || "none"}.`
-        : `Plan is within budget (${Math.round(utilization * 100)}% utilized) using a ${risk}. Focus execution on BUY items first.`;
-    };
-
-    const applyScenario = () => {
-      const sc = scenario();
-      working = makeItems(sc);
-      working.forEach((it) => {
-        const input = qtyInputs.find((x) => x.dataset.product === it.id);
-        if (input) input.value = String(it.suggested);
-        const row = document.querySelector(`tr[data-item="${it.id}"]`);
-        if (row) {
-          const chipNode = row.querySelector("td:nth-child(2) span");
-          const sugNode = row.querySelector("td:nth-child(3) div");
-          if (chipNode) {
-            const chip = actionChip(it.action);
-            chipNode.textContent = chip.label;
-            chipNode.className = `inline-flex items-center px-2.5 py-1 rounded-full text-xs font-semibold ${chip.cls}`;
-          }
-          if (sugNode) sugNode.textContent = `${it.suggested} ${it.unit}`;
-        }
-      });
-      recompute();
-    };
-
-    qtyInputs.forEach((i) => i.addEventListener("input", recompute));
-    budgetInput?.addEventListener("input", recompute);
-    document.getElementById("plan-region")?.addEventListener("change", recompute);
-    document.getElementById("plan-scenario")?.addEventListener("change", applyScenario);
-
-    document.getElementById("auto-allocate")?.addEventListener("click", () => {
-      const budget = getBudget();
-      let weights = working.map((it) => ({ ...it, weight: it.action === "BUY" ? 3 : it.action === "HOLD" ? 2 : 1 }));
-      const totalWeightCost = weights.reduce((s, w) => s + (w.weight * Number(w.pricePerUnit)), 0) || 1;
-      weights.forEach((w) => {
-        const targetCost = (budget * w.weight * Number(w.pricePerUnit)) / totalWeightCost;
-        const qty = Math.max(0, Math.round(targetCost / Number(w.pricePerUnit)));
-        const input = qtyInputs.find((x) => x.dataset.product === w.id);
-        if (input) input.value = String(qty);
-      });
-      recompute();
-    });
-
-    document.querySelectorAll("[data-qaction]").forEach((btn) => {
-      btn.addEventListener("click", () => {
-        const [id, op] = btn.dataset.qaction.split("|");
-        const item = working.find((x) => x.id === id);
-        const input = qtyInputs.find((x) => x.dataset.product === id);
-        if (!item || !input) return;
-        let q = Number(input.value || 0);
-        if (op === "SUGGESTED") q = item.suggested;
-        if (op === "ZERO") q = 0;
-        if (op === "PLUS10") q = Math.round(q * 1.1);
-        if (op === "MINUS10") q = Math.max(0, Math.round(q * 0.9));
-        input.value = String(q);
-        recompute();
-      });
-    });
-
-    document.getElementById("save-version")?.addEventListener("click", () => {
-      const name = window.prompt("Version name", `Plan ${new Date().toLocaleString()}`);
-      if (!name) return;
-      const payload = {
-        name,
-        at: new Date().toISOString(),
-        budget: getBudget(),
-        region: document.getElementById("plan-region").value,
-        scenario: scenario(),
-        rows: working.map((w) => ({ id: w.id, qty: Number(qtyInputs.find((x) => x.dataset.product === w.id)?.value || 0) }))
-      };
-      const next = [...versions, payload];
-      localStorage.setItem("plan_versions", JSON.stringify(next));
-      route("plan");
-    });
-
-    document.getElementById("version-select")?.addEventListener("change", (e) => {
-      const idx = Number(e.target.value);
-      if (!Number.isFinite(idx)) return;
-      const v = versions[idx];
-      if (!v) return;
-      budgetInput.value = Number(v.budget || 0).toLocaleString();
-      document.getElementById("plan-region").value = v.region || "NCR";
-      document.getElementById("plan-scenario").value = v.scenario || "Base";
-      applyScenario();
-      (v.rows || []).forEach((r) => {
-        const input = qtyInputs.find((x) => x.dataset.product === r.id);
-        if (input) input.value = String(r.qty);
-      });
-      recompute();
-    });
-
-    const saveBtn = document.getElementById("savePlan");
-    saveBtn?.addEventListener("click", () => {
-      const budget = getBudget();
-      const total = working.reduce((s, it) => {
-        const q = Number(qtyInputs.find((x) => x.dataset.product === it.id)?.value || 0);
-        return s + q * Number(it.pricePerUnit);
-      }, 0);
-      if (total > budget) {
-        warningEl.classList.remove("hidden");
-        return;
+      if (remaining < 0) {
+        saveStatusEl.className = "px-3 py-1.5 rounded-full text-sm inline-flex items-center gap-1 bg-error-container text-on-error-container";
+        saveStatusEl.innerHTML = `<span class="material-symbols-outlined text-[16px]">warning</span>Over budget by ₱ ${Math.abs(remaining).toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
+        saveBtn.disabled = true;
+        saveBtn.classList.add("opacity-50", "cursor-not-allowed");
+        saveBtn.textContent = "Fix Budget to Save";
+      } else {
+        saveStatusEl.className = "px-3 py-1.5 rounded-full text-sm inline-flex items-center gap-1 bg-primary-fixed text-on-primary-fixed";
+        saveStatusEl.innerHTML = `<span class="material-symbols-outlined text-[16px]">check_circle</span>Within budget`;
+        saveBtn.disabled = false;
+        saveBtn.classList.remove("opacity-50", "cursor-not-allowed");
+        saveBtn.innerHTML = '<span class="material-symbols-outlined">save</span>Save Plan';
       }
-      const original = saveBtn.innerHTML;
+      scheduleAutosave();
+    }
+
+    function applyScenario() {
+      const sc = scenarioEl.value;
+      localStorage.setItem("plan_scenario", sc);
+      const mul = scenarioMultiplier[sc] || 1;
+      working = seedItems.map((x) => ({ ...x, suggested: Math.max(0, Math.round(x.suggested * mul)), qty: Math.max(0, Math.round(x.suggested * mul)) }));
+      renderCards();
+      recompute();
+    }
+
+    function autoAllocate() {
+      const budget = getBudget();
+      const weighted = working.map((it) => ({ ...it, w: it.action === "BUY" ? 3 : it.action === "HOLD" ? 2 : 1 }));
+      const denom = weighted.reduce((s, x) => s + x.w * Number(x.pricePerUnit), 0) || 1;
+      weighted.forEach((x) => {
+        const target = (budget * x.w * Number(x.pricePerUnit)) / denom;
+        const row = working.find((it) => it.id === x.id);
+        row.qty = Math.max(0, Math.round(target / Number(x.pricePerUnit)));
+      });
+      renderCards();
+      recompute();
+    }
+
+    budgetInput.addEventListener("input", recompute);
+    planNameInput.addEventListener("input", scheduleAutosave);
+    scenarioEl.addEventListener("change", applyScenario);
+    sortEl.addEventListener("change", () => {
+      sortMode = sortEl.value;
+      renderCards();
+    });
+    document.getElementById("auto-allocate").addEventListener("click", autoAllocate);
+    document.getElementById("open-plans-inline")?.addEventListener("click", () => route("plans"));
+    document.getElementById("export-csv")?.addEventListener("click", () => {
+      const p = buildPlanPayload();
+      const rows = [["Product", "Action", "Qty", "Price", "Cost"], ...p.items.map((it) => [it.name, it.action, it.qty, it.pricePerUnit, (it.qty * it.pricePerUnit).toFixed(2)])];
+      const csv = rows.map((r) => r.map((v) => `"${String(v).replace(/"/g, '""')}"`).join(",")).join("\n");
+      const blob = new Blob([csv], { type: "text/csv;charset=utf-8;" });
+      const a = document.createElement("a");
+      a.href = URL.createObjectURL(blob);
+      a.download = `${p.planName.replace(/\s+/g, "_")}.csv`;
+      a.click();
+      URL.revokeObjectURL(a.href);
+    });
+    document.getElementById("export-pdf")?.addEventListener("click", () => window.print());
+    document.getElementById("reset-plan").addEventListener("click", () => {
+      working = seedItems.map((x) => ({ ...x }));
+      renderCards();
+      recompute();
+    });
+    showMoreBtn.addEventListener("click", () => {
+      expanded = !expanded;
+      renderCards();
+    });
+    saveBtn.addEventListener("click", () => {
+      if (saveBtn.disabled) return;
+      const total = working.reduce((s, it) => s + it.qty * Number(it.pricePerUnit), 0);
+      const drivers = [...working].map((x) => ({ name: x.name, cost: x.qty * Number(x.pricePerUnit) })).sort((a, b) => b.cost - a.cost).slice(0, 3);
+      const buy = working.filter((x) => x.action === "BUY").length;
+      const hold = working.filter((x) => x.action === "HOLD").length;
+      const delay = working.filter((x) => x.action === "DELAY").length;
+      confirmBody.innerHTML = `<div>Total: <strong>₱ ${total.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</strong></div><div>Signals: BUY ${buy}, HOLD ${hold}, DELAY ${delay}</div><div>Top costs: ${drivers.map((d) => d.name).join(", ") || "-"}</div>`;
+      confirmModal.classList.remove("hidden");
+      confirmModal.classList.add("flex");
+    });
+    document.getElementById("confirm-cancel").addEventListener("click", () => {
+      confirmModal.classList.add("hidden");
+      confirmModal.classList.remove("flex");
+    });
+    document.getElementById("confirm-save").addEventListener("click", async () => {
+      confirmModal.classList.add("hidden");
+      confirmModal.classList.remove("flex");
+      const original = '<span class="material-symbols-outlined">save</span>Save Plan';
       saveBtn.innerHTML = '<span class="material-symbols-outlined animate-spin">sync</span> Saving...';
       saveBtn.disabled = true;
-      setTimeout(() => {
-        saveBtn.innerHTML = '<span class="material-symbols-outlined">check_circle</span> Plan Saved!';
+      try {
+        await persistPlan("approved");
+        autosaveStatusEl.textContent = `Saved as approved ${new Date().toLocaleTimeString()}`;
+        saveBtn.innerHTML = '<span class="material-symbols-outlined">check_circle</span> Saved';
         setTimeout(() => {
           saveBtn.innerHTML = original;
-          saveBtn.disabled = false;
-        }, 1500);
-      }, 900);
+          recompute();
+        }, 1000);
+      } catch {
+        saveBtn.innerHTML = '<span class="material-symbols-outlined">error</span> Save failed';
+      }
     });
 
+    renderCards();
     recompute();
+    window.addEventListener("scroll", () => {
+      const compact = window.scrollY > 220;
+      if (compact) stickyEl.classList.add("shadow-lg");
+      else stickyEl.classList.remove("shadow-lg");
+    });
   }
   if (state.page === "prices") {
     const pricePayload = await api("prices");
-    let byChange = [...(pricePayload.rows || [])];
+    let data = [...(pricePayload.rows || [])];
+    const watch = new Set(getWatchlist());
     const drill = localStorage.getItem("drill_prices");
     if (drill === "GAINERS") {
-      byChange = byChange.filter((r) => Number(r.changePct || 0) > 0);
+      data = data.filter((r) => Number(r.changePct || 0) > 0);
       localStorage.removeItem("drill_prices");
     }
-    const topGainer = [...byChange].sort((a, b) => (b.changePct || 0) - (a.changePct || 0))[0];
-    const topLoser = [...byChange].sort((a, b) => (a.changePct || 0) - (b.changePct || 0))[0];
-    const volatility = byChange.some((x) => Math.abs(x.changePct || 0) > 10) ? "High" : byChange.some((x) => Math.abs(x.changePct || 0) > 5) ? "Medium" : "Low";
+    data.sort((a, b) => {
+      const aw = watch.has(a.productId) ? 1 : 0;
+      const bw = watch.has(b.productId) ? 1 : 0;
+      if (aw !== bw) return bw - aw;
+      return a.productName.localeCompare(b.productName);
+    });
+    const trendLabel = (pct) => {
+      const v = Number(pct || 0);
+      if (v >= 5) return "Rising fast";
+      if (v >= 1) return "Rising";
+      if (v <= -5) return "Cooling fast";
+      if (v <= -1) return "Cooling";
+      return "Stable";
+    };
 
     app.innerHTML = `
-      <section class="mb-xl">
-        <h1 class="text-headline-lg font-headline-lg text-on-surface mb-2">Market Price Movements</h1>
-        <p class="text-body-lg text-on-surface-variant">Real-time agricultural commodity tracking across regional hubs.</p>
-        <div class="mt-2 inline-flex items-center px-3 py-1 rounded-full bg-surface-container-high text-on-surface-variant text-label-sm">Data Week: ${pricePayload.dataWeek || "N/A"}</div>
+      <section class="mb-lg">
+        <h1 class="text-headline-lg font-headline-lg text-on-surface mb-1">${t().pricesTitle}</h1>
+        <p class="text-body-md text-on-surface-variant">Decision-first price monitoring for vegetable commodities.</p>
       </section>
-      <div class="grid grid-cols-1 md:grid-cols-3 gap-gutter mb-xl">
-        <div class="bg-surface-container-lowest border border-outline-variant p-lg rounded-xl soft-lift flex flex-col justify-between">
-          <div><div class="flex justify-between items-start mb-md"><span class="text-label-md text-on-surface-variant uppercase tracking-wider">Top Gainer</span><span class="material-symbols-outlined text-primary">arrow_upward</span></div><h3 class="text-headline-sm font-headline-sm mb-1">${topGainer?.productName || "N/A"}</h3></div>
-          <div class="flex items-end gap-2"><span class="text-headline-md font-headline-md text-primary">${topGainer?.changePct > 0 ? "+" : ""}${Number(topGainer?.changePct || 0).toFixed(2)}%</span><span class="text-label-sm text-on-surface-variant mb-1">from last DA week</span></div>
+      <section class="bg-surface border border-outline-variant rounded-xl p-4 mb-lg">
+        <div class="flex flex-col md:flex-row justify-between items-center gap-3 mb-3">
+          <div class="inline-flex items-center gap-2"><span class="material-symbols-outlined text-secondary">query_stats</span><span class="font-semibold">Selected Commodity Trend</span></div>
+          <div class="flex items-center gap-2">
+            <select id="price-focus" class="px-3 py-2 rounded-lg border border-outline-variant text-sm bg-surface">${data.map((r, i) => `<option value="${r.productId}" ${i===0?"selected":""}>${r.productName}</option>`).join("")}</select>
+            <select id="price-range" class="px-3 py-2 rounded-lg border border-outline-variant text-sm bg-surface"><option value="4">4 weeks</option><option value="8" selected>8 weeks</option><option value="12">12 weeks</option></select>
+          </div>
         </div>
-        <div class="bg-surface-container-lowest border border-outline-variant p-lg rounded-xl soft-lift flex flex-col justify-between">
-          <div><div class="flex justify-between items-start mb-md"><span class="text-label-md text-on-surface-variant uppercase tracking-wider">Top Loser</span><span class="material-symbols-outlined text-error">arrow_downward</span></div><h3 class="text-headline-sm font-headline-sm mb-1">${topLoser?.productName || "N/A"}</h3></div>
-          <div class="flex items-end gap-2"><span class="text-headline-md font-headline-md text-error">${Number(topLoser?.changePct || 0).toFixed(2)}%</span><span class="text-label-sm text-on-surface-variant mb-1">from last DA week</span></div>
-        </div>
-        <div class="bg-surface-container-lowest border border-outline-variant p-lg rounded-xl soft-lift flex flex-col justify-between">
-          <div><div class="flex justify-between items-start mb-md"><span class="text-label-md text-on-surface-variant uppercase tracking-wider">Market Volatility</span><span class="material-symbols-outlined text-tertiary">speed</span></div><h3 class="text-headline-sm font-headline-sm mb-1">${volatility}</h3></div>
-          <div class="flex items-end gap-2"><span class="text-body-md text-on-surface-variant">Last updated just now</span></div>
+        <div id="focus-chart" class="w-full text-on-surface-variant text-sm"></div>
+      </section>
+      <div class="mb-3" id="decision-filters">
+        <div class="inline-flex rounded-xl border border-outline-variant overflow-hidden bg-surface">
+          <button data-df="ALL" class="df px-4 py-2 text-sm bg-primary text-white">All</button>
+          <button data-df="BUY" class="df px-4 py-2 text-sm text-on-surface-variant">Buy</button>
+          <button data-df="HOLD" class="df px-4 py-2 text-sm text-on-surface-variant">Hold</button>
+          <button data-df="DELAY" class="df px-4 py-2 text-sm text-on-surface-variant">Delay</button>
         </div>
       </div>
       <div class="flex flex-col md:flex-row justify-between items-center gap-4 mb-lg">
-        <div class="relative w-full md:w-96"><span class="material-symbols-outlined absolute left-4 top-1/2 -translate-y-1/2 text-on-surface-variant">search</span><input id="price-search" class="w-full bg-surface border border-outline-variant rounded-lg pl-12 pr-4 py-3 focus:border-primary focus:ring-1 focus:ring-primary outline-none text-body-md" placeholder="Search products or regions..." type="text"/></div>
-        <div class="flex gap-2 w-full md:w-auto">
-          <button class="flex-1 md:flex-none flex items-center justify-center gap-2 border border-outline-variant bg-surface px-6 py-3 rounded-lg hover:bg-surface-container-high transition-colors font-label-md"><span class="material-symbols-outlined text-[20px]">filter_list</span> Filter</button>
-          <button class="flex-1 md:flex-none flex items-center justify-center gap-2 border border-outline-variant bg-surface px-6 py-3 rounded-lg hover:bg-surface-container-high transition-colors font-label-md"><span class="material-symbols-outlined text-[20px]">download</span> Export</button>
-        </div>
+        <div class="relative w-full md:w-96"><span class="material-symbols-outlined absolute left-4 top-1/2 -translate-y-1/2 text-on-surface-variant">search</span><input id="price-search" class="w-full bg-surface border border-outline-variant rounded-lg pl-12 pr-4 py-3 focus:border-primary focus:ring-1 focus:ring-primary outline-none text-body-md" placeholder="Search products..." type="text"/></div>
+        <div class="inline-flex items-center px-3 py-1 rounded-full bg-surface-container-high text-on-surface-variant text-sm">Data week: ${pricePayload.dataWeek || "N/A"}</div>
       </div>
       <div class="bg-surface-container-lowest border border-outline-variant rounded-xl overflow-hidden soft-lift mb-xl">
-        <div class="overflow-x-auto no-scrollbar">
-          <table class="w-full text-left border-collapse">
-            <thead><tr class="bg-surface-container-low border-b border-outline-variant"><th class="px-lg py-4 text-label-md text-on-surface-variant uppercase tracking-wider">Product Name</th><th class="px-lg py-4 text-label-md text-on-surface-variant uppercase tracking-wider">Last Price (₱)</th><th class="px-lg py-4 text-label-md text-on-surface-variant uppercase tracking-wider">Current Price (₱)</th><th class="px-lg py-4 text-label-md text-on-surface-variant uppercase tracking-wider">Change (%)</th><th class="px-lg py-4 text-label-md text-on-surface-variant uppercase tracking-wider">Trend</th><th class="px-lg py-4 text-label-md text-on-surface-variant uppercase tracking-wider text-right">Action</th></tr></thead>
-            <tbody id="prices-body" class="divide-y divide-outline-variant">
-              ${byChange.map((r) => {
+        <div class="overflow-x-auto no-scrollbar max-h-[62vh]">
+          <table class="w-full border-collapse">
+            <thead class="sticky top-0 z-10 bg-surface-container-low">
+              <tr class="border-b border-outline-variant text-left">
+                <th class="px-lg py-3 text-label-sm text-on-surface-variant uppercase">Watch</th>
+                <th class="px-lg py-3 text-label-sm text-on-surface-variant uppercase">Product</th>
+                <th class="px-lg py-3 text-label-sm text-on-surface-variant uppercase text-right tabular-nums">Last</th>
+                <th class="px-lg py-3 text-label-sm text-on-surface-variant uppercase text-right tabular-nums">Current</th>
+                <th class="px-lg py-3 text-label-sm text-on-surface-variant uppercase">Trend</th>
+                <th class="px-lg py-3 text-label-sm text-on-surface-variant uppercase text-right">Actions</th>
+              </tr>
+            </thead>
+            <tbody id="prices-body">
+              ${data.map((r, i) => {
                 const current = Number(r.currentPrice || 0);
                 const last = Number(r.lastPrice || 0);
-                const trendUp = r.changePct > 1;
-                const stable = Math.abs(r.changePct) <= 1;
-                return `<tr class="hover:bg-surface-container transition-colors price-row">
-                  <td class="px-lg py-md"><div class="flex items-center gap-4"><div class="w-10 h-10 rounded-full bg-primary-container/10 flex items-center justify-center"><span class="material-symbols-outlined text-primary">${productIcon({ name: r.productName, commodityGroup: r.productName })}</span></div><span class="font-label-md text-on-surface">${r.productName}</span></div></td>
-                  <td class="px-lg py-md font-body-md">${last ? last.toFixed(2) : "-"}</td>
-                  <td class="px-lg py-md font-body-md font-bold">${current ? current.toFixed(2) : "-"}</td>
-                  <td class="px-lg py-md font-body-md ${trendUp ? "text-primary" : stable ? "text-on-surface-variant" : "text-error"}">${r.changePct > 0 ? "+" : ""}${Number(r.changePct || 0).toFixed(2)}%</td>
-                  <td class="px-lg py-md"><span class="px-3 py-1 ${trendUp ? "bg-[#d1e7dd] text-[#0f5132]" : stable ? "bg-surface-container-high text-on-surface-variant" : "bg-error-container text-on-error-container"} rounded-full text-label-sm font-bold inline-flex items-center gap-1"><span class="material-symbols-outlined text-[14px]">${trendUp ? "trending_up" : stable ? "horizontal_rule" : "trending_down"}</span>${trendUp ? "Going Up" : stable ? "Stable" : "Going Down"}</span></td>
-                  <td class="px-lg py-md text-right"><button class="trade-btn bg-primary text-white font-label-md px-4 py-2 rounded-lg hover:opacity-90">Trade</button></td>
+                const watched = watch.has(r.productId);
+                const vol = Math.abs(Number(r.changePct || 0)) >= 5;
+                return `<tr data-row="${r.productId}" class="${i % 2 ? "bg-surface-container-lowest" : "bg-surface"} border-b border-outline-variant hover:bg-surface-container-low">
+                  <td class="px-lg py-3"><button data-watch="${r.productId}" class="text-lg">${watched ? "★" : "☆"}</button></td>
+                  <td class="px-lg py-3"><div class="inline-flex items-center gap-2"><span class="material-symbols-outlined text-primary">${productIcon({ name: r.productName, commodityGroup: r.productName })}</span><span class="font-medium">${r.productName}</span>${vol ? '<span class="px-2 py-0.5 rounded-full text-xs bg-error-container text-on-error-container">High Volatility</span>' : ""}</div></td>
+                  <td class="px-lg py-3 text-right tabular-nums">${last ? last.toFixed(2) : "-"}</td>
+                  <td class="px-lg py-3 text-right tabular-nums font-semibold">${current ? current.toFixed(2) : "-"}</td>
+                  <td class="px-lg py-3"><button data-explain="${r.productId}" class="px-2 py-1 rounded-full text-xs ${Number(r.changePct || 0) >= 1 ? "bg-primary-fixed text-on-primary-fixed" : Number(r.changePct || 0) <= -1 ? "bg-tertiary-fixed text-on-tertiary-fixed-variant" : "bg-surface-container-high text-on-surface-variant"}">${trendLabel(r.changePct)}</button></td>
+                  <td class="px-lg py-3 text-right">
+                    <div class="inline-flex gap-1">
+                      <button data-pact="${r.productId}|BUY" class="inline-flex items-center gap-1 px-2 py-1 rounded-full text-xs bg-primary-fixed text-on-primary-fixed"><span class="material-symbols-outlined text-[14px]">shopping_cart</span>Buy</button>
+                      <button data-pact="${r.productId}|HOLD" class="inline-flex items-center gap-1 px-2 py-1 rounded-full text-xs bg-surface-container-high text-on-surface-variant"><span class="material-symbols-outlined text-[14px]">pause_circle</span>Hold</button>
+                      <button data-pact="${r.productId}|DELAY" class="inline-flex items-center gap-1 px-2 py-1 rounded-full text-xs bg-tertiary-fixed text-on-tertiary-fixed-variant"><span class="material-symbols-outlined text-[14px]">schedule</span>Delay</button>
+                      <button data-send="${r.productId}" class="inline-flex items-center gap-1 px-2 py-1 rounded-full text-xs border border-outline-variant"><span class="material-symbols-outlined text-[14px]">send</span>To Plan</button>
+                    </div>
+                  </td>
                 </tr>`;
               }).join("")}
             </tbody>
           </table>
         </div>
       </div>
-      <section class="relative overflow-hidden bg-primary-container text-on-primary rounded-2xl p-xl flex flex-col md:flex-row items-center justify-between gap-8 mb-xl">
-        <div class="absolute inset-0 opacity-10 pointer-events-none" style="background-image: radial-gradient(circle at 2px 2px, white 1px, transparent 0); background-size: 24px 24px;"></div>
-        <div class="relative z-10 text-center md:text-left"><h2 class="text-headline-md font-headline-md mb-2 text-on-primary-container">Master Your Inventory with Precision</h2><p class="text-body-md opacity-90 max-w-lg">Sync your trading decisions with local market data and optimize your profits using our predictive analytics tools.</p></div>
-        <button class="relative z-10 bg-on-primary-container text-primary-container px-8 py-4 rounded-xl font-bold soft-lift hover:scale-105 transition-transform">Get Market Insights</button>
-      </section>
-      <footer class="bg-surface-container-lowest border-t border-outline-variant py-xl"><div class="flex flex-col md:flex-row justify-between items-center w-full px-container-margin max-w-[1280px] mx-auto"><div class="mb-4 md:mb-0"><span class="text-label-md font-label-md font-bold text-primary">SupplyIT</span><p class="text-label-sm text-on-surface-variant mt-1">© 2024 SupplyIT. Filipino Agricultural Decision Support.</p></div><div class="flex gap-8"><a class="text-label-sm text-on-surface-variant hover:text-secondary underline transition-colors" href="#">Help Center</a><a class="text-label-sm text-on-surface-variant hover:text-secondary underline transition-colors" href="#">Privacy Policy</a><a class="text-label-sm text-on-surface-variant hover:text-secondary underline transition-colors" href="#">Terms of Service</a></div></div></footer>
+      <div id="price-explain" class="hidden fixed inset-0 z-[90] bg-black/30 items-center justify-center p-4">
+        <div class="bg-surface w-full max-w-xl rounded-xl border border-outline-variant p-5">
+          <div class="flex justify-between items-center mb-2"><h3 class="font-semibold">Why this signal</h3><button id="close-explain" class="p-1 rounded hover:bg-surface-container-high"><span class="material-symbols-outlined">close</span></button></div>
+          <div id="explain-body" class="text-sm text-on-surface-variant"></div>
+        </div>
+      </div>
     `;
 
-    const s = document.getElementById("price-search");
-    const rows = [...document.querySelectorAll("#prices-body tr")];
-    s?.addEventListener("input", (e) => {
-      const q = e.target.value.toLowerCase();
-      rows.forEach((row) => { row.style.display = row.innerText.toLowerCase().includes(q) ? "" : "none"; });
-    });
-    document.querySelectorAll(".trade-btn").forEach((btn) => {
-      btn.addEventListener("click", () => {
-        btn.style.transform = "scale(0.95)";
-        setTimeout(() => { btn.style.transform = "scale(1)"; }, 100);
+    const explainModal = document.getElementById("price-explain");
+    const explainBody = document.getElementById("explain-body");
+    const search = document.getElementById("price-search");
+    const rangeEl = document.getElementById("price-range");
+    const focusEl = document.getElementById("price-focus");
+    let activeFilter = "ALL";
+    const updateProduct = async (id, patch) => api(`products/${id}`, { method: "PUT", headers: { "Content-Type": "application/json" }, body: JSON.stringify(patch) });
+    const recomputeRows = () => {
+      const q = (search.value || "").toLowerCase();
+      const rows = [...document.querySelectorAll("#prices-body tr")];
+      rows.forEach((row) => {
+        const id = row.dataset.row;
+        const item = data.find((x) => x.productId === id);
+        const txt = row.innerText.toLowerCase();
+        const watched = watch.has(id);
+        const action = item?.demand === "HIGH DEMAND" ? "BUY" : item?.demand === "LOW DEMAND" ? "DELAY" : "HOLD";
+        const filterOk = activeFilter === "ALL" || action === activeFilter;
+        row.style.display = txt.includes(q) && filterOk ? "" : "none";
       });
+    };
+    const renderFocusChart = () => {
+      const id = focusEl.value;
+      const item = data.find((x) => x.productId === id);
+      const n = Number(rangeEl.value || 8);
+      const series = (item?.series || []).slice(-n);
+      if (!series.length) {
+        document.getElementById("focus-chart").innerHTML = "No series data.";
+        return;
+      }
+      const max = Math.max(...series.map((x) => Number(x.price)));
+      const min = Math.min(...series.map((x) => Number(x.price)));
+      const change = Number(series.at(-1).price) - Number(series[0].price);
+      const trend = change > 0 ? "Prices increased over selected window." : change < 0 ? "Prices softened over selected window." : "Prices remained stable over selected window.";
+      document.getElementById("focus-chart").innerHTML = `
+        <div class="w-full overflow-x-auto">
+          <div class="min-w-[640px]">
+            <div class="flex gap-2 items-end h-56">
+              ${series.map((s) => {
+                const h = Math.max(16, Math.round((Number(s.price) / (max || 1)) * 180));
+                return `
+                <div class="flex-1 min-w-[52px] flex flex-col items-center justify-end h-full">
+                  <div class="text-[11px] text-on-surface-variant mb-1">₱${Number(s.price).toFixed(2)}</div>
+                  <div title="${s.weekStart}" class="w-full max-w-[48px] bg-primary/75 rounded-t-md border border-primary/20" style="height:${h}px"></div>
+                  <div class="text-[10px] text-on-surface-variant mt-1">${s.weekStart.slice(5)}</div>
+                </div>`;
+              }).join("")}
+            </div>
+          </div>
+        </div>
+        <div class="mt-3 flex items-center justify-between text-xs text-on-surface-variant">
+          <span>${item.productName} (${n}-week view)</span>
+          <span>Range: ₱${min.toFixed(2)} - ₱${max.toFixed(2)}</span>
+        </div>
+        <div class="mt-1 text-sm ${change > 0 ? "text-error" : change < 0 ? "text-primary" : "text-on-surface-variant"}">${trend}</div>
+      `;
+    };
+    renderFocusChart();
+    focusEl.addEventListener("change", renderFocusChart);
+    rangeEl.addEventListener("change", renderFocusChart);
+    search.addEventListener("input", recomputeRows);
+    document.querySelectorAll(".df").forEach((btn) => btn.addEventListener("click", () => {
+      activeFilter = btn.dataset.df;
+      document.querySelectorAll(".df").forEach((b) => { b.className = `df px-4 py-2 text-sm ${b.dataset.df === activeFilter ? "bg-primary text-white" : "text-on-surface-variant"}`; });
+      recomputeRows();
+    }));
+    document.querySelectorAll("[data-watch]").forEach((btn) => btn.addEventListener("click", () => {
+      const id = btn.dataset.watch;
+      if (watch.has(id)) watch.delete(id); else watch.add(id);
+      setWatchlist([...watch]);
+      btn.textContent = watch.has(id) ? "★" : "☆";
+      route("prices");
+    }));
+    document.querySelectorAll("[data-pact]").forEach((btn) => btn.addEventListener("click", async () => {
+      const [id, action] = btn.dataset.pact.split("|");
+      await updateProduct(id, { manualAction: action });
+    }));
+    document.querySelectorAll("[data-send]").forEach((btn) => btn.addEventListener("click", () => {
+      localStorage.setItem("plan_focus_product", btn.dataset.send);
+      route("plan");
+    }));
+    document.querySelectorAll("[data-explain]").forEach((btn) => btn.addEventListener("click", () => {
+      const id = btn.dataset.explain;
+      const item = data.find((x) => x.productId === id);
+      const treeText = item?.votes?.decisionTree || "UNAVAILABLE";
+      const regText = item?.votes?.regression || "UNAVAILABLE";
+      const knnText = item?.votes?.knn || "UNAVAILABLE";
+      const finalText = item?.demand || "UNAVAILABLE";
+      explainBody.innerHTML = `<div><strong>${item?.productName || ""}</strong></div><div class="mt-2">Decision Tree: ${treeText}</div><div>Linear Regression: ${regText}</div><div>kNN: ${knnText}</div><div class="mt-2"><strong>Final:</strong> ${finalText}</div>`;
+      explainModal.classList.remove("hidden");
+      explainModal.classList.add("flex");
+    }));
+    document.getElementById("close-explain").addEventListener("click", () => {
+      explainModal.classList.add("hidden");
+      explainModal.classList.remove("flex");
     });
+    explainModal.addEventListener("click", (e) => {
+      if (e.target === explainModal) {
+        explainModal.classList.add("hidden");
+        explainModal.classList.remove("flex");
+      }
+    });
+    recomputeRows();
   }
   if (state.page === "demand") {
     const payload = await api("demand");
@@ -839,120 +1430,205 @@ async function render() {
       data = data.filter((r) => r.action === "BUY");
       localStorage.removeItem("drill_reco");
     }
-    const rising = data.filter((d) => d.action === "BUY" || d.action === "TOP-UP");
-    const top = rising[0] || data[0];
-    const overallTrend = rising.length >= Math.ceil(Math.max(1, data.length / 2)) ? "Rising" : "Stable";
-    const nextPeak = `Week ${40 + (new Date().getDate() % 4)}`;
-    const avgChange = data.length ? (data.reduce((s, d) => s + Number(d.changePct || 0), 0) / data.length) : 0;
-    const sortedUp = [...data].sort((a, b) => Number(b.changePct || 0) - Number(a.changePct || 0));
-    const sortedDown = [...data].sort((a, b) => Number(a.changePct || 0) - Number(b.changePct || 0));
+    const previousByProduct = JSON.parse(localStorage.getItem("suggestions_prev") || "{}");
+    const confidenceBand = (c) => c >= 85 ? "High" : c >= 70 ? "Medium" : "Low";
+    const urgency = (r) => r.action === "BUY" ? "Act today" : r.action === "HOLD" ? "This week" : "Can wait";
+    const impactBand = (q) => q >= 1300 ? "High" : q >= 800 ? "Medium" : "Low";
+    const verdictTag = (r) => {
+      const pct = Number(r.changePct || 0);
+      if (pct <= -2) return "Price falling";
+      if (pct >= 2) return "Trend up";
+      if (Number(r.quantity || 0) >= 1300) return "Low stock";
+      return "Stable trend";
+    };
+    const actionOrder = { BUY: 0, HOLD: 1, DELAY: 2 };
+    data.sort((a, b) => (actionOrder[a.action] ?? 9) - (actionOrder[b.action] ?? 9) || (Number(b.confidence || 0) - Number(a.confidence || 0)));
+
+    const urgentRows = data.filter((d) => d.action === "BUY").slice(0, 3);
+    const urgentCount = data.filter((d) => d.action === "BUY").length;
+    const estimatedSpend = data.filter((d) => d.action === "BUY").reduce((s, d) => s + Number(d.quantity || 0), 0);
 
     app.innerHTML = `
-      <section class="mb-xl">
-        <h1 class="text-headline-lg font-headline-lg text-on-surface mb-2">Demand Estimation</h1>
-        <p class="text-body-lg text-on-surface-variant">Predictive commodity analytics to optimize your inventory sourcing.</p>
+      <section class="mb-lg">
+        <h1 class="text-headline-lg font-headline-lg text-on-surface mb-1">${t().suggestionsTitle}</h1>
+        <p class="text-body-md text-on-surface-variant">Action-ready recommendations from DA prices + model voting.</p>
         <div class="mt-2 inline-flex items-center px-3 py-1 rounded-full bg-surface-container-high text-on-surface-variant text-label-sm">Data Week: ${recoPayload.dataWeek || "N/A"}</div>
       </section>
-
-      <div class="grid grid-cols-1 md:grid-cols-3 gap-gutter mb-xl">
-        <div class="bg-surface-container-lowest border border-outline-variant p-lg rounded-xl soft-lift flex flex-col justify-between">
-          <div><div class="flex justify-between items-start mb-md"><span class="text-label-md text-on-surface-variant uppercase tracking-wider">Overall Demand Trend</span><span class="material-symbols-outlined text-primary">trending_up</span></div><h3 class="text-headline-sm font-headline-sm mb-1">${overallTrend}</h3></div>
-          <div class="flex items-end gap-2"><span class="text-headline-md font-headline-md ${avgChange >= 0 ? "text-primary" : "text-error"}">${avgChange >= 0 ? "+" : ""}${avgChange.toFixed(2)}%</span><span class="text-label-sm text-on-surface-variant mb-1">latest DA week avg</span></div>
-        </div>
-        <div class="bg-surface-container-lowest border border-outline-variant p-lg rounded-xl soft-lift flex flex-col justify-between">
-          <div><div class="flex justify-between items-start mb-md"><span class="text-label-md text-on-surface-variant uppercase tracking-wider">Top In-Demand Product</span><span class="material-symbols-outlined text-tertiary">inventory</span></div><h3 class="text-headline-sm font-headline-sm mb-1">${top?.productName || "N/A"}</h3></div>
-          <div class="flex items-end gap-2"><span class="text-body-md text-on-surface-variant">Critical stock level suggested</span></div>
-        </div>
-        <div class="bg-surface-container-lowest border border-outline-variant p-lg rounded-xl soft-lift flex flex-col justify-between">
-          <div><div class="flex justify-between items-start mb-md"><span class="text-label-md text-on-surface-variant uppercase tracking-wider">Next High-Demand Peak</span><span class="material-symbols-outlined text-secondary">event</span></div><h3 class="text-headline-sm font-headline-sm mb-1">${nextPeak}</h3></div>
-          <div class="flex items-end gap-2"><span class="text-body-md text-on-surface-variant">Based on highest positive weekly movers</span></div>
-        </div>
-      </div>
-
-      <section class="bg-surface-container-lowest border border-outline-variant p-lg rounded-xl soft-lift mb-xl">
-        <div class="flex justify-between items-center mb-lg">
-          <h3 class="font-headline-sm text-headline-sm">8-Week Demand Forecast (Metric Tons)</h3>
-          <div class="flex gap-sm">
-            <span class="inline-flex items-center gap-xs text-label-sm text-on-surface-variant"><span class="w-3 h-3 rounded-full bg-primary"></span> Historical</span>
-            <span class="inline-flex items-center gap-xs text-label-sm text-on-surface-variant"><span class="w-3 h-3 rounded-full bg-secondary-container"></span> Forecasted</span>
-          </div>
-        </div>
-        <div class="relative h-64 flex items-end justify-between gap-md border-l border-b border-outline-variant pb-xs pl-xs">
-          <div class="w-full h-24 bg-primary-container/20 rounded-t-sm relative"><div class="absolute bottom-0 w-full h-3/4 bg-primary rounded-t-sm"></div></div>
-          <div class="w-full h-32 bg-primary-container/20 rounded-t-sm relative"><div class="absolute bottom-0 w-full h-4/5 bg-primary rounded-t-sm"></div></div>
-          <div class="w-full h-40 bg-primary-container/20 rounded-t-sm relative"><div class="absolute bottom-0 w-full h-1/2 bg-primary rounded-t-sm"></div></div>
-          <div class="w-full h-48 bg-secondary-container/20 rounded-t-sm relative border-l border-dashed border-outline"><div class="absolute bottom-0 w-full h-3/5 bg-secondary-container rounded-t-sm"></div></div>
-          <div class="w-full h-56 bg-secondary-container/20 rounded-t-sm relative"><div class="absolute bottom-0 w-full h-4/5 bg-secondary-container rounded-t-sm"></div></div>
-          <div class="w-full h-64 bg-secondary-container/20 rounded-t-sm relative"><div class="absolute bottom-0 w-full h-full bg-secondary-container rounded-t-sm"></div></div>
-          <div class="w-full h-56 bg-secondary-container/20 rounded-t-sm relative"><div class="absolute bottom-0 w-full h-2/3 bg-secondary-container rounded-t-sm"></div></div>
-          <div class="w-full h-48 bg-secondary-container/20 rounded-t-sm relative"><div class="absolute bottom-0 w-full h-1/2 bg-secondary-container rounded-t-sm"></div></div>
-        </div>
-        <div class="flex justify-between mt-sm text-label-sm text-on-surface-variant"><span>W35</span><span>W36</span><span>W37</span><span class="font-bold text-outline">Today</span><span>W39</span><span>W40</span><span>W41</span><span>W42</span></div>
-      </section>
-
-      <section class="bg-surface-container-lowest border border-outline-variant rounded-xl overflow-hidden soft-lift mb-xl">
-        <div class="p-lg border-b border-outline-variant flex flex-col sm:flex-row justify-between items-start sm:items-center gap-md">
-          <h3 class="text-headline-sm font-headline-sm">Commodity Demand Breakdown</h3>
-          <div class="flex gap-2 w-full sm:w-auto">
-            <div class="relative flex-1 sm:w-64"><span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-on-surface-variant text-[20px]">search</span><input id="sugg-search" class="w-full bg-surface border border-outline-variant rounded-lg pl-10 pr-4 py-2 text-label-md focus:border-primary outline-none" placeholder="Search products..." type="text"/></div>
-            <button class="flex items-center gap-2 border border-outline-variant bg-surface px-4 py-2 rounded-lg hover:bg-surface-container-high transition-colors font-label-md"><span class="material-symbols-outlined text-[20px]">filter_list</span> Filter</button>
-          </div>
-        </div>
-        <div class="overflow-x-auto no-scrollbar">
-          <table class="w-full text-left border-collapse">
-            <thead><tr class="bg-surface-container-low border-b border-outline-variant"><th class="px-lg py-4 text-label-md text-on-surface-variant uppercase tracking-wider">Product Name</th><th class="px-lg py-4 text-label-md text-on-surface-variant uppercase tracking-wider">Current Demand</th><th class="px-lg py-4 text-label-md text-on-surface-variant uppercase tracking-wider">Forecast (Next Month)</th><th class="px-lg py-4 text-label-md text-on-surface-variant uppercase tracking-wider">Confidence Score</th><th class="px-lg py-4 text-label-md text-on-surface-variant uppercase tracking-wider">Estimated Volume Needed</th><th class="px-lg py-4 text-label-md text-on-surface-variant uppercase tracking-wider text-right">Action</th></tr></thead>
-            <tbody id="sugg-body" class="divide-y divide-outline-variant">
-              ${data.map((r) => {
-                const risingRow = r.action === "BUY";
-                const stable = r.action === "HOLD";
-                const pct = `${r.changePct > 0 ? "+" : ""}${Number(r.changePct || 0).toFixed(2)}%`;
-                const confidence = Number(r.confidence || 0);
-                return `<tr class="hover:bg-surface-container transition-colors sugg-row">
-                  <td class="px-lg py-md"><div class="flex items-center gap-4"><div class="w-10 h-10 rounded-full bg-primary-container/10 flex items-center justify-center"><span class="material-symbols-outlined text-primary">${productIcon({ name: r.productName, commodityGroup: r.productName })}</span></div><span class="font-label-md text-on-surface font-bold">${r.productName}</span></div></td>
-                  <td class="px-lg py-md"><span class="px-3 py-1 ${r.demand === "HIGH DEMAND" ? "bg-error-container text-on-error-container" : r.demand === "NEUTRAL" ? "bg-surface-container-high text-on-surface-variant" : "bg-green-100 text-green-800"} rounded-full text-label-sm font-bold">${r.demand}</span></td>
-                  <td class="px-lg py-md font-body-md ${r.changePct > 0 ? "text-primary font-bold" : Math.abs(r.changePct) <= 1 ? "text-on-surface-variant" : "text-error font-bold"}"><div class="flex items-center gap-1"><span class="material-symbols-outlined text-sm">${r.changePct > 0 ? "arrow_upward" : Math.abs(r.changePct) <= 1 ? "horizontal_rule" : "arrow_downward"}</span> ${pct}</div></td>
-                  <td class="px-lg py-md"><div class="flex flex-col gap-1"><div class="w-32 h-2 bg-surface-container-high rounded-full overflow-hidden"><div class="${confidence > 85 ? "bg-primary" : confidence > 70 ? "bg-secondary-container" : "bg-amber-500"} h-full" style="width: ${confidence}%;"></div></div><span class="text-label-sm text-on-surface-variant">${confidence}% ${confidence > 85 ? "High" : "Moderate"}</span></div></td>
-                  <td class="px-lg py-md font-body-md font-bold text-on-surface">${Number(r.quantity || 0).toLocaleString()} kg</td>
-                  <td class="px-lg py-md text-right"><button class="${risingRow ? "bg-primary text-white" : "border border-outline-variant text-on-surface"} font-label-md px-4 py-2 rounded-lg hover:opacity-90">${risingRow ? "Buy Now" : "Hold"}</button></td>
-                </tr>`;
-              }).join("")}
-            </tbody>
-          </table>
-        </div>
-        <div class="p-lg border-t border-outline-variant bg-surface-container-low text-center"><button class="text-primary font-label-md flex items-center justify-center gap-xs mx-auto hover:underline">View All Commodity Predictions <span class="material-symbols-outlined">expand_more</span></button></div>
-      </section>
-
       <section class="mb-xl">
-        <h3 class="font-headline-sm text-headline-sm mb-gutter">AI Market Insights & Advisory</h3>
-        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-gutter">
-          <div class="bg-secondary-container/10 border-l-4 border-secondary p-md rounded-lg flex gap-md soft-lift"><span class="material-symbols-outlined text-secondary">info</span><div><p class="font-label-md font-bold text-on-secondary-container">Top Upward Mover</p><p class="text-label-sm text-on-surface-variant">${sortedUp[0]?.productName || "N/A"} at ${Number(sortedUp[0]?.changePct || 0).toFixed(2)}% weekly change.</p></div></div>
-          <div class="bg-primary-container/10 border-l-4 border-primary p-md rounded-lg flex gap-md soft-lift"><span class="material-symbols-outlined text-primary">check_circle</span><div><p class="font-label-md font-bold text-primary">Best Buy Signal</p><p class="text-label-sm text-on-surface-variant">${rising[0]?.productName || "No strong buy signal this week"}.</p></div></div>
-          <div class="bg-tertiary-container/10 border-l-4 border-tertiary p-md rounded-lg flex gap-md soft-lift"><span class="material-symbols-outlined text-tertiary">warning</span><div><p class="font-label-md font-bold text-tertiary">Top Downward Mover</p><p class="text-label-sm text-on-surface-variant">${sortedDown[0]?.productName || "N/A"} at ${Number(sortedDown[0]?.changePct || 0).toFixed(2)}% weekly change.</p></div></div>
-          <div class="bg-secondary-container/10 border-l-4 border-secondary p-md rounded-lg flex gap-md soft-lift"><span class="material-symbols-outlined text-secondary">rocket_launch</span><div><p class="font-label-md font-bold text-on-secondary-container">Coverage Snapshot</p><p class="text-label-sm text-on-surface-variant">${data.length} DA commodities in active monitoring.</p></div></div>
+        <div class="flex items-center justify-between mb-3">
+          <h2 class="text-headline-sm font-headline-sm inline-flex items-center gap-2"><span class="material-symbols-outlined text-primary">priority_high</span>Urgent Actions</h2>
+          <span class="text-sm text-on-surface-variant">${urgentCount} urgent</span>
+        </div>
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-gutter">
+          ${(urgentRows.length ? urgentRows : data.slice(0, 3)).map((r) => {
+            const chip = actionChip(r.action);
+            return `<article class="bg-surface border border-outline-variant rounded-xl p-4 h-full flex flex-col">
+              <div class="text-lg font-semibold leading-tight">${r.productName}</div>
+              <div class="mt-2"><span class="px-2 py-1 rounded-full text-xs font-semibold ${chip.cls}">${chip.label}</span></div>
+              <div class="mt-2 text-sm text-on-surface-variant">${verdictTag(r)}</div>
+              <button data-primary="${r.productId}|${r.action}" class="mt-4 px-3 py-2 rounded-lg border border-outline-variant text-sm inline-flex items-center justify-center gap-1">
+                <span class="material-symbols-outlined text-[16px]">send</span>${r.action === "BUY" ? "Send to Buy Plan" : r.action === "HOLD" ? "Apply Hold" : "Apply Delay"}
+              </button>
+            </article>`;
+          }).join("")}
         </div>
       </section>
-
-      <section class="relative overflow-hidden bg-primary-container text-on-primary rounded-2xl p-xl flex flex-col md:flex-row items-center justify-between gap-8 mb-xl">
-        <div class="absolute inset-0 opacity-10 pointer-events-none" style="background-image: radial-gradient(circle at 2px 2px, white 1px, transparent 0); background-size: 24px 24px;"></div>
-        <div class="relative z-10 text-center md:text-left"><h2 class="text-headline-md font-headline-md mb-2 text-on-primary-container font-bold">Act on Predicted Demand Trends</h2><p class="text-body-md opacity-90 max-w-lg">Leverage our high-confidence forecasts to secure your supply chains before market fluctuations hit.</p></div>
-        <button class="relative z-10 bg-on-primary-container text-primary-container px-8 py-4 rounded-xl font-bold soft-lift hover:scale-105 transition-transform">Download Full Forecast Report</button>
+      <section class="mb-lg">
+        <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-3 mb-4">
+          <div id="sugg-segment" class="inline-flex rounded-xl border border-outline-variant overflow-hidden bg-surface">
+            <button data-sf="ALL" class="sf px-4 py-2 text-sm bg-primary text-white">All</button>
+            <button data-sf="BUY" class="sf px-4 py-2 text-sm text-on-surface-variant">Buy</button>
+            <button data-sf="HOLD" class="sf px-4 py-2 text-sm text-on-surface-variant">Hold</button>
+            <button data-sf="DELAY" class="sf px-4 py-2 text-sm text-on-surface-variant">Delay</button>
+          </div>
+          <button id="toggle-more-filters" class="px-3 py-2 rounded-lg border border-outline-variant text-sm inline-flex items-center gap-1">
+            <span class="material-symbols-outlined text-[16px]">tune</span>More filters
+          </button>
+        </div>
+        <div id="more-filters" class="hidden mb-4 bg-surface border border-outline-variant rounded-xl p-3">
+          <label class="inline-flex items-center gap-2 mr-4 text-sm"><input id="mf-high-conf" type="checkbox">High confidence only</label>
+          <label class="inline-flex items-center gap-2 text-sm"><input id="mf-high-impact" type="checkbox">High impact only</label>
+        </div>
+        <div class="relative w-full md:w-96 mb-4"><span class="material-symbols-outlined absolute left-4 top-1/2 -translate-y-1/2 text-on-surface-variant">search</span><input id="sugg-search" class="w-full bg-surface border border-outline-variant rounded-lg pl-12 pr-4 py-3 focus:border-primary focus:ring-1 focus:ring-primary outline-none text-body-md" placeholder="Search suggestions..." type="text"/></div>
+        <div id="sugg-empty" class="hidden mb-4 p-4 rounded-xl bg-surface-container-low text-on-surface-variant text-sm">No matching suggestions.</div>
+      <div id="sugg-list" class="grid grid-cols-1 xl:grid-cols-2 gap-3"></div>
+        <div class="mt-4 flex justify-center">
+          <button id="show-more-sugg" class="hidden px-4 py-2 rounded-lg border border-outline-variant text-sm inline-flex items-center gap-1"><span class="material-symbols-outlined text-[16px]">expand_more</span>Show 10 more</button>
+        </div>
       </section>
-
-      <footer class="bg-surface-container-lowest border-t border-outline-variant py-xl"><div class="flex flex-col md:flex-row justify-between items-center w-full px-container-margin max-w-[1280px] mx-auto"><div class="mb-4 md:mb-0 text-center md:text-left"><span class="text-label-md font-label-md font-bold text-primary">SupplyIT</span><p class="text-label-sm text-on-surface-variant mt-1">© 2024 SupplyIT. Filipino Agricultural Decision Support.</p></div><div class="flex gap-8"><a class="text-label-sm text-on-surface-variant hover:text-secondary underline transition-colors" href="#">Help Center</a><a class="text-label-sm text-on-surface-variant hover:text-secondary underline transition-colors" href="#">Privacy Policy</a><a class="text-label-sm text-on-surface-variant hover:text-secondary underline transition-colors" href="#">Terms of Service</a></div></div></footer>
     `;
 
-    const srch = document.getElementById("sugg-search");
-    const rows = [...document.querySelectorAll("#sugg-body tr")];
-    srch?.addEventListener("input", (e) => {
-      const q = e.target.value.toLowerCase();
-      rows.forEach((row) => { row.style.display = row.innerText.toLowerCase().includes(q) ? "" : "none"; });
-    });
-    document.querySelectorAll("button").forEach((btn) => {
-      btn.addEventListener("click", () => {
-        btn.style.transform = "scale(0.95)";
-        setTimeout(() => { btn.style.transform = "scale(1)"; }, 100);
+    const byProductNow = {};
+    data.forEach((d) => { byProductNow[d.productId] = { action: d.action }; });
+    localStorage.setItem("suggestions_prev", JSON.stringify(byProductNow));
+
+    let activeFilter = "ALL";
+    let pageSize = 10;
+    let currentLimit = 10;
+    const searchInput = document.getElementById("sugg-search");
+    const mfHighConf = document.getElementById("mf-high-conf");
+    const mfHighImpact = document.getElementById("mf-high-impact");
+    const listEl = document.getElementById("sugg-list");
+    const showMoreBtn = document.getElementById("show-more-sugg");
+    const updateProduct = async (id, patch) => api(`products/${id}`, { method: "PUT", headers: { "Content-Type": "application/json" }, body: JSON.stringify(patch) });
+
+    function rowHtml(r) {
+      const chip = actionChip(r.action);
+      const conf = confidenceBand(Number(r.confidence || 0));
+      const imp = impactBand(Number(r.quantity || 0));
+      const prev = previousByProduct[r.productId];
+      const delta = prev ? (prev.action === r.action ? "Unchanged" : `Changed from ${prev.action}`) : "New signal";
+      return `<article data-sugg="${r.productId}" class="bg-surface border border-outline-variant rounded-xl p-3.5 h-full">
+        <div class="grid grid-cols-1 md:grid-cols-[minmax(0,1fr)_auto] gap-2.5 items-center">
+          <div class="min-w-0">
+            <div class="flex flex-wrap items-center gap-2">
+              <div class="text-base font-semibold truncate">${r.productName}</div>
+              <span class="px-2 py-1 rounded-full text-xs font-semibold ${chip.cls}">${chip.label}</span>
+            </div>
+            <div class="mt-1 text-sm text-on-surface-variant">${verdictTag(r)}</div>
+            <div class="mt-0.5 text-xs text-on-surface-variant">${delta}</div>
+          </div>
+          <div class="flex items-center gap-1.5 md:justify-end">
+            <button data-primary="${r.productId}|${r.action}" class="px-2.5 py-1.5 rounded-lg border border-outline-variant text-xs inline-flex items-center gap-1 whitespace-nowrap">
+              <span class="material-symbols-outlined text-[16px]">${r.action === "BUY" ? "shopping_cart" : r.action === "HOLD" ? "pause_circle" : "schedule"}</span>
+              ${r.action === "BUY" ? "Send to Buy Plan" : r.action === "HOLD" ? "Apply Hold" : "Apply Delay"}
+            </button>
+            <div class="relative">
+              <button data-menu="${r.productId}" class="w-8 h-8 rounded-lg border border-outline-variant inline-flex items-center justify-center"><span class="material-symbols-outlined text-[17px]">more_vert</span></button>
+              <div id="menu-${r.productId}" class="hidden absolute right-0 mt-1 w-44 bg-surface border border-outline-variant rounded-lg shadow-sm z-20">
+                <button data-ra="${r.productId}|BUY" class="w-full text-left px-3 py-2 text-sm hover:bg-surface-container-low">Set BUY</button>
+                <button data-ra="${r.productId}|HOLD" class="w-full text-left px-3 py-2 text-sm hover:bg-surface-container-low">Set HOLD</button>
+                <button data-ra="${r.productId}|DELAY" class="w-full text-left px-3 py-2 text-sm hover:bg-surface-container-low">Set DELAY</button>
+                <button data-expand="${r.productId}" class="w-full text-left px-3 py-2 text-sm hover:bg-surface-container-low">Show details</button>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div id="detail-${r.productId}" class="hidden mt-3 text-sm text-on-surface-variant bg-surface-container-low rounded-lg p-3">
+          <div>Confidence: ${conf}</div>
+          <div>Impact: ${imp}</div>
+          <div>Urgency: ${urgency(r)}</div>
+          <div>Decision Tree: ${r?.demand || "UNAVAILABLE"}</div>
+          <div>Regression: ${r?.trend || "UNAVAILABLE"}</div>
+          <div>Estimated volume: ${Number(r.quantity || 0).toLocaleString()} kg</div>
+        </div>
+      </article>`;
+    }
+
+    const applyFilter = () => {
+      const q = (searchInput.value || "").toLowerCase();
+      const filtered = data.filter((row) => {
+        const conf = Number(row?.confidence || 0);
+        const impHigh = Number(row?.quantity || 0) >= 1300;
+        const segmentOk = activeFilter === "ALL" || row?.action === activeFilter;
+        const moreOk = (!mfHighConf.checked || conf >= 85) && (!mfHighImpact.checked || impHigh);
+        const searchOk = `${row.productName} ${row.reason || ""}`.toLowerCase().includes(q);
+        return segmentOk && moreOk && searchOk;
       });
+      const visibleRows = filtered.slice(0, currentLimit);
+      listEl.innerHTML = visibleRows.map(rowHtml).join("");
+      document.getElementById("sugg-empty").classList.toggle("hidden", filtered.length !== 0 || data.length === 0);
+      showMoreBtn.classList.toggle("hidden", filtered.length <= currentLimit);
+      bindSuggestionActions();
+    };
+
+    function bindSuggestionActions() {
+      document.querySelectorAll("[data-primary]").forEach((btn) => btn.addEventListener("click", async () => {
+        const [id, action] = btn.dataset.primary.split("|");
+        await updateProduct(id, { manualAction: action });
+        if (action === "BUY") {
+          localStorage.setItem("plan_focus_product", id);
+          route("plan");
+        } else {
+          applyFilter();
+        }
+      }));
+      document.querySelectorAll("[data-menu]").forEach((btn) => btn.addEventListener("click", (e) => {
+        e.stopPropagation();
+        const id = btn.dataset.menu;
+        document.querySelectorAll("[id^='menu-']").forEach((n) => { if (n.id !== `menu-${id}`) n.classList.add("hidden"); });
+        document.getElementById(`menu-${id}`)?.classList.toggle("hidden");
+      }));
+      document.querySelectorAll("[data-ra]").forEach((btn) => btn.addEventListener("click", async () => {
+        const [id, action] = btn.dataset.ra.split("|");
+        await updateProduct(id, { manualAction: action });
+        document.getElementById(`menu-${id}`)?.classList.add("hidden");
+        if (action === "BUY") {
+          localStorage.setItem("plan_focus_product", id);
+          route("plan");
+        } else {
+          applyFilter();
+        }
+      }));
+      document.querySelectorAll("[data-expand]").forEach((btn) => btn.addEventListener("click", () => {
+        const id = btn.dataset.expand;
+        const node = document.getElementById(`detail-${id}`);
+        if (node) node.classList.toggle("hidden");
+        document.getElementById(`menu-${id}`)?.classList.add("hidden");
+      }));
+    }
+
+    document.querySelectorAll(".sf").forEach((btn) => btn.addEventListener("click", () => {
+      activeFilter = btn.dataset.sf;
+      currentLimit = pageSize;
+      document.querySelectorAll(".sf").forEach((b) => { b.className = `sf px-4 py-2 text-sm ${b.dataset.sf === activeFilter ? "bg-primary text-white" : "text-on-surface-variant"}`; });
+      applyFilter();
+    }));
+    searchInput.addEventListener("input", applyFilter);
+    mfHighConf.addEventListener("change", () => { currentLimit = pageSize; applyFilter(); });
+    mfHighImpact.addEventListener("change", () => { currentLimit = pageSize; applyFilter(); });
+    document.getElementById("toggle-more-filters").addEventListener("click", () => {
+      document.getElementById("more-filters").classList.toggle("hidden");
     });
+    showMoreBtn.addEventListener("click", () => {
+      currentLimit += pageSize;
+      applyFilter();
+    });
+    document.addEventListener("click", () => {
+      document.querySelectorAll("[id^='menu-']").forEach((n) => n.classList.add("hidden"));
+    });
+    if (data.length === 0) document.getElementById("sugg-empty").classList.remove("hidden");
+    applyFilter();
   }
   if (state.page === "settings") {
     const s = await api("settings");
@@ -962,7 +1638,11 @@ async function render() {
     card.onmouseenter = () => { card.style.transform = 'translateY(-2px)'; card.style.transition='transform .2s ease-out'; };
     card.onmouseleave = () => { card.style.transform = 'translateY(0)'; };
   });
+  localizeAppShell();
 }
 
 function route(page) { state.page = page; render(); }
+initSidebarCollapse();
 render();
+window.SUPPLYIT_RENDER = render;
+window.addEventListener("supplyit:lang-changed", () => render());

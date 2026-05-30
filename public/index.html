@@ -5,44 +5,371 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>SupplyIT</title>
   <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
-  <link href="https://fonts.googleapis.com/css2?family=Hanken+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet"/>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet"/>
   <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
   <script>
     tailwind.config = { darkMode: 'class', theme: { extend: { colors: {primary:'#0d631b',background:'#f8f9ff',surface:'#f8f9ff','on-surface':'#121c2a','on-surface-variant':'#40493d','outline-variant':'#bfcaba','surface-container-low':'#eff4ff','surface-container-lowest':'#ffffff','surface-container-high':'#dee9fc','surface-container-highest':'#d9e3f6','primary-container':'#2e7d32','on-primary-container':'#cbffc2','primary-fixed':'#a3f69c','on-primary-fixed':'#002204',error:'#ba1a1a','error-container':'#ffdad6','on-error-container':'#93000a',secondary:'#0061a4',tertiary:'#794b00','tertiary-fixed':'#ffddb8','on-tertiary-fixed-variant':'#653e00'}, spacing:{gutter:'16px',lg:'24px',xl:'32px','container-margin':'20px'} } } }
   </script>
-  <style>body{font-family:'Hanken Grotesk',sans-serif}.material-symbols-outlined{font-variation-settings:'FILL' 0,'wght' 400,'GRAD' 0,'opsz' 24}.soft-lift{box-shadow:0 4px 12px rgba(0,0,0,.05)}</style>
+  <style>
+    body{font-family:'Inter',sans-serif}
+    .material-symbols-outlined{font-variation-settings:'FILL' 0,'wght' 400,'GRAD' 0,'opsz' 24}
+    .soft-lift{box-shadow:0 4px 12px rgba(0,0,0,.05)}
+
+    :root{
+      --ease-smooth:cubic-bezier(.22,.61,.36,1);
+      --dur-fast:140ms;
+      --dur-med:220ms;
+      --dur-slow:360ms;
+    }
+
+    html{
+      scroll-behavior:smooth;
+      scrollbar-gutter:stable;
+    }
+
+    body{
+      -webkit-font-smoothing:antialiased;
+      text-rendering:optimizeLegibility;
+    }
+
+    button,a,input,select,textarea,[role="button"]{
+      transition:
+        background-color var(--dur-fast) var(--ease-smooth),
+        border-color var(--dur-fast) var(--ease-smooth),
+        color var(--dur-fast) var(--ease-smooth),
+        opacity var(--dur-fast) var(--ease-smooth),
+        transform var(--dur-fast) var(--ease-smooth),
+        box-shadow var(--dur-fast) var(--ease-smooth);
+    }
+
+    .soft-lift{
+      transition:
+        transform var(--dur-med) var(--ease-smooth),
+        box-shadow var(--dur-med) var(--ease-smooth);
+      will-change:transform;
+    }
+
+    .soft-lift:hover{
+      transform:translateY(-2px);
+      box-shadow:0 10px 20px rgba(0,0,0,.06);
+    }
+
+    .nav-item{
+      transition:
+        background-color var(--dur-fast) var(--ease-smooth),
+        color var(--dur-fast) var(--ease-smooth),
+        transform var(--dur-fast) var(--ease-smooth);
+    }
+
+    @media (min-width: 768px){
+      #app-sidebar{
+        width:16rem;
+        transition:width var(--dur-med) var(--ease-smooth);
+        overflow:hidden;
+      }
+      #app-topbar{
+        margin-left:16rem;
+        transition:margin-left var(--dur-med) var(--ease-smooth);
+      }
+      #app-main{
+        margin-left:16rem;
+        transition:margin-left var(--dur-med) var(--ease-smooth);
+      }
+
+      body.nav-collapsed #app-sidebar{
+        width:5.25rem;
+      }
+      body.nav-collapsed #app-topbar{
+        margin-left:5.25rem;
+      }
+      body.nav-collapsed #app-main{
+        margin-left:5.25rem;
+      }
+      body.nav-collapsed .brand-text,
+      body.nav-collapsed .nav-label,
+      body.nav-collapsed .sidebar-footer-label{
+        display:none;
+      }
+      body.nav-collapsed #side-nav .nav-item{
+        justify-content:center;
+        padding-left:.5rem;
+        padding-right:.5rem;
+      }
+      body.nav-collapsed #app-sidebar .sidebar-brand{
+        justify-content:center;
+      }
+      body.nav-collapsed #app-sidebar .sidebar-footer-btn{
+        justify-content:center;
+        padding-left:.5rem;
+        padding-right:.5rem;
+      }
+    }
+
+    .page-enter{
+      animation:pageEnter var(--dur-slow) var(--ease-smooth);
+    }
+
+    .brand-logo{
+      width:32px;
+      height:32px;
+      color:#0d631b;
+      display:inline-flex;
+      align-items:center;
+      justify-content:center;
+      position:relative;
+      flex-shrink:0;
+      overflow:hidden;
+    }
+
+    .brand-logo .material-symbols-outlined{
+      font-size:26px;
+      font-variation-settings:'FILL' 1,'wght' 500,'GRAD' 0,'opsz' 24;
+      transform:translateY(-2px);
+      opacity:1;
+    }
+
+    @keyframes pageEnter{
+      from{opacity:0; transform:translateY(8px)}
+      to{opacity:1; transform:translateY(0)}
+    }
+
+    @media (prefers-reduced-motion: reduce){
+      html{scroll-behavior:auto}
+      *{
+        animation:none !important;
+        transition:none !important;
+      }
+    }
+  </style>
 </head>
 <body class="bg-background text-on-surface">
-  <header class="fixed top-0 left-0 right-0 z-50 bg-surface border-b border-outline-variant md:ml-64">
+  <main id="auth-screen" class="flex h-screen w-full">
+    <button id="auth-lang-toggle" class="absolute top-4 right-4 z-[120] px-3 h-9 rounded-full border border-outline-variant bg-surface inline-flex items-center gap-1.5 text-on-surface-variant hover:text-primary hover:bg-surface-container-low">
+      <span class="material-symbols-outlined text-[18px]">translate</span>
+      <span id="auth-lang-label" class="text-xs font-semibold">Tagalog</span>
+    </button>
+    <section class="hidden lg:flex relative w-1/2 h-full bg-primary-container items-center justify-center p-16 overflow-hidden">
+      <div class="absolute inset-0 z-0">
+        <img class="w-full h-full object-cover opacity-35 mix-blend-overlay" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBB7M6tEMchyHHzskLnKCk5GHE8H73XQZS9ctkb5pEZY4RYExUWrE1lRNNSg_nlt3kuT3c1wgg2qz0O97Sz6m4FKpG6g3nuhKYOVkhujrnTxt0y24-57_GKELNfnLVoDzDODlIxB27kyaT2Qyl9HjiZEORIkOl17g5gaoKpft-I2mIToTNJkND_MMyRr810c1DwbVfbtDnD5COpXFFkLd4CS9_E5m14tjISiUsvIa5p0e2dIVa-MgPFR6JEtLOGcVAB1QAPBtxrxS-n" alt="Agricultural landscape"/>
+        <div class="absolute inset-0 bg-gradient-to-tr from-primary via-primary-container/80 to-transparent opacity-90"></div>
+      </div>
+      <div class="relative z-10 max-w-xl text-left">
+        <div class="flex items-center gap-3 mb-8">
+          <span class="brand-logo" aria-hidden="true"><span class="material-symbols-outlined">eco</span></span>
+          <span class="text-3xl font-bold text-white" style="font-family:'Plus Jakarta Sans',sans-serif;">SupplyIT</span>
+        </div>
+        <h1 class="text-5xl font-extrabold text-white leading-tight mb-5" style="font-family:'Plus Jakarta Sans',sans-serif;">
+          Smarter buying for<br/><span class="text-primary-fixed">vegetable traders.</span>
+        </h1>
+        <p class="text-lg text-on-primary-container opacity-95 mb-8">
+          Real DA market data + model-driven suggestions, built for fast and confident weekly planning.
+        </p>
+        <div class="p-6 bg-white/10 backdrop-blur-md rounded-2xl border border-white/15">
+          <div class="flex justify-between items-center mb-3">
+            <span class="text-sm font-semibold text-primary-fixed">Market Prediction Confidence</span>
+            <span class="text-white font-semibold">94.2%</span>
+          </div>
+          <div class="w-full bg-white/20 h-2 rounded-full overflow-hidden"><div id="progress-bar" class="bg-primary-fixed h-full w-[94%]"></div></div>
+        </div>
+      </div>
+    </section>
+    <section class="w-full lg:w-1/2 h-full flex items-center justify-center bg-surface relative">
+      <div class="w-full max-w-md px-6 py-10">
+        <div class="lg:hidden flex items-center gap-3 mb-8">
+          <span class="brand-logo" aria-hidden="true"><span class="material-symbols-outlined">eco</span></span>
+          <span class="text-2xl font-bold text-primary" style="font-family:'Plus Jakarta Sans',sans-serif;">SupplyIT</span>
+        </div>
+        <div class="mb-8">
+          <h2 id="auth-title" class="text-4xl font-bold text-on-surface mb-1" style="font-family:'Plus Jakarta Sans',sans-serif;">Welcome Back</h2>
+          <p id="auth-subtitle" class="text-on-surface-variant">Login to continue to your dashboard.</p>
+        </div>
+        <form id="login-form" class="space-y-5" onsubmit="return false;">
+          <div class="space-y-1">
+            <label id="auth-email-label" class="text-sm font-semibold text-on-surface-variant" for="email">Email Address</label>
+            <div class="relative">
+              <span class="material-symbols-outlined absolute left-4 top-1/2 -translate-y-1/2 text-outline">mail</span>
+              <input id="email" class="w-full pl-12 pr-4 py-3 bg-surface-container-low border border-outline-variant rounded-xl focus:ring-2 focus:ring-primary focus:border-primary outline-none" placeholder="arnel.santos@agri.ph" type="email"/>
+            </div>
+          </div>
+          <div class="space-y-1">
+            <label id="auth-pass-label" class="text-sm font-semibold text-on-surface-variant" for="password">Password</label>
+            <div class="relative">
+              <span class="material-symbols-outlined absolute left-4 top-1/2 -translate-y-1/2 text-outline">lock</span>
+              <input id="password" class="w-full pl-12 pr-12 py-3 bg-surface-container-low border border-outline-variant rounded-xl focus:ring-2 focus:ring-primary focus:border-primary outline-none" placeholder="••••••••" type="password"/>
+            </div>
+          </div>
+          <button id="login-btn" class="w-full py-3.5 bg-primary text-white rounded-xl font-semibold hover:shadow-lg active:scale-[0.98] transition-all inline-flex items-center justify-center gap-2">
+            Login to Dashboard <span class="material-symbols-outlined text-[20px]">arrow_forward</span>
+          </button>
+        </form>
+        <div class="mt-8 p-4 rounded-xl bg-surface-container-low border border-outline-variant">
+          <h3 id="auth-steps-title" class="text-sm font-bold text-on-surface mb-2">How to use SupplyIT (Quick Steps)</h3>
+          <ol class="text-sm text-on-surface-variant space-y-1 list-decimal ml-4">
+            <li id="auth-step-1">Check Dashboard for urgent market signals.</li>
+            <li id="auth-step-2">Update stock and thresholds in Products.</li>
+            <li id="auth-step-3">Review Buy/Hold/Delay in Suggestions.</li>
+            <li id="auth-step-4">Build and save your weekly Buy Plan.</li>
+          </ol>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <div id="app-shell" class="hidden">
+  <header id="app-topbar" class="fixed top-0 left-0 right-0 z-50 bg-surface border-b border-outline-variant md:ml-64">
     <div class="flex justify-between items-center w-full px-container-margin max-w-[1280px] mx-auto h-16">
       <div class="flex items-center gap-4">
+        <button id="sidebar-toggle" class="px-3 h-9 rounded-full border border-outline-variant inline-flex items-center justify-center gap-1.5 text-on-surface-variant hover:text-primary hover:bg-surface-container-low" title="Collapse sidebar" aria-label="Collapse sidebar">
+          <span id="sidebar-toggle-icon" class="material-symbols-outlined text-[18px]">left_panel_close</span>
+          <span id="sidebar-toggle-label" class="text-xs font-semibold tracking-wide">Collapse</span>
+        </button>
+        <span class="brand-logo" aria-hidden="true"><span class="material-symbols-outlined">eco</span></span>
         <span class="text-headline-md font-headline-md font-bold text-primary">SupplyIT</span>
       </div>
       <div class="flex items-center gap-4">
+        <button id="global-lang-toggle" class="px-3 h-9 rounded-full border border-outline-variant inline-flex items-center gap-1.5 text-on-surface-variant hover:text-primary hover:bg-surface-container-low">
+          <span class="material-symbols-outlined text-[18px]">translate</span>
+          <span id="global-lang-label" class="text-xs font-semibold">Tagalog</span>
+        </button>
         <button class="material-symbols-outlined text-on-surface-variant hover:text-primary transition-colors">account_circle</button>
       </div>
     </div>
   </header>
-  <aside class="hidden md:flex flex-col fixed left-0 top-0 h-full w-64 bg-surface border-r border-outline-variant p-4 gap-2 z-[60]">
-    <div class="flex flex-col mb-8 px-4 py-2">
-      <span class="text-headline-sm font-headline-sm font-bold text-primary">SupplyIT</span>
-      <span class="text-label-sm font-label-sm text-on-surface-variant">Agricultural Trade Tool</span>
+  <aside id="app-sidebar" class="hidden md:flex flex-col fixed left-0 top-0 h-full bg-surface border-r border-outline-variant p-4 gap-2 z-[60]">
+    <div class="sidebar-brand flex items-center gap-3 mb-8 px-4 py-2">
+      <span class="brand-logo" aria-hidden="true"><span class="material-symbols-outlined">eco</span></span>
+      <div class="brand-text flex flex-col">
+        <span class="text-headline-sm font-headline-sm font-bold text-primary">SupplyIT</span>
+        <span class="text-label-sm font-label-sm text-on-surface-variant whitespace-nowrap">Agricultural Trade Tool</span>
+      </div>
     </div>
     <nav id="side-nav" class="flex flex-col gap-1 flex-grow"></nav>
     <div class="mt-auto flex flex-col gap-1 border-t border-outline-variant pt-4">
-      <button class="bg-primary text-on-primary w-full py-3 rounded-lg font-label-md mb-4 hover:opacity-90 transition-all">New Plan</button>
-      <button data-page="settings" class="mobile-nav hidden md:flex items-center gap-3 text-on-surface-variant px-4 py-2 text-label-sm hover:bg-surface-container-high transition-colors">
-        <span class="material-symbols-outlined">settings</span><span>Settings</span>
+      <button id="open-plans-btn" class="sidebar-footer-btn bg-primary text-white w-full py-3 rounded-lg font-label-md mb-4 hover:opacity-90 transition-all inline-flex items-center justify-center gap-2">
+        <span class="material-symbols-outlined text-[18px]">folder_open</span>
+        <span id="plans-btn-label" class="sidebar-footer-label">Plans</span>
+      </button>
+      <button data-page="settings" class="mobile-nav sidebar-footer-btn hidden md:flex items-center gap-3 text-on-surface-variant px-4 py-2 text-label-sm hover:bg-surface-container-high transition-colors">
+        <span class="material-symbols-outlined">settings</span><span id="settings-btn-label" class="sidebar-footer-label">Settings</span>
+      </button>
+      <button id="logout-btn-sidebar" class="mobile-nav sidebar-footer-btn hidden md:flex items-center gap-3 text-on-surface-variant px-4 py-2 text-label-sm hover:bg-surface-container-high transition-colors">
+        <span class="material-symbols-outlined">logout</span><span class="sidebar-footer-label">Logout</span>
       </button>
     </div>
   </aside>
-  <main class="md:ml-64 pt-24 pb-xl px-container-margin min-h-screen"><div id="app" class="max-w-[1280px] mx-auto"></div></main>
+  <main id="app-main" class="pt-24 pb-xl px-container-margin min-h-screen md:ml-64"><div id="app" class="max-w-[1280px] mx-auto"></div></main>
   <nav class="md:hidden fixed bottom-0 left-0 right-0 bg-surface border-t border-outline-variant flex justify-around items-center h-16 px-4 z-50">
     <button data-page="dashboard" class="mobile-nav flex flex-col items-center gap-1 text-primary"><span class="material-symbols-outlined">dashboard</span><span class="text-[10px] font-label-sm">Home</span></button>
     <button data-page="products" class="mobile-nav flex flex-col items-center gap-1 text-on-surface-variant"><span class="material-symbols-outlined">inventory_2</span><span class="text-[10px] font-label-sm">Stock</span></button>
     <button data-page="prices" class="mobile-nav flex flex-col items-center gap-1 text-on-surface-variant"><span class="material-symbols-outlined">trending_up</span><span class="text-[10px] font-label-sm">Prices</span></button>
     <button data-page="settings" class="mobile-nav flex flex-col items-center gap-1 text-on-surface-variant"><span class="material-symbols-outlined">account_circle</span><span class="text-[10px] font-label-sm">Profile</span></button>
   </nav>
+  </div>
   <script type="module" src="/js/app.js"></script>
+  <script>
+    const AUTH_KEY = "supplyit_logged_in";
+    const LANG_KEY = "supplyit_lang";
+    const I18N = {
+      en: {
+        langBtn: "Tagalog",
+        title: "Welcome Back",
+        subtitle: "Login to continue to your dashboard.",
+        email: "Email Address",
+        password: "Password",
+        login: "Login to Dashboard",
+        stepsTitle: "How to use SupplyIT (Quick Steps)",
+        s1: "Check Dashboard for urgent market signals.",
+        s2: "Update stock and thresholds in Products.",
+        s3: "Review Buy/Hold/Delay in Suggestions.",
+        s4: "Build and save your weekly Buy Plan."
+      },
+      tl: {
+        langBtn: "English",
+        title: "Maligayang Pagbabalik",
+        subtitle: "Mag-login para magpatuloy sa iyong dashboard.",
+        email: "Email Address",
+        password: "Password",
+        login: "Mag-login sa Dashboard",
+        stepsTitle: "Paano Gamitin ang SupplyIT (Mabilis na Hakbang)",
+        s1: "Tingnan ang Dashboard para sa agarang market signals.",
+        s2: "I-update ang stock at thresholds sa Products.",
+        s3: "Suriin ang Buy/Hold/Delay sa Suggestions.",
+        s4: "Buuin at i-save ang lingguhang Buy Plan."
+      }
+    };
+    function currentLang() { return localStorage.getItem(LANG_KEY) || "en"; }
+    function setLang(lang) { localStorage.setItem(LANG_KEY, lang); }
+    function applyAuthLanguage() {
+      const lang = currentLang();
+      const t = I18N[lang];
+      const globalLang = document.getElementById("global-lang-label");
+      if (globalLang) globalLang.textContent = t.langBtn;
+      const authLang = document.getElementById("auth-lang-label");
+      if (authLang) authLang.textContent = t.langBtn;
+      const plansBtnLabel = document.getElementById("plans-btn-label");
+      if (plansBtnLabel) plansBtnLabel.textContent = lang === "tl" ? "Mga Plano" : "Plans";
+      const settingsBtnLabel = document.getElementById("settings-btn-label");
+      if (settingsBtnLabel) settingsBtnLabel.textContent = lang === "tl" ? "Settings" : "Settings";
+      document.getElementById("auth-title").textContent = t.title;
+      document.getElementById("auth-subtitle").textContent = t.subtitle;
+      document.getElementById("auth-email-label").textContent = t.email;
+      document.getElementById("auth-pass-label").textContent = t.password;
+      document.getElementById("login-btn").childNodes[0].nodeValue = `${t.login} `;
+      document.getElementById("auth-steps-title").textContent = t.stepsTitle;
+      document.getElementById("auth-step-1").textContent = t.s1;
+      document.getElementById("auth-step-2").textContent = t.s2;
+      document.getElementById("auth-step-3").textContent = t.s3;
+      document.getElementById("auth-step-4").textContent = t.s4;
+      window.dispatchEvent(new CustomEvent("supplyit:lang-changed", { detail: { lang } }));
+    }
+    function showAppShell() {
+      document.getElementById("auth-screen")?.classList.add("hidden");
+      document.getElementById("app-shell")?.classList.remove("hidden");
+      if (window.SUPPLYIT_RENDER) window.SUPPLYIT_RENDER();
+    }
+    function showAuth() {
+      document.getElementById("auth-screen")?.classList.remove("hidden");
+      document.getElementById("app-shell")?.classList.add("hidden");
+    }
+    document.addEventListener("DOMContentLoaded", () => {
+      applyAuthLanguage();
+      const loggedIn = localStorage.getItem(AUTH_KEY) === "1";
+      if (loggedIn) showAppShell();
+      else showAuth();
+
+      const bar = document.getElementById("progress-bar");
+      if (bar) {
+        bar.style.width = "0%";
+        setTimeout(() => {
+          bar.style.transition = "width 2s cubic-bezier(0.65, 0, 0.35, 1)";
+          bar.style.width = "94%";
+        }, 250);
+      }
+
+      document.getElementById("global-lang-toggle")?.addEventListener("click", () => {
+        setLang(currentLang() === "en" ? "tl" : "en");
+        applyAuthLanguage();
+        if (window.SUPPLYIT_RENDER) window.SUPPLYIT_RENDER();
+      });
+      document.getElementById("auth-lang-toggle")?.addEventListener("click", () => {
+        setLang(currentLang() === "en" ? "tl" : "en");
+        applyAuthLanguage();
+        if (window.SUPPLYIT_RENDER) window.SUPPLYIT_RENDER();
+      });
+      document.getElementById("logout-btn-sidebar")?.addEventListener("click", () => {
+        localStorage.removeItem(AUTH_KEY);
+        showAuth();
+      });
+
+      document.getElementById("login-form")?.addEventListener("submit", () => {
+        localStorage.setItem(AUTH_KEY, "1");
+        showAppShell();
+      });
+      document.getElementById("login-btn")?.addEventListener("click", () => {
+        localStorage.setItem(AUTH_KEY, "1");
+        showAppShell();
+      });
+    });
+  </script>
 </body>
 </html>

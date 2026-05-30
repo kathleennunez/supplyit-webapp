@@ -102,14 +102,72 @@ export async function updateProduct(id, patch) {
 }
 
 export async function getPlan() {
-  return readJson("plan.json");
+  const plans = await readJson("plan.json");
+  return Array.isArray(plans) ? plans : [];
 }
 
 export async function savePlan(plan) {
-  const plans = await readJson("plan.json");
+  const plans = await getPlan();
   plans.push(plan);
   await writeJson("plan.json", plans);
   return plan;
+}
+
+export async function listPlans() {
+  const plans = await getPlan();
+  return plans.sort((a, b) => String(b.updatedAt || b.createdAt || "").localeCompare(String(a.updatedAt || a.createdAt || "")));
+}
+
+export async function createPlan(input) {
+  const now = new Date().toISOString();
+  const plans = await getPlan();
+  const id = input?.id || `plan_${Date.now()}_${Math.random().toString(36).slice(2, 8)}`;
+  const plan = {
+    id,
+    name: input?.name || `Plan ${new Date().toLocaleDateString()}`,
+    createdAt: input?.createdAt || now,
+    updatedAt: now,
+    status: input?.status || "draft",
+    payload: input?.payload || {}
+  };
+  plans.push(plan);
+  await writeJson("plan.json", plans);
+  return plan;
+}
+
+export async function updatePlanById(id, patch) {
+  const plans = await getPlan();
+  const idx = plans.findIndex((p) => p.id === id);
+  if (idx < 0) return null;
+  const next = {
+    ...plans[idx],
+    ...patch,
+    id: plans[idx].id,
+    createdAt: plans[idx].createdAt,
+    updatedAt: new Date().toISOString()
+  };
+  plans[idx] = next;
+  await writeJson("plan.json", plans);
+  return next;
+}
+
+export async function deletePlanById(id) {
+  const plans = await getPlan();
+  const next = plans.filter((p) => p.id !== id);
+  const removed = next.length !== plans.length;
+  if (removed) await writeJson("plan.json", next);
+  return { ok: removed };
+}
+
+export async function duplicatePlanById(id) {
+  const plans = await getPlan();
+  const base = plans.find((p) => p.id === id);
+  if (!base) return null;
+  return createPlan({
+    name: `${base.name} (Copy)`,
+    status: "draft",
+    payload: base.payload || {}
+  });
 }
 
 export async function getPricePredictions() {

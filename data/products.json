@@ -1,6 +1,11 @@
 [
   {
     "id": "ampalaya4-5-pcs-kg",
-    "archived": false
+    "archived": false,
+    "manualAction": "DELAY"
+  },
+  {
+    "id": "broccoli-localmedium-diameter-bunch-hd",
+    "manualAction": "BUY"
   }
 ]

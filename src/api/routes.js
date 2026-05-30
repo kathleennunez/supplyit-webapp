@@ -1,5 +1,20 @@
 import express from "express";
-import { getDashboard, getDemandEstimation, getPlan, getPricePredictions, getProducts, getRecommendations, savePlan, saveProduct, updateProduct } from "../services/domain.js";
+import {
+  createPlan,
+  deletePlanById,
+  duplicatePlanById,
+  getDashboard,
+  getDemandEstimation,
+  getPlan,
+  getPricePredictions,
+  getProducts,
+  getRecommendations,
+  listPlans,
+  savePlan,
+  saveProduct,
+  updatePlanById,
+  updateProduct
+} from "../services/domain.js";
 import { rebuildCanonicalHistory, runBackfill, runIngestion } from "../services/ingestion.js";
 import { readJson, writeJson } from "../utils/store.js";
 
@@ -14,6 +29,19 @@ router.post("/products", async (req, res) => res.status(201).json(await saveProd
 router.put("/products/:id", async (req, res) => res.json(await updateProduct(req.params.id, req.body)));
 router.get("/plan", async (_req, res) => res.json(await getPlan()));
 router.post("/plan", async (req, res) => res.status(201).json(await savePlan(req.body)));
+router.get("/plans", async (_req, res) => res.json(await listPlans()));
+router.post("/plans", async (req, res) => res.status(201).json(await createPlan(req.body || {})));
+router.put("/plans/:id", async (req, res) => {
+  const row = await updatePlanById(req.params.id, req.body || {});
+  if (!row) return res.status(404).json({ error: "Plan not found" });
+  return res.json(row);
+});
+router.delete("/plans/:id", async (req, res) => res.json(await deletePlanById(req.params.id)));
+router.post("/plans/:id/duplicate", async (req, res) => {
+  const row = await duplicatePlanById(req.params.id);
+  if (!row) return res.status(404).json({ error: "Plan not found" });
+  return res.status(201).json(row);
+});
 router.get("/prices", async (_req, res) => res.json(await getPricePredictions()));
 router.get("/demand", async (_req, res) => res.json(await getDemandEstimation()));
 router.get("/recommendations", async (_req, res) => res.json(await getRecommendations()));
