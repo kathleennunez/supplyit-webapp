@@ -287,7 +287,7 @@ async function renderDashboard() {
   const gainers = d.summary?.priceUp ?? recs.filter((r) => Number(r.changePct || 0) > 0).length;
   const buys = d.summary?.quickBuy ?? recs.filter((r) => r.action === "BUY").length;
   return `<section class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-gutter mb-xl">
-    <button data-drill="products" class="text-left bg-surface border border-outline-variant p-lg rounded-xl soft-lift"><div class="flex items-center justify-between"><div class="text-xs text-on-surface-variant uppercase">Tracked Commodities</div><span class="material-symbols-outlined text-secondary">inventory_2</span></div><div class="text-2xl font-semibold mt-2">${tracked}</div><div class="mt-2 text-sm text-on-surface-variant">From DA vegetables feed</div></button>
+    <button data-drill="products" class="text-left bg-surface border border-outline-variant p-lg rounded-xl soft-lift"><div class="flex items-center justify-between"><div class="text-xs text-on-surface-variant uppercase">Tracked Products</div><span class="material-symbols-outlined text-secondary">inventory_2</span></div><div class="text-2xl font-semibold mt-2">${tracked}</div><div class="mt-2 text-sm text-on-surface-variant">From DA vegetables feed</div></button>
     <div class="bg-surface border border-outline-variant p-lg rounded-xl soft-lift"><div class="flex items-center justify-between"><div class="text-xs text-on-surface-variant uppercase">Average Weekly Change</div><span class="material-symbols-outlined text-tertiary">swap_vert</span></div><div class="text-2xl font-semibold mt-2">${avg > 0 ? "+" : ""}${Number(avg).toFixed(2)}%</div><div class="mt-2 text-sm text-on-surface-variant">Across monitored products</div></div>
     <button data-drill="gainers" class="text-left bg-surface border border-outline-variant p-lg rounded-xl soft-lift"><div class="flex items-center justify-between"><div class="text-xs text-on-surface-variant uppercase">Price Gainers</div><span class="material-symbols-outlined text-primary">trending_up</span></div><div class="text-2xl font-semibold mt-2">${gainers}</div><div class="mt-2 text-sm text-on-surface-variant">Open positive movers</div></button>
     <button data-drill="buys" class="text-left bg-surface border border-outline-variant p-lg rounded-xl soft-lift"><div class="flex items-center justify-between"><div class="text-xs text-on-surface-variant uppercase">Actionable Buys</div><span class="material-symbols-outlined text-primary">shopping_basket</span></div><div class="text-2xl font-semibold mt-2">${buys}</div><div class="mt-2 text-sm text-on-surface-variant">Open BUY suggestions</div></button>
@@ -439,7 +439,6 @@ async function render() {
         <button data-bulk="HOLD" class="bulk-action px-3 py-1 rounded-lg bg-surface-container-high text-on-surface-variant text-sm">Set HOLD</button>
         <button data-bulk="BUY" class="bulk-action px-3 py-1 rounded-lg bg-primary-fixed text-on-primary-fixed text-sm">Set BUY</button>
         <button data-bulk="DELAY" class="bulk-action px-3 py-1 rounded-lg bg-tertiary-fixed text-on-tertiary-fixed-variant text-sm">Set DELAY</button>
-        <button data-bulk="LOW_STOCK_120" class="bulk-action px-3 py-1 rounded-lg border border-outline-variant text-sm">Reorder Level 120</button>
         <span id="selected-count" class="ml-auto text-sm text-on-surface-variant">0 selected</span>
       </div>
       <div class="bg-surface-container-lowest border border-outline-variant rounded-xl overflow-hidden shadow-sm">
@@ -451,16 +450,16 @@ async function render() {
         </div>
         <div class="overflow-x-auto">
           <table class="w-full text-left border-collapse">
-            <thead>
-              <tr class="bg-surface-container-low border-b border-outline-variant">
-                <th class="px-lg py-4 text-label-md text-on-surface-variant uppercase tracking-wider">Select</th>
-                <th class="px-lg py-4 text-label-md text-on-surface-variant uppercase tracking-wider">Product Name</th>
-                <th class="px-lg py-4 text-label-md text-on-surface-variant uppercase tracking-wider">Category</th>
-                <th class="px-lg py-4 text-label-md text-on-surface-variant uppercase tracking-wider">Stock Level</th>
-                <th class="px-lg py-4 text-label-md text-on-surface-variant uppercase tracking-wider">Price (PHP/kg)</th>
-                <th class="px-lg py-4 text-label-md text-on-surface-variant uppercase tracking-wider">Indicator</th>
-                <th class="px-lg py-4 text-label-md text-on-surface-variant uppercase tracking-wider">Guidance</th>
-                <th class="px-lg py-4 text-label-md text-on-surface-variant uppercase tracking-wider text-right">Actions</th>
+            <thead class="bg-surface-container-low">
+              <tr class="border-b border-outline-variant text-left">
+                <th class="pl-lg pr-sm py-3 text-label-sm text-on-surface-variant uppercase w-14 whitespace-nowrap">Select</th>
+                <th class="pl-lg pr-md py-3 text-label-sm text-on-surface-variant uppercase whitespace-nowrap">Product Name</th>
+                <th class="px-md py-3 text-label-sm text-on-surface-variant uppercase whitespace-nowrap">Category</th>
+                <th class="px-md py-3 text-label-sm text-on-surface-variant uppercase whitespace-nowrap">Stock Level</th>
+                <th class="px-md py-3 text-label-sm text-on-surface-variant uppercase whitespace-nowrap">Price (PHP/kg)</th>
+                <th class="px-md py-3 text-label-sm text-on-surface-variant uppercase whitespace-nowrap">Indicator</th>
+                <th class="px-md py-3 text-label-sm text-on-surface-variant uppercase whitespace-nowrap">Guidance</th>
+                <th class="pl-md pr-lg py-3 text-label-sm text-on-surface-variant uppercase whitespace-nowrap text-right">Actions</th>
               </tr>
             </thead>
             <tbody id="products-body" class="divide-y divide-outline-variant">
@@ -472,20 +471,20 @@ async function render() {
                 const priceRow = priceMap.get(p.id);
                 const actionText = rec?.action || "HOLD";
                 return `<tr class="hover:bg-surface-container-low transition-colors group product-row">
-                  <td class="px-lg py-4"><input type="checkbox" class="row-select" data-id="${p.id}" /></td>
-                  <td class="px-lg py-4">
+                  <td class="pl-lg pr-sm py-4"><input type="checkbox" class="row-select" data-id="${p.id}" /></td>
+                  <td class="pl-lg pr-md py-4">
                     <div class="flex items-center gap-3">
                       <div class="w-10 h-10 rounded-lg bg-surface-container-high flex-shrink-0 flex items-center justify-center">
                         <span class="material-symbols-outlined text-primary">${productIcon(p)}</span>
                       </div>
-                      <span class="font-label-md text-on-surface">${p.name}</span>
+                      <span class="font-label-md text-on-surface whitespace-nowrap">${p.name}</span>
                     </div>
                   </td>
-                  <td class="px-lg py-4 text-body-md text-on-surface">${categoryChip(p.commodityGroup)}</td>
-                  <td class="px-lg py-4 text-body-md text-on-surface">${p.stockQty} ${p.unit} <span class="text-xs text-on-surface-variant">(Reorder ${p.lowStockThreshold})</span></td>
-                  <td class="px-lg py-4 text-body-md text-on-surface">₱${Number(p.pricePerUnit).toFixed(2)}</td>
-                  <td class="px-lg py-4"><button data-explain="${p.id}" class="explain-chip inline-flex items-center px-3 py-1 rounded-full text-label-sm font-bold ${chip.cls}">${chip.label}</button></td>
-                  <td class="px-lg py-4">
+                  <td class="px-md py-4 text-body-md text-on-surface">${categoryChip(p.commodityGroup)}</td>
+                  <td class="px-md py-4 text-body-md text-on-surface">${p.stockQty} ${p.unit}</td>
+                  <td class="px-md py-4 text-body-md text-on-surface">₱${Number(p.pricePerUnit).toFixed(2)}</td>
+                  <td class="px-md py-4"><button data-explain="${p.id}" class="explain-chip inline-flex items-center px-3 py-1 rounded-full text-label-sm font-bold ${chip.cls}">${chip.label}</button></td>
+                  <td class="px-md py-4">
                     <div class="inline-flex items-start gap-2 px-2.5 py-2 rounded-lg border ${guide.cls}">
                       <span class="material-symbols-outlined text-[16px] mt-[1px]">${guide.icon}</span>
                       <div class="leading-tight">
@@ -494,12 +493,15 @@ async function render() {
                       </div>
                     </div>
                   </td>
-                  <td class="px-lg py-4 text-right">
-                    <div class="inline-flex gap-1">
-                      <button data-detail="${p.id}" class="p-2 hover:bg-surface-container-high rounded-full transition-colors text-on-surface-variant" title="Details"><span class="material-symbols-outlined">visibility</span></button>
-                      <button data-stock="${p.id}" class="p-2 hover:bg-surface-container-high rounded-full transition-colors text-on-surface-variant" title="Adjust Stock"><span class="material-symbols-outlined">edit</span></button>
-                      <button data-alias="${p.id}" class="p-2 hover:bg-surface-container-high rounded-full transition-colors text-on-surface-variant" title="Rename Alias"><span class="material-symbols-outlined">drive_file_rename_outline</span></button>
-                      <button data-archive="${p.id}" class="p-2 hover:bg-surface-container-high rounded-full transition-colors text-on-surface-variant" title="Archive"><span class="material-symbols-outlined">archive</span></button>
+                  <td class="pl-md pr-lg py-4 text-right">
+                    <div class="relative inline-flex items-center gap-1.5">
+                      <button data-detail="${p.id}" class="inline-flex items-center gap-1 px-2.5 py-1.5 rounded-full text-[11px] border border-outline-variant text-on-surface-variant hover:bg-surface-container-high whitespace-nowrap" title="Details"><span class="material-symbols-outlined text-[13px]">visibility</span>View</button>
+                      <button data-more="${p.id}" class="inline-flex items-center justify-center w-8 h-8 rounded-full border border-outline-variant text-on-surface-variant hover:bg-surface-container-high" title="More actions"><span class="material-symbols-outlined text-[16px]">more_horiz</span></button>
+                      <div id="menu-${p.id}" class="hidden absolute right-0 top-9 w-36 rounded-lg border border-outline-variant bg-surface shadow-md z-20 overflow-hidden">
+                        <button data-stock="${p.id}" class="w-full inline-flex items-center gap-2 px-3 py-2 text-xs text-on-surface-variant hover:bg-surface-container-high"><span class="material-symbols-outlined text-[14px]">edit</span>Stock</button>
+                        <button data-alias="${p.id}" class="w-full inline-flex items-center gap-2 px-3 py-2 text-xs text-on-surface-variant hover:bg-surface-container-high"><span class="material-symbols-outlined text-[14px]">drive_file_rename_outline</span>Name</button>
+                        <button data-archive="${p.id}" class="w-full inline-flex items-center gap-2 px-3 py-2 text-xs text-on-surface-variant hover:bg-surface-container-high"><span class="material-symbols-outlined text-[14px]">archive</span>Archive</button>
+                      </div>
                     </div>
                   </td>
                 </tr>`;
@@ -537,7 +539,28 @@ async function render() {
             <h3 id="modal-title" class="text-xl font-semibold">Details</h3>
             <button id="modal-close" class="p-1 rounded hover:bg-surface-container-high"><span class="material-symbols-outlined">close</span></button>
           </div>
-          <div id="modal-body" class="text-sm text-on-surface-variant"></div>
+          <div id="modal-body" class="text-sm text-on-surface-variant space-y-3"></div>
+        </div>
+      </div>
+      <div id="product-form-modal" class="hidden fixed inset-0 z-[81] bg-black/30 items-center justify-center p-4">
+        <div class="bg-surface w-full max-w-md rounded-xl border border-outline-variant p-5">
+          <div class="flex items-center justify-between mb-3">
+            <h3 id="form-modal-title" class="text-xl font-semibold">Edit</h3>
+            <button id="form-modal-close" class="p-1 rounded hover:bg-surface-container-high"><span class="material-symbols-outlined">close</span></button>
+          </div>
+          <div class="space-y-3">
+            <p id="form-modal-subtitle" class="text-sm text-on-surface-variant"></p>
+            <div>
+              <label id="form-modal-label" class="block text-xs uppercase text-on-surface-variant mb-1"></label>
+              <input id="form-modal-input" class="w-full bg-surface border border-outline-variant rounded-lg px-3 py-2 text-body-md focus:ring-1 focus:ring-primary focus:border-primary outline-none" />
+            </div>
+          </div>
+          <div class="mt-4 flex justify-end gap-2">
+            <button id="form-modal-cancel" class="px-4 py-2 rounded-lg border border-outline-variant text-sm">Cancel</button>
+            <button id="form-modal-save" class="px-4 py-2 rounded-lg bg-primary text-white text-sm inline-flex items-center gap-1">
+              <span class="material-symbols-outlined text-[16px]">save</span>Save
+            </button>
+          </div>
         </div>
       </div>
     `;
@@ -550,6 +573,31 @@ async function render() {
     const modal = document.getElementById("product-modal");
     const modalBody = document.getElementById("modal-body");
     const modalTitle = document.getElementById("modal-title");
+    const formModal = document.getElementById("product-form-modal");
+    const formModalTitle = document.getElementById("form-modal-title");
+    const formModalSubtitle = document.getElementById("form-modal-subtitle");
+    const formModalLabel = document.getElementById("form-modal-label");
+    const formModalInput = document.getElementById("form-modal-input");
+    const formModalSave = document.getElementById("form-modal-save");
+    const closeFormModal = () => {
+      formModal.classList.add("hidden");
+      formModal.classList.remove("flex");
+      formModalInput.value = "";
+      formModalSave.onclick = null;
+    };
+    const openFormModal = ({ title, subtitle, label, value, type = "text", onSave }) => {
+      formModalTitle.textContent = title;
+      formModalSubtitle.textContent = subtitle || "";
+      formModalLabel.textContent = label || "";
+      formModalInput.type = type;
+      formModalInput.value = value ?? "";
+      formModal.classList.remove("hidden");
+      formModal.classList.add("flex");
+      setTimeout(() => formModalInput.focus(), 0);
+      formModalSave.onclick = async () => {
+        await onSave(formModalInput.value);
+      };
+    };
     const showModal = (title, html) => {
       modalTitle.textContent = title;
       modalBody.innerHTML = html;
@@ -565,6 +613,11 @@ async function render() {
         modal.classList.add("hidden");
         modal.classList.remove("flex");
       }
+    });
+    document.getElementById("form-modal-close")?.addEventListener("click", closeFormModal);
+    document.getElementById("form-modal-cancel")?.addEventListener("click", closeFormModal);
+    formModal?.addEventListener("click", (e) => {
+      if (e.target === formModal) closeFormModal();
     });
 
     const evaluateRowVisibility = (row) => {
@@ -611,33 +664,47 @@ async function render() {
       btn.addEventListener("click", async () => {
         if (!selected.size) return;
         const ids = [...selected];
-        if (btn.dataset.bulk === "LOW_STOCK_120") {
-          await Promise.all(ids.map((id) => updateProduct(id, { lowStockThreshold: 120 })));
-        } else {
-          await Promise.all(ids.map((id) => updateProduct(id, { manualAction: btn.dataset.bulk })));
-        }
+        await Promise.all(ids.map((id) => updateProduct(id, { manualAction: btn.dataset.bulk })));
         route("products");
       });
     });
 
     document.querySelectorAll("[data-stock]").forEach((btn) => {
-      btn.addEventListener("click", async () => {
+      btn.addEventListener("click", () => {
         const id = btn.dataset.stock;
         const prod = data.find((p) => p.id === id);
-        const qty = window.prompt(`Set stock for ${prod.name} (${prod.unit})`, String(prod.stockQty || 0));
-        if (qty == null) return;
-        await updateProduct(id, { stockQty: Number(qty) || 0 });
-        route("products");
+        openFormModal({
+          title: "Adjust Stock",
+          subtitle: prod.name,
+          label: `Stock (${prod.unit})`,
+          value: String(prod.stockQty || 0),
+          type: "number",
+          onSave: async (qty) => {
+            await updateProduct(id, { stockQty: Number(qty) || 0 });
+            closeFormModal();
+            route("products");
+          }
+        });
       });
     });
     document.querySelectorAll("[data-alias]").forEach((btn) => {
-      btn.addEventListener("click", async () => {
+      btn.addEventListener("click", () => {
         const id = btn.dataset.alias;
         const prod = data.find((p) => p.id === id);
-        const alias = window.prompt(`Display name for ${prod.name}`, prod.name);
-        if (alias == null) return;
-        await updateProduct(id, { alias });
-        route("products");
+        openFormModal({
+          title: "Rename Product",
+          subtitle: `Current name: ${prod.name}`,
+          label: "Display Name",
+          value: prod.name,
+          type: "text",
+          onSave: async (alias) => {
+            const clean = String(alias || "").trim();
+            if (!clean) return;
+            await updateProduct(id, { alias: clean });
+            closeFormModal();
+            route("products");
+          }
+        });
       });
     });
     document.querySelectorAll("[data-archive]").forEach((btn) => {
@@ -650,6 +717,19 @@ async function render() {
         route("products");
       });
     });
+    document.querySelectorAll("[data-more]").forEach((btn) => {
+      btn.addEventListener("click", (e) => {
+        e.stopPropagation();
+        const id = btn.dataset.more;
+        const menu = document.getElementById(`menu-${id}`);
+        if (!menu) return;
+        document.querySelectorAll("[id^='menu-']").forEach((m) => { if (m !== menu) m.classList.add("hidden"); });
+        menu.classList.toggle("hidden");
+      });
+    });
+    document.addEventListener("click", () => {
+      document.querySelectorAll("[id^='menu-']").forEach((m) => m.classList.add("hidden"));
+    });
     document.getElementById("open-archived-page")?.addEventListener("click", () => route("archived"));
 
     document.querySelectorAll("[data-detail]").forEach((btn) => {
@@ -661,11 +741,23 @@ async function render() {
         const series = price?.series || [];
         const bars = series.map((s) => `${s.weekStart}: ₱${Number(s.price).toFixed(2)}`).join("<br>");
         showModal(`${prod.name} Details`, `
-          <div class="space-y-2">
-            <div><strong>Current Action:</strong> ${rec?.action || "HOLD"}</div>
-            <div><strong>Guidance:</strong> ${verbalMarketSignal(rec?.changePct)}</div>
-            <div><strong>Stock:</strong> ${prod.stockQty} ${prod.unit} (Reorder ${prod.lowStockThreshold})</div>
-            <div><strong>Recent Weekly Prices:</strong><br>${bars || "No series available"}</div>
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
+            <div class="rounded-lg border border-outline-variant bg-surface-container-low p-3">
+              <div class="text-xs uppercase text-on-surface-variant mb-1">Current Action</div>
+              <div class="text-sm font-semibold">${rec?.action || "HOLD"}</div>
+            </div>
+            <div class="rounded-lg border border-outline-variant bg-surface-container-low p-3">
+              <div class="text-xs uppercase text-on-surface-variant mb-1">Guidance</div>
+              <div class="text-sm font-semibold">${verbalMarketSignal(rec?.changePct)}</div>
+            </div>
+          </div>
+          <div class="rounded-lg border border-outline-variant bg-surface-container-low p-3">
+            <div class="text-xs uppercase text-on-surface-variant mb-1">Inventory</div>
+            <div class="text-sm">${prod.stockQty} ${prod.unit}</div>
+          </div>
+          <div class="rounded-lg border border-outline-variant bg-surface-container-low p-3">
+            <div class="text-xs uppercase text-on-surface-variant mb-1">Recent Weekly Prices</div>
+            <div class="text-sm">${bars || "No series available"}</div>
           </div>
         `);
       });
@@ -924,6 +1016,10 @@ async function render() {
                 <div class="text-sm uppercase text-on-surface-variant mb-1">Plan Tip</div>
                 <div id="plan-ai" class="text-base text-on-surface-variant leading-relaxed"></div>
               </div>
+              <div class="rounded-lg border border-outline-variant bg-surface-container-low p-3 md:col-span-2">
+                <div class="text-sm uppercase text-on-surface-variant mb-2">Action Mix</div>
+                <div id="plan-mix" class="flex flex-wrap gap-2"></div>
+              </div>
             </div>
           </details>
         </section>
@@ -970,6 +1066,7 @@ async function render() {
     const saveStatusEl = document.getElementById("save-status");
     const breakdownEl = document.getElementById("plan-breakdown");
     const aiEl = document.getElementById("plan-ai");
+    const mixEl = document.getElementById("plan-mix");
     const saveBtn = document.getElementById("savePlan");
     const confirmModal = document.getElementById("save-confirm");
     const confirmBody = document.getElementById("confirm-body");
@@ -1099,10 +1196,20 @@ async function render() {
       const buy = working.filter((x) => x.action === "BUY").length;
       const hold = working.filter((x) => x.action === "HOLD").length;
       const delay = working.filter((x) => x.action === "DELAY").length;
-      breakdownEl.textContent = `Plan Summary: BUY ${buy}, HOLD ${hold}, DELAY ${delay}. Top cost drivers: ${drivers.map((d) => d.name).join(", ") || "-"}.`;
-      aiEl.textContent = remaining < 0
-        ? `Plan Tip: Reduce top costly items (${drivers.slice(0, 2).map((d) => d.name).join(", ")}) to get back within budget.`
-        : "Plan Tip: You are within budget. Prioritize executing BUY items first.";
+      breakdownEl.innerHTML = `
+        <div class="font-semibold text-on-surface mb-1">Top Cost Drivers</div>
+        <ol class="list-decimal ml-5 space-y-1">
+          ${drivers.map((d) => `<li>${d.name} — ₱${d.cost.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</li>`).join("") || "<li>None</li>"}
+        </ol>
+      `;
+      mixEl.innerHTML = `
+        <span class="px-3 py-1 rounded-full text-xs font-semibold bg-primary-fixed text-on-primary-fixed">BUY: ${buy}</span>
+        <span class="px-3 py-1 rounded-full text-xs font-semibold bg-surface-container-high text-on-surface-variant">HOLD: ${hold}</span>
+        <span class="px-3 py-1 rounded-full text-xs font-semibold bg-tertiary-fixed text-on-tertiary-fixed-variant">DELAY: ${delay}</span>
+      `;
+      aiEl.innerHTML = remaining < 0
+        ? `<div class="rounded-lg bg-error-container/40 text-on-error-container p-2"><span class="font-semibold">Tip:</span> Reduce ${drivers.slice(0, 2).map((d) => d.name).join(" and ")} to return within budget.</div>`
+        : `<div class="rounded-lg bg-primary-fixed/50 text-on-primary-fixed p-2"><span class="font-semibold">Tip:</span> Budget is healthy. Prioritize BUY items first.</div>`;
 
       if (remaining < 0) {
         saveStatusEl.className = "px-3 py-1.5 rounded-full text-sm inline-flex items-center gap-1 bg-error-container text-on-error-container";
@@ -1164,7 +1271,8 @@ async function render() {
     });
     document.getElementById("export-pdf")?.addEventListener("click", () => window.print());
     document.getElementById("reset-plan").addEventListener("click", () => {
-      working = seedItems.map((x) => ({ ...x }));
+      applyScenario();
+      autoAllocate();
       renderCards();
       recompute();
     });
@@ -1596,17 +1704,14 @@ async function render() {
             <button data-sf="HOLD" class="sf px-4 py-2 text-sm text-on-surface-variant">Hold</button>
             <button data-sf="DELAY" class="sf px-4 py-2 text-sm text-on-surface-variant">Delay</button>
           </div>
-          <button id="toggle-more-filters" class="px-3 py-2 rounded-lg border border-outline-variant text-sm inline-flex items-center gap-1">
-            <span class="material-symbols-outlined text-[16px]">tune</span>More filters
-          </button>
-        </div>
-        <div id="more-filters" class="hidden mb-4 bg-surface border border-outline-variant rounded-xl p-3">
-          <label class="inline-flex items-center gap-2 mr-4 text-sm"><input id="mf-high-conf" type="checkbox">High confidence only</label>
-          <label class="inline-flex items-center gap-2 text-sm"><input id="mf-high-impact" type="checkbox">High impact only</label>
+          <div id="sugg-more-filters" class="ml-auto inline-flex rounded-xl border border-outline-variant overflow-hidden bg-surface">
+            <button data-mf="high-conf" class="mf px-4 py-2 text-sm text-on-surface-variant">High Confidence</button>
+            <button data-mf="high-impact" class="mf px-4 py-2 text-sm text-on-surface-variant">High Priority</button>
+          </div>
         </div>
         <div class="relative w-full md:w-96 mb-4"><span class="material-symbols-outlined absolute left-4 top-1/2 -translate-y-1/2 text-on-surface-variant">search</span><input id="sugg-search" class="w-full bg-surface border border-outline-variant rounded-lg pl-12 pr-4 py-3 focus:border-primary focus:ring-1 focus:ring-primary outline-none text-body-md" placeholder="Search suggestions..." type="text"/></div>
         <div id="sugg-empty" class="hidden mb-4 p-4 rounded-xl bg-surface-container-low text-on-surface-variant text-sm">No matching suggestions.</div>
-      <div id="sugg-list" class="grid grid-cols-1 xl:grid-cols-2 gap-3"></div>
+      <div id="sugg-list" class="columns-1 xl:columns-2 [column-gap:12px]"></div>
         <div class="mt-4 flex justify-center">
           <button id="show-more-sugg" class="hidden px-4 py-2 rounded-lg border border-outline-variant text-sm inline-flex items-center gap-1"><span class="material-symbols-outlined text-[16px]">expand_more</span>Show 10 more</button>
         </div>
@@ -1621,8 +1726,8 @@ async function render() {
     let pageSize = 10;
     let currentLimit = 10;
     const searchInput = document.getElementById("sugg-search");
-    const mfHighConf = document.getElementById("mf-high-conf");
-    const mfHighImpact = document.getElementById("mf-high-impact");
+    let mfHighConf = false;
+    let mfHighImpact = false;
     const listEl = document.getElementById("sugg-list");
     const showMoreBtn = document.getElementById("show-more-sugg");
     const updateProduct = async (id, patch) => api(`products/${id}`, { method: "PUT", headers: { "Content-Type": "application/json" }, body: JSON.stringify(patch) });
@@ -1634,7 +1739,7 @@ async function render() {
       const prev = previousByProduct[r.productId];
       const delta = prev ? (prev.action === r.action ? "Unchanged" : `Changed from ${prev.action}`) : "New signal";
       const isTL = lang() === "tl";
-      return `<article data-sugg="${r.productId}" class="bg-surface border border-outline-variant rounded-xl p-3.5 h-full">
+      return `<article data-sugg="${r.productId}" class="bg-surface border border-outline-variant rounded-xl p-3.5 mb-3 break-inside-avoid">
         <div class="grid grid-cols-1 md:grid-cols-[minmax(0,1fr)_auto] gap-2.5 items-center">
           <div class="min-w-0">
             <div class="flex flex-wrap items-center gap-2">
@@ -1655,7 +1760,6 @@ async function render() {
           <div>${isTL ? "Laki ng epekto sa plano" : "How much this affects your plan"}: ${imp}</div>
           <div>${isTL ? "Kailan dapat kumilos" : "When to act"}: ${urgency(r)}</div>
           <div>${isTL ? "Trend ng presyo sa susunod na linggo" : "Next-week price trend"}: ${r?.trend || "UNAVAILABLE"}</div>
-          <div>${isTL ? "Tinatayang dami na kailangan" : "Estimated volume needed"}: ${Number(r.quantity || 0).toLocaleString()} kg</div>
         </div>
       </article>`;
     }
@@ -1666,7 +1770,7 @@ async function render() {
         const conf = Number(row?.confidence || 0);
         const impHigh = Number(row?.quantity || 0) >= 1300;
         const segmentOk = activeFilter === "ALL" || row?.action === activeFilter;
-        const moreOk = (!mfHighConf.checked || conf >= 85) && (!mfHighImpact.checked || impHigh);
+        const moreOk = (!mfHighConf || conf >= 85) && (!mfHighImpact || impHigh);
         const searchOk = `${row.productName} ${row.reason || ""}`.toLowerCase().includes(q);
         return segmentOk && moreOk && searchOk;
       });
@@ -1694,11 +1798,17 @@ async function render() {
       applyFilter();
     }));
     searchInput.addEventListener("input", applyFilter);
-    mfHighConf.addEventListener("change", () => { currentLimit = pageSize; applyFilter(); });
-    mfHighImpact.addEventListener("change", () => { currentLimit = pageSize; applyFilter(); });
-    document.getElementById("toggle-more-filters").addEventListener("click", () => {
-      document.getElementById("more-filters").classList.toggle("hidden");
-    });
+    document.querySelectorAll(".mf").forEach((btn) => btn.addEventListener("click", () => {
+      const key = btn.dataset.mf;
+      if (key === "high-conf") mfHighConf = !mfHighConf;
+      if (key === "high-impact") mfHighImpact = !mfHighImpact;
+      document.querySelectorAll(".mf").forEach((b) => {
+        const active = (b.dataset.mf === "high-conf" && mfHighConf) || (b.dataset.mf === "high-impact" && mfHighImpact);
+        b.className = `mf px-4 py-2 text-sm ${active ? "bg-primary text-white" : "text-on-surface-variant"}`;
+      });
+      currentLimit = pageSize;
+      applyFilter();
+    }));
     showMoreBtn.addEventListener("click", () => {
       currentLimit += pageSize;
       applyFilter();
