@@ -2,10 +2,14 @@
   {
     "id": "ampalaya4-5-pcs-kg",
     "archived": false,
-    "manualAction": "DELAY"
+    "manualAction": "HOLD"
   },
   {
     "id": "broccoli-localmedium-diameter-bunch-hd",
+    "manualAction": "BUY"
+  },
+  {
+    "id": "bell-pepper-green-localmedium-pc",
     "manualAction": "BUY"
   }
 ]

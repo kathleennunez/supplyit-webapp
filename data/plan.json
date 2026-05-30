@@ -3,19 +3,28 @@
     "id": "plan_1780103496352_tyilz6",
     "name": "Plan 5/30/2026",
     "createdAt": "2026-05-30T01:11:36.351Z",
-    "updatedAt": "2026-05-30T02:58:14.055Z",
+    "updatedAt": "2026-05-30T03:50:34.323Z",
     "status": "draft",
     "payload": {
       "planName": "Plan 5/30/2026",
-      "budget": 4000000,
+      "budget": 40000,
       "scenario": "Safe",
       "sortMode": "priority",
-      "expanded": false,
+      "expanded": true,
       "items": [
+        {
+          "id": "bell-pepper-green-localmedium-pc",
+          "name": "Bell Pepper Green",
+          "qty": 16,
+          "suggested": 100,
+          "action": "HOLD",
+          "pricePerUnit": 244.14,
+          "unit": "kg"
+        },
         {
           "id": "broccoli-localmedium-diameter-bunch-hd",
           "name": "Broccoli",
-          "qty": 140,
+          "qty": 24,
           "suggested": 140,
           "action": "BUY",
           "pricePerUnit": 148.46,
@@ -24,7 +33,7 @@
         {
           "id": "cabbage-rare-ball-510-gm-1-kg-head",
           "name": "Cabbage Rare Ball",
-          "qty": 140,
+          "qty": 24,
           "suggested": 140,
           "action": "BUY",
           "pricePerUnit": 59.44,
@@ -33,7 +42,7 @@
         {
           "id": "cabbage-scorpio-750-gm-1-kg-head",
           "name": "Cabbage Scorpio",
-          "qty": 140,
+          "qty": 24,
           "suggested": 140,
           "action": "BUY",
           "pricePerUnit": 65,
@@ -42,7 +51,7 @@
         {
           "id": "cabbage-wonder-ball-510-gm-1-kg-head",
           "name": "Cabbage Wonder Ball",
-          "qty": 140,
+          "qty": 24,
           "suggested": 140,
           "action": "BUY",
           "pricePerUnit": 58.95,
@@ -51,34 +60,34 @@
         {
           "id": "carrots-local8-10-pcs-kg",
           "name": "Carrots",
-          "qty": 140,
+          "qty": 24,
           "suggested": 140,
           "action": "BUY",
           "pricePerUnit": 135.01,
           "unit": "kg"
         },
         {
+          "id": "ampalaya4-5-pcs-kg",
+          "name": "Ampalaya",
+          "qty": 8,
+          "suggested": 60,
+          "action": "DELAY",
+          "pricePerUnit": 120.88,
+          "unit": "kg"
+        },
+        {
           "id": "habichuelas-baguio-beans-local",
           "name": "Baguio Beans",
-          "qty": 100,
+          "qty": 16,
           "suggested": 100,
           "action": "HOLD",
           "pricePerUnit": 125.1,
           "unit": "kg"
         },
         {
-          "id": "bell-pepper-green-localmedium-pc",
-          "name": "Bell Pepper Green",
-          "qty": 100,
-          "suggested": 100,
-          "action": "HOLD",
-          "pricePerUnit": 244.14,
-          "unit": "kg"
-        },
-        {
           "id": "bell-pepper-red-localmedium-pc",
           "name": "Bell Pepper Red",
-          "qty": 100,
+          "qty": 16,
           "suggested": 100,
           "action": "HOLD",
           "pricePerUnit": 245.6,
@@ -87,7 +96,7 @@
         {
           "id": "celerymedium",
           "name": "Celery",
-          "qty": 100,
+          "qty": 16,
           "suggested": 100,
           "action": "HOLD",
           "pricePerUnit": 147.2,
@@ -96,7 +105,7 @@
         {
           "id": "pechay-baguio",
           "name": "Pechay Baguio",
-          "qty": 100,
+          "qty": 16,
           "suggested": 100,
           "action": "HOLD",
           "pricePerUnit": 75.98,
@@ -105,7 +114,7 @@
         {
           "id": "pole-sitao3-4-bundles",
           "name": "Pole Sitao",
-          "qty": 100,
+          "qty": 16,
           "suggested": 100,
           "action": "HOLD",
           "pricePerUnit": 110.85,
@@ -114,7 +123,7 @@
         {
           "id": "squashsuprema-variety",
           "name": "Squash",
-          "qty": 100,
+          "qty": 16,
           "suggested": 100,
           "action": "HOLD",
           "pricePerUnit": 63.25,
@@ -123,7 +132,7 @@
         {
           "id": "tomato15-18-pcs-kg",
           "name": "Tomato",
-          "qty": 100,
+          "qty": 16,
           "suggested": 100,
           "action": "HOLD",
           "pricePerUnit": 63.92,
@@ -132,25 +141,16 @@
         {
           "id": "white-potato-local10-12-pcs-kg",
           "name": "White Potato",
-          "qty": 100,
+          "qty": 16,
           "suggested": 100,
           "action": "HOLD",
           "pricePerUnit": 97.29,
           "unit": "kg"
         },
         {
-          "id": "ampalaya4-5-pcs-kg",
-          "name": "Ampalaya",
-          "qty": 60,
-          "suggested": 60,
-          "action": "DELAY",
-          "pricePerUnit": 120.88,
-          "unit": "kg"
-        },
-        {
           "id": "cauliflower-localmedium-diameter-bunch-hd",
           "name": "Cauliflower",
-          "qty": 60,
+          "qty": 8,
           "suggested": 60,
           "action": "DELAY",
           "pricePerUnit": 135.29,
@@ -159,7 +159,7 @@
         {
           "id": "chayotemedium",
           "name": "Chayote",
-          "qty": 60,
+          "qty": 8,
           "suggested": 60,
           "action": "DELAY",
           "pricePerUnit": 70.07,
@@ -168,7 +168,7 @@
         {
           "id": "chilli-green-localhaba-panigang",
           "name": "Chilli Green",
-          "qty": 60,
+          "qty": 8,
           "suggested": 60,
           "action": "DELAY",
           "pricePerUnit": 122.73,
@@ -177,7 +177,7 @@
         {
           "id": "eggplant3-4-bundles",
           "name": "Eggplant",
-          "qty": 60,
+          "qty": 8,
           "suggested": 60,
           "action": "DELAY",
           "pricePerUnit": 89.02,
@@ -186,7 +186,7 @@
         {
           "id": "lettuce-green-ice",
           "name": "Lettuce Green Ice",
-          "qty": 60,
+          "qty": 8,
           "suggested": 60,
           "action": "DELAY",
           "pricePerUnit": 245.58,
@@ -195,7 +195,7 @@
         {
           "id": "lettuce-iceberg",
           "name": "Lettuce Iceberg",
-          "qty": 60,
+          "qty": 8,
           "suggested": 60,
           "action": "DELAY",
           "pricePerUnit": 194.75,
@@ -204,7 +204,7 @@
         {
           "id": "lettuce-romaine",
           "name": "Lettuce Romaine",
-          "qty": 60,
+          "qty": 8,
           "suggested": 60,
           "action": "DELAY",
           "pricePerUnit": 224.93,
@@ -213,7 +213,7 @@
         {
           "id": "native-pechay3-4-bundles",
           "name": "Native Pechay",
-          "qty": 60,
+          "qty": 8,
           "suggested": 60,
           "action": "DELAY",
           "pricePerUnit": 80.96,

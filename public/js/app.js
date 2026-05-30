@@ -163,9 +163,6 @@ const TL_MAP = {
   "Expect higher buy cost soon.": "Posibleng tumaas ang gastos sa pagbili.",
   "Good timing to monitor buys.": "Magandang panahon para bantayan ang bili.",
   "No major price pressure now.": "Walang malaking pressure sa presyo ngayon.",
-  "horizontal_rule": "",
-  "trending_up": "",
-  "trending_down": "",
   "Stable trend": "Stable na trend",
   "Unchanged": "Walang pagbabago",
   "New signal": "Bagong signal",
@@ -184,7 +181,8 @@ function localizeAppShell() {
   if (!appRoot) return;
   const toTL = lang() === "tl";
   const pairs = Object.entries(TL_MAP);
-  const replacements = toTL ? pairs : pairs.map(([en, tl]) => [tl, en]);
+  const replacements = (toTL ? pairs : pairs.map(([en, tl]) => [tl, en]))
+    .filter(([from, to]) => typeof from === "string" && typeof to === "string" && from.length > 0);
 
   const walker = document.createTreeWalker(appRoot, NodeFilter.SHOW_TEXT);
   const textNodes = [];
@@ -295,7 +293,7 @@ async function renderDashboard() {
     <button data-drill="buys" class="text-left bg-surface border border-outline-variant p-lg rounded-xl soft-lift"><div class="flex items-center justify-between"><div class="text-xs text-on-surface-variant uppercase">Actionable Buys</div><span class="material-symbols-outlined text-primary">shopping_basket</span></div><div class="text-2xl font-semibold mt-2">${buys}</div><div class="mt-2 text-sm text-on-surface-variant">Open BUY suggestions</div></button>
   </section>
   <div class="grid grid-cols-1 lg:grid-cols-2 gap-gutter">
-    <div class="bg-surface border border-outline-variant rounded-xl p-lg soft-lift"><h2 class="text-xl font-semibold mb-3 inline-flex items-center gap-2"><span class="material-symbols-outlined text-primary">lightbulb</span>Top Recommendations</h2>${recs.slice(0,4).map(r=>{ const chip = actionChip(r.action); return `<div class="p-3 border border-outline-variant rounded-lg mb-2"><div class="flex justify-between items-center"><div class="inline-flex items-center gap-2"><span class="material-symbols-outlined text-primary">${productIcon({name:r.productName,commodityGroup:r.productName})}</span><strong>${r.productName}</strong></div><span class="px-2 py-1 rounded-full text-xs font-semibold ${chip.cls}">${chip.label}</span></div><p class="text-sm text-on-surface-variant mb-2">Qty: ${r.quantity} | ${verbalMarketSignal(r.changePct)}</p><div class="flex flex-wrap gap-2"><button data-rec-action="${r.productId}|BUY" class="inline-flex items-center gap-1 px-2 py-1 rounded-full text-xs bg-primary-fixed text-on-primary-fixed"><span class="material-symbols-outlined text-[14px]">shopping_cart</span>Buy</button><button data-rec-action="${r.productId}|HOLD" class="inline-flex items-center gap-1 px-2 py-1 rounded-full text-xs bg-surface-container-high text-on-surface-variant"><span class="material-symbols-outlined text-[14px]">pause_circle</span>Hold</button><button data-rec-action="${r.productId}|DELAY" class="inline-flex items-center gap-1 px-2 py-1 rounded-full text-xs bg-tertiary-fixed text-on-tertiary-fixed-variant"><span class="material-symbols-outlined text-[14px]">schedule</span>Delay</button><button data-send-plan="${r.productId}" class="inline-flex items-center gap-1 px-2 py-1 rounded-full text-xs border border-outline-variant"><span class="material-symbols-outlined text-[14px]">send</span>To Plan</button></div></div>`;}).join("") || `<p class="text-sm text-on-surface-variant">No recommendation data yet.</p>`}</div>
+    <div class="bg-surface border border-outline-variant rounded-xl p-lg soft-lift"><h2 class="text-xl font-semibold mb-3 inline-flex items-center gap-2"><span class="material-symbols-outlined text-primary">lightbulb</span>Top Recommendations</h2>${recs.slice(0,6).map(r=>{ const chip = actionChip(r.action); return `<div class="p-3 border border-outline-variant rounded-lg mb-2"><div class="flex justify-between items-center"><div class="inline-flex items-center gap-2"><span class="material-symbols-outlined text-primary">${productIcon({name:r.productName,commodityGroup:r.productName})}</span><strong>${r.productName}</strong></div><span class="px-2 py-1 rounded-full text-xs font-semibold ${chip.cls}">${chip.label}</span></div><p class="text-sm text-on-surface-variant">Qty: ${r.quantity} | ${verbalMarketSignal(r.changePct)}</p></div>`;}).join("") || `<p class="text-sm text-on-surface-variant">No recommendation data yet.</p>`}</div>
     <div class="bg-surface border border-outline-variant rounded-xl p-lg soft-lift"><h2 class="text-xl font-semibold mb-3 inline-flex items-center gap-2"><span class="material-symbols-outlined text-secondary">query_stats</span>Market Summary</h2><div class="space-y-2">${(d.market || []).slice(0,5).map(m=>{ const full=[...(prices.rows||[])].find(p=>p.productName===m.productName); return `<div class="p-3 border border-outline-variant rounded-lg"><div class="flex items-center justify-between"><div class="inline-flex items-center gap-2"><span class="material-symbols-outlined text-primary">${productIcon({name:m.productName,commodityGroup:m.productName})}</span><span class="font-semibold">${m.productName}</span></div><span class="text-sm font-semibold">₱${Number(m.currentPrice||0).toFixed(2)}</span></div><div class="mt-2 flex items-center justify-between"><span class="text-xs text-on-surface-variant">${verbalMarketSignal(m.changePct)}</span><span>${sparklineSvg(full?.series||[])}</span></div></div>`;}).join("") || `<div class="text-sm text-on-surface-variant">No market data yet.</div>`}</div></div>
   </div>`;
 }
@@ -886,7 +884,7 @@ async function render() {
           <p class="font-body-md text-body-md text-on-surface-variant">Set budget, review top BUY items, then save when status is green.</p>
         </section>
         <section class="bg-surface-container-lowest border border-outline-variant p-lg rounded-xl">
-          <h2 class="font-semibold text-on-surface">Step 1: Set Budget</h2>
+          <h2 class="font-semibold text-on-surface text-xl md:text-2xl flex items-center gap-2 md:gap-3 leading-tight"><span class="inline-flex items-center justify-center w-8 h-8 md:w-9 md:h-9 rounded-full bg-primary text-white text-sm md:text-base shrink-0">1</span><span>Step 1: Set Budget</span></h2>
           <p class="text-sm text-on-surface-variant mb-3">Choose your plan style and let auto-allocation prepare quantities.</p>
           <div class="grid grid-cols-1 md:grid-cols-6 gap-5 items-end">
             <div><label class="text-sm text-on-surface-variant">Plan Name</label><input id="plan-name" class="w-full mt-1 px-3 py-2.5 rounded-lg border border-outline bg-white" value="${savedPlanName}"></div>
@@ -897,8 +895,8 @@ async function render() {
             <button id="reset-plan" class="px-4 py-2.5 rounded-lg border border-outline-variant text-sm inline-flex items-center justify-center gap-1"><span class="material-symbols-outlined text-[16px]">restart_alt</span>Reset Recommended</button>
           </div>
         </section>
-        <section>
-          <h2 class="font-semibold text-on-surface">Step 2: Review Recommended Items</h2>
+        <section class="bg-surface-container-lowest border border-outline-variant p-lg rounded-xl">
+          <h2 class="font-semibold text-on-surface text-xl md:text-2xl flex items-center gap-2 md:gap-3 leading-tight"><span class="inline-flex items-center justify-center w-8 h-8 md:w-9 md:h-9 rounded-full bg-primary text-white text-sm md:text-base shrink-0">2</span><span>Step 2: Review Recommended Items</span></h2>
           <p class="text-sm text-on-surface-variant mb-3">Adjust only what you need. Default view shows the highest-priority products.</p>
           <div id="plan-cards" class="grid grid-cols-1 md:grid-cols-2 gap-5"></div>
           <div class="mt-4 flex justify-center">
@@ -931,7 +929,7 @@ async function render() {
         </section>
       </div>
       <footer id="plan-sticky" class="fixed bottom-0 left-0 right-0 md:left-64 md:w-[calc(100%-16rem)] bg-surface border-t border-outline-variant z-40">
-        <div class="w-full px-5 md:px-8 py-4">
+        <div class="max-w-[1280px] mx-auto px-container-margin py-4">
           <div id="save-status" class="mb-2 px-3.5 py-2 rounded-full text-sm inline-flex items-center gap-1 bg-surface-container-high text-on-surface-variant"><span class="material-symbols-outlined text-[16px]">info</span>Checking plan...</div>
           <div id="autosave-status" class="mb-3 text-xs text-on-surface-variant">Draft not saved yet</div>
           <div class="flex justify-between items-center gap-4 flex-wrap">
@@ -1219,7 +1217,16 @@ async function render() {
   if (state.page === "prices") {
     const pricePayload = await api("prices");
     let data = [...(pricePayload.rows || [])];
+    const productsPayload = await api("products?includeArchived=1");
+    const manualActionMap = new Map((productsPayload || []).map((p) => [p.id, p.manualAction || null]));
+    const actionFromRow = (row) => {
+      const manual = manualActionMap.get(row.productId);
+      if (manual && ["BUY", "HOLD", "DELAY"].includes(manual)) return manual;
+      return row?.demand === "HIGH DEMAND" ? "BUY" : row?.demand === "LOW DEMAND" ? "DELAY" : "HOLD";
+    };
     const watch = new Set(getWatchlist());
+    const selected = new Set();
+    let lastChange = null;
     const drill = localStorage.getItem("drill_prices");
     if (drill === "GAINERS") {
       data = data.filter((r) => Number(r.changePct || 0) > 0);
@@ -1249,8 +1256,14 @@ async function render() {
         <div class="flex flex-col md:flex-row justify-between items-center gap-3 mb-3">
           <div class="inline-flex items-center gap-2"><span class="material-symbols-outlined text-secondary">query_stats</span><span class="font-semibold">Selected Commodity Trend</span></div>
           <div class="flex items-center gap-2">
-            <select id="price-focus" class="px-3 py-2 rounded-lg border border-outline-variant text-sm bg-surface">${data.map((r, i) => `<option value="${r.productId}" ${i===0?"selected":""}>${r.productName}</option>`).join("")}</select>
-            <select id="price-range" class="px-3 py-2 rounded-lg border border-outline-variant text-sm bg-surface"><option value="4">4 weeks</option><option value="8" selected>8 weeks</option><option value="12">12 weeks</option></select>
+            <div class="relative">
+              <select id="price-focus" style="background-image:none" class="appearance-none pl-3 pr-8 py-2 rounded-lg border border-outline-variant text-sm bg-surface">${data.map((r, i) => `<option value="${r.productId}" ${i===0?"selected":""}>${r.productName}</option>`).join("")}</select>
+              <span class="material-symbols-outlined pointer-events-none absolute right-2 top-1/2 -translate-y-1/2 text-on-surface-variant text-[18px]">expand_more</span>
+            </div>
+            <div class="relative">
+              <select id="price-range" style="background-image:none" class="appearance-none pl-3 pr-8 py-2 rounded-lg border border-outline-variant text-sm bg-surface"><option value="4">4 weeks</option><option value="8" selected>8 weeks</option><option value="12">12 weeks</option></select>
+              <span class="material-symbols-outlined pointer-events-none absolute right-2 top-1/2 -translate-y-1/2 text-on-surface-variant text-[18px]">expand_more</span>
+            </div>
           </div>
         </div>
         <div id="focus-chart" class="w-full text-on-surface-variant text-sm"></div>
@@ -1267,11 +1280,19 @@ async function render() {
         <div class="relative w-full md:w-96"><span class="material-symbols-outlined absolute left-4 top-1/2 -translate-y-1/2 text-on-surface-variant">search</span><input id="price-search" class="w-full bg-surface border border-outline-variant rounded-lg pl-12 pr-4 py-3 focus:border-primary focus:ring-1 focus:ring-primary outline-none text-body-md" placeholder="Search products..." type="text"/></div>
         <div class="inline-flex items-center px-3 py-1 rounded-full bg-surface-container-high text-on-surface-variant text-sm">Data week: ${pricePayload.dataWeek || "N/A"}</div>
       </div>
+      <div class="mb-3 bg-surface border border-outline-variant rounded-xl p-3 flex flex-wrap items-center gap-2">
+        <span class="text-sm text-on-surface-variant mr-2">Bulk actions:</span>
+        <button data-bulk="BUY" class="price-bulk px-3 py-1 rounded-lg bg-primary-fixed text-on-primary-fixed text-sm">Set BUY</button>
+        <button data-bulk="HOLD" class="price-bulk px-3 py-1 rounded-lg bg-surface-container-high text-on-surface-variant text-sm">Set HOLD</button>
+        <button data-bulk="DELAY" class="price-bulk px-3 py-1 rounded-lg bg-tertiary-fixed text-on-tertiary-fixed-variant text-sm">Set DELAY</button>
+        <span id="price-selected-count" class="ml-auto text-sm text-on-surface-variant">0 selected</span>
+      </div>
       <div class="bg-surface-container-lowest border border-outline-variant rounded-xl overflow-hidden soft-lift mb-xl">
         <div class="overflow-x-auto no-scrollbar max-h-[62vh]">
           <table class="w-full border-collapse">
             <thead class="sticky top-0 z-10 bg-surface-container-low">
               <tr class="border-b border-outline-variant text-left">
+                <th class="px-lg py-3 text-label-sm text-on-surface-variant uppercase"><input id="price-select-all" type="checkbox"></th>
                 <th class="px-lg py-3 text-label-sm text-on-surface-variant uppercase">Watch</th>
                 <th class="px-lg py-3 text-label-sm text-on-surface-variant uppercase">Product</th>
                 <th class="px-lg py-3 text-label-sm text-on-surface-variant uppercase text-right tabular-nums">Last</th>
@@ -1287,23 +1308,35 @@ async function render() {
                 const watched = watch.has(r.productId);
                 const vol = Math.abs(Number(r.changePct || 0)) >= 5;
                 return `<tr data-row="${r.productId}" class="${i % 2 ? "bg-surface-container-lowest" : "bg-surface"} border-b border-outline-variant hover:bg-surface-container-low">
+                  <td class="px-lg py-3"><input class="price-select" type="checkbox" data-id="${r.productId}"></td>
                   <td class="px-lg py-3"><button data-watch="${r.productId}" class="text-lg">${watched ? "★" : "☆"}</button></td>
                   <td class="px-lg py-3"><div class="inline-flex items-center gap-2"><span class="material-symbols-outlined text-primary">${productIcon({ name: r.productName, commodityGroup: r.productName })}</span><span class="font-medium">${r.productName}</span>${vol ? '<span class="px-2 py-0.5 rounded-full text-xs bg-error-container text-on-error-container">High Volatility</span>' : ""}</div></td>
                   <td class="px-lg py-3 text-right tabular-nums">${last ? last.toFixed(2) : "-"}</td>
                   <td class="px-lg py-3 text-right tabular-nums font-semibold">${current ? current.toFixed(2) : "-"}</td>
                   <td class="px-lg py-3"><button data-explain="${r.productId}" class="px-2 py-1 rounded-full text-xs ${Number(r.changePct || 0) >= 1 ? "bg-primary-fixed text-on-primary-fixed" : Number(r.changePct || 0) <= -1 ? "bg-tertiary-fixed text-on-tertiary-fixed-variant" : "bg-surface-container-high text-on-surface-variant"}">${trendLabel(r.changePct)}</button></td>
                   <td class="px-lg py-3 text-right">
-                    <div class="inline-flex gap-1">
-                      <button data-pact="${r.productId}|BUY" class="inline-flex items-center gap-1 px-2 py-1 rounded-full text-xs bg-primary-fixed text-on-primary-fixed"><span class="material-symbols-outlined text-[14px]">shopping_cart</span>Buy</button>
-                      <button data-pact="${r.productId}|HOLD" class="inline-flex items-center gap-1 px-2 py-1 rounded-full text-xs bg-surface-container-high text-on-surface-variant"><span class="material-symbols-outlined text-[14px]">pause_circle</span>Hold</button>
-                      <button data-pact="${r.productId}|DELAY" class="inline-flex items-center gap-1 px-2 py-1 rounded-full text-xs bg-tertiary-fixed text-on-tertiary-fixed-variant"><span class="material-symbols-outlined text-[14px]">schedule</span>Delay</button>
-                      <button data-send="${r.productId}" class="inline-flex items-center gap-1 px-2 py-1 rounded-full text-xs border border-outline-variant"><span class="material-symbols-outlined text-[14px]">send</span>To Plan</button>
+                    <div class="inline-flex items-center gap-2">
+                      <div class="relative">
+                        <select data-action-select="${r.productId}" style="background-image:none" class="action-select appearance-none pl-3 pr-8 py-1.5 rounded-full border text-xs font-semibold bg-surface">
+                          <option value="BUY" ${actionFromRow(r) === "BUY" ? "selected" : ""}>BUY</option>
+                          <option value="HOLD" ${actionFromRow(r) === "HOLD" ? "selected" : ""}>HOLD</option>
+                          <option value="DELAY" ${actionFromRow(r) === "DELAY" ? "selected" : ""}>DELAY</option>
+                        </select>
+                        <span class="material-symbols-outlined pointer-events-none absolute right-2 top-1/2 -translate-y-1/2 text-[16px] text-on-surface-variant">expand_more</span>
+                      </div>
+                      <button data-save-plan="${r.productId}" class="save-plan-btn inline-flex items-center gap-1 px-2.5 py-1.5 rounded-lg text-xs bg-primary text-white"><span class="material-symbols-outlined text-[14px]">save</span><span>Save to Buy Plan</span></button>
                     </div>
                   </td>
                 </tr>`;
               }).join("")}
             </tbody>
           </table>
+        </div>
+      </div>
+      <div id="price-toast" class="hidden fixed bottom-4 right-4 z-[95] bg-inverse-surface text-inverse-on-surface px-4 py-3 rounded-xl shadow-lg">
+        <div class="flex items-center gap-3">
+          <span id="price-toast-text" class="text-sm"></span>
+          <button id="price-undo" class="underline text-sm">Undo</button>
         </div>
       </div>
       <div id="price-explain" class="hidden fixed inset-0 z-[90] bg-black/30 items-center justify-center p-4">
@@ -1321,6 +1354,47 @@ async function render() {
     const focusEl = document.getElementById("price-focus");
     let activeFilter = "ALL";
     const updateProduct = async (id, patch) => api(`products/${id}`, { method: "PUT", headers: { "Content-Type": "application/json" }, body: JSON.stringify(patch) });
+    const styleActionSelect = (sel) => {
+      if (!sel) return;
+      const v = sel.value;
+      if (v === "BUY") {
+        sel.className = "action-select appearance-none pl-3 pr-8 py-1.5 rounded-full border text-xs font-semibold bg-primary-fixed text-on-primary-fixed border-primary-fixed-dim";
+      } else if (v === "DELAY") {
+        sel.className = "action-select appearance-none pl-3 pr-8 py-1.5 rounded-full border text-xs font-semibold bg-tertiary-fixed text-on-tertiary-fixed-variant border-tertiary-fixed-dim";
+      } else {
+        sel.className = "action-select appearance-none pl-3 pr-8 py-1.5 rounded-full border text-xs font-semibold bg-surface-container-high text-on-surface-variant border-outline-variant";
+      }
+    };
+    const selectedCountEl = document.getElementById("price-selected-count");
+    const updateSelectedCount = () => { selectedCountEl.textContent = `${selected.size} selected`; };
+    const showToast = (text, undoFn) => {
+      const toast = document.getElementById("price-toast");
+      const toastText = document.getElementById("price-toast-text");
+      const undoBtn = document.getElementById("price-undo");
+      toastText.textContent = text;
+      toast.classList.remove("hidden");
+      let timer = setTimeout(() => toast.classList.add("hidden"), 4500);
+      undoBtn.onclick = async () => {
+        clearTimeout(timer);
+        toast.classList.add("hidden");
+        await undoFn();
+        recomputeRows();
+      };
+    };
+    const applyAction = async (ids, action) => {
+      const prev = ids.map((id) => ({ id, prevAction: manualActionMap.get(id) || null }));
+      await Promise.all(ids.map(async (id) => {
+        await updateProduct(id, { manualAction: action });
+        manualActionMap.set(id, action);
+      }));
+      lastChange = { ids, prev };
+      showToast(`${ids.length} product(s) set to ${action}`, async () => {
+        await Promise.all(lastChange.prev.map(async (p) => {
+          await updateProduct(p.id, { manualAction: p.prevAction });
+          manualActionMap.set(p.id, p.prevAction);
+        }));
+      });
+    };
     const recomputeRows = () => {
       const q = (search.value || "").toLowerCase();
       const rows = [...document.querySelectorAll("#prices-body tr")];
@@ -1329,7 +1403,7 @@ async function render() {
         const item = data.find((x) => x.productId === id);
         const txt = row.innerText.toLowerCase();
         const watched = watch.has(id);
-        const action = item?.demand === "HIGH DEMAND" ? "BUY" : item?.demand === "LOW DEMAND" ? "DELAY" : "HOLD";
+        const action = actionFromRow(item || {});
         const filterOk = activeFilter === "ALL" || action === activeFilter;
         row.style.display = txt.includes(q) && filterOk ? "" : "none";
       });
@@ -1386,9 +1460,49 @@ async function render() {
       btn.textContent = watch.has(id) ? "★" : "☆";
       route("prices");
     }));
-    document.querySelectorAll("[data-pact]").forEach((btn) => btn.addEventListener("click", async () => {
-      const [id, action] = btn.dataset.pact.split("|");
-      await updateProduct(id, { manualAction: action });
+    document.querySelectorAll("[data-action-select]").forEach((sel) => {
+      styleActionSelect(sel);
+      sel.addEventListener("change", () => {
+        styleActionSelect(sel);
+      const id = sel.dataset.actionSelect;
+      const btn = document.querySelector(`[data-save-plan="${id}"]`);
+      if (!btn) return;
+      btn.classList.remove("bg-secondary", "text-white");
+      btn.classList.add("bg-primary", "text-white");
+      btn.dataset.saved = "0";
+      const label = btn.querySelector("span:last-child");
+      if (label) label.textContent = "Save to Buy Plan";
+      });
+    });
+    document.querySelectorAll("[data-save-plan]").forEach((btn) => btn.addEventListener("click", async () => {
+      const id = btn.dataset.savePlan;
+      const sel = document.querySelector(`[data-action-select="${id}"]`);
+      const action = sel?.value || "HOLD";
+      await applyAction([id], action);
+      localStorage.setItem("plan_focus_product", id);
+      btn.classList.remove("bg-primary");
+      btn.classList.add("bg-secondary", "text-white");
+      btn.dataset.saved = "1";
+      const label = btn.querySelector("span:last-child");
+      if (label) label.textContent = "Saved";
+    }));
+    document.querySelectorAll(".price-select").forEach((cb) => cb.addEventListener("change", () => {
+      const id = cb.dataset.id;
+      if (cb.checked) selected.add(id); else selected.delete(id);
+      updateSelectedCount();
+    }));
+    document.getElementById("price-select-all")?.addEventListener("change", (e) => {
+      const checked = e.target.checked;
+      document.querySelectorAll(".price-select").forEach((cb) => {
+        cb.checked = checked;
+        if (checked) selected.add(cb.dataset.id); else selected.delete(cb.dataset.id);
+      });
+      updateSelectedCount();
+    });
+    document.querySelectorAll(".price-bulk").forEach((btn) => btn.addEventListener("click", async () => {
+      const ids = [...selected];
+      if (!ids.length) return;
+      await applyAction(ids, btn.dataset.bulk);
     }));
     document.querySelectorAll("[data-send]").forEach((btn) => btn.addEventListener("click", () => {
       localStorage.setItem("plan_focus_product", btn.dataset.send);
@@ -1463,12 +1577,13 @@ async function render() {
           ${(urgentRows.length ? urgentRows : data.slice(0, 3)).map((r) => {
             const chip = actionChip(r.action);
             return `<article class="bg-surface border border-outline-variant rounded-xl p-4 h-full flex flex-col">
-              <div class="text-lg font-semibold leading-tight">${r.productName}</div>
+              <div class="inline-flex items-center gap-2">
+                <span class="material-symbols-outlined text-primary">${productIcon({ name: r.productName, commodityGroup: r.productName })}</span>
+                <div class="text-lg font-semibold leading-tight">${r.productName}</div>
+              </div>
               <div class="mt-2"><span class="px-2 py-1 rounded-full text-xs font-semibold ${chip.cls}">${chip.label}</span></div>
               <div class="mt-2 text-sm text-on-surface-variant">${verdictTag(r)}</div>
-              <button data-primary="${r.productId}|${r.action}" class="mt-4 px-3 py-2 rounded-lg border border-outline-variant text-sm inline-flex items-center justify-center gap-1">
-                <span class="material-symbols-outlined text-[16px]">send</span>${r.action === "BUY" ? "Send to Buy Plan" : r.action === "HOLD" ? "Apply Hold" : "Apply Delay"}
-              </button>
+              <div class="mt-3 text-xs text-on-surface-variant">Confidence: ${confidenceBand(Number(r.confidence || 0))} • Urgency: ${urgency(r)}</div>
             </article>`;
           }).join("")}
         </div>
@@ -1518,6 +1633,7 @@ async function render() {
       const imp = impactBand(Number(r.quantity || 0));
       const prev = previousByProduct[r.productId];
       const delta = prev ? (prev.action === r.action ? "Unchanged" : `Changed from ${prev.action}`) : "New signal";
+      const isTL = lang() === "tl";
       return `<article data-sugg="${r.productId}" class="bg-surface border border-outline-variant rounded-xl p-3.5 h-full">
         <div class="grid grid-cols-1 md:grid-cols-[minmax(0,1fr)_auto] gap-2.5 items-center">
           <div class="min-w-0">
@@ -1529,28 +1645,17 @@ async function render() {
             <div class="mt-0.5 text-xs text-on-surface-variant">${delta}</div>
           </div>
           <div class="flex items-center gap-1.5 md:justify-end">
-            <button data-primary="${r.productId}|${r.action}" class="px-2.5 py-1.5 rounded-lg border border-outline-variant text-xs inline-flex items-center gap-1 whitespace-nowrap">
-              <span class="material-symbols-outlined text-[16px]">${r.action === "BUY" ? "shopping_cart" : r.action === "HOLD" ? "pause_circle" : "schedule"}</span>
-              ${r.action === "BUY" ? "Send to Buy Plan" : r.action === "HOLD" ? "Apply Hold" : "Apply Delay"}
+            <button data-expand="${r.productId}" class="inline-flex items-center justify-center text-on-surface-variant hover:text-primary">
+              <span id="arrow-${r.productId}" class="material-symbols-outlined text-[20px]">keyboard_arrow_down</span>
             </button>
-            <div class="relative">
-              <button data-menu="${r.productId}" class="w-8 h-8 rounded-lg border border-outline-variant inline-flex items-center justify-center"><span class="material-symbols-outlined text-[17px]">more_vert</span></button>
-              <div id="menu-${r.productId}" class="hidden absolute right-0 mt-1 w-44 bg-surface border border-outline-variant rounded-lg shadow-sm z-20">
-                <button data-ra="${r.productId}|BUY" class="w-full text-left px-3 py-2 text-sm hover:bg-surface-container-low">Set BUY</button>
-                <button data-ra="${r.productId}|HOLD" class="w-full text-left px-3 py-2 text-sm hover:bg-surface-container-low">Set HOLD</button>
-                <button data-ra="${r.productId}|DELAY" class="w-full text-left px-3 py-2 text-sm hover:bg-surface-container-low">Set DELAY</button>
-                <button data-expand="${r.productId}" class="w-full text-left px-3 py-2 text-sm hover:bg-surface-container-low">Show details</button>
-              </div>
-            </div>
           </div>
         </div>
         <div id="detail-${r.productId}" class="hidden mt-3 text-sm text-on-surface-variant bg-surface-container-low rounded-lg p-3">
-          <div>Confidence: ${conf}</div>
-          <div>Impact: ${imp}</div>
-          <div>Urgency: ${urgency(r)}</div>
-          <div>Decision Tree: ${r?.demand || "UNAVAILABLE"}</div>
-          <div>Regression: ${r?.trend || "UNAVAILABLE"}</div>
-          <div>Estimated volume: ${Number(r.quantity || 0).toLocaleString()} kg</div>
+          <div>${isTL ? "Gaano katiyak ang signal" : "How certain this signal is"}: ${conf}</div>
+          <div>${isTL ? "Laki ng epekto sa plano" : "How much this affects your plan"}: ${imp}</div>
+          <div>${isTL ? "Kailan dapat kumilos" : "When to act"}: ${urgency(r)}</div>
+          <div>${isTL ? "Trend ng presyo sa susunod na linggo" : "Next-week price trend"}: ${r?.trend || "UNAVAILABLE"}</div>
+          <div>${isTL ? "Tinatayang dami na kailangan" : "Estimated volume needed"}: ${Number(r.quantity || 0).toLocaleString()} kg</div>
         </div>
       </article>`;
     }
@@ -1573,38 +1678,12 @@ async function render() {
     };
 
     function bindSuggestionActions() {
-      document.querySelectorAll("[data-primary]").forEach((btn) => btn.addEventListener("click", async () => {
-        const [id, action] = btn.dataset.primary.split("|");
-        await updateProduct(id, { manualAction: action });
-        if (action === "BUY") {
-          localStorage.setItem("plan_focus_product", id);
-          route("plan");
-        } else {
-          applyFilter();
-        }
-      }));
-      document.querySelectorAll("[data-menu]").forEach((btn) => btn.addEventListener("click", (e) => {
-        e.stopPropagation();
-        const id = btn.dataset.menu;
-        document.querySelectorAll("[id^='menu-']").forEach((n) => { if (n.id !== `menu-${id}`) n.classList.add("hidden"); });
-        document.getElementById(`menu-${id}`)?.classList.toggle("hidden");
-      }));
-      document.querySelectorAll("[data-ra]").forEach((btn) => btn.addEventListener("click", async () => {
-        const [id, action] = btn.dataset.ra.split("|");
-        await updateProduct(id, { manualAction: action });
-        document.getElementById(`menu-${id}`)?.classList.add("hidden");
-        if (action === "BUY") {
-          localStorage.setItem("plan_focus_product", id);
-          route("plan");
-        } else {
-          applyFilter();
-        }
-      }));
       document.querySelectorAll("[data-expand]").forEach((btn) => btn.addEventListener("click", () => {
         const id = btn.dataset.expand;
         const node = document.getElementById(`detail-${id}`);
         if (node) node.classList.toggle("hidden");
-        document.getElementById(`menu-${id}`)?.classList.add("hidden");
+        const arrow = document.getElementById(`arrow-${id}`);
+        if (arrow) arrow.textContent = node?.classList.contains("hidden") ? "keyboard_arrow_down" : "keyboard_arrow_up";
       }));
     }
 
@@ -1623,9 +1702,6 @@ async function render() {
     showMoreBtn.addEventListener("click", () => {
       currentLimit += pageSize;
       applyFilter();
-    });
-    document.addEventListener("click", () => {
-      document.querySelectorAll("[id^='menu-']").forEach((n) => n.classList.add("hidden"));
     });
     if (data.length === 0) document.getElementById("sugg-empty").classList.remove("hidden");
     applyFilter();
