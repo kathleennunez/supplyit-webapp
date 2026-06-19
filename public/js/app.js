@@ -76,7 +76,7 @@ const TL_MAP = {
   "Plan Style": "Estilo ng Plano",
   "Sort": "Ayos",
   "Auto Allocate": "Awtomatikong Hati",
-  "Reset Recommended": "Ibalik sa Rekomendado",
+  "Reset": "I-reset",
   "Show more products": "Ipakita pa ang produkto",
   "Show fewer products": "Ipakita nang kaunti",
   "Plan Details": "Detalye ng Plano",
@@ -984,7 +984,7 @@ async function render() {
             <div><label class="text-sm text-on-surface-variant">Plan Style</label><select id="plan-scenario" class="w-full mt-1 px-3 py-2.5 rounded-lg border border-outline bg-white"><option ${savedScenario === "Safe" ? "selected" : ""}>Safe</option><option ${savedScenario === "Balanced" ? "selected" : ""}>Balanced</option><option ${savedScenario === "Growth" ? "selected" : ""}>Growth</option></select></div>
             <div><label class="text-sm text-on-surface-variant">Sort</label><select id="plan-sort" class="w-full mt-1 px-3 py-2.5 rounded-lg border border-outline bg-white"><option value="priority">Priority</option><option value="cost">Cost</option><option value="name">Name</option></select></div>
             <button id="auto-allocate" class="px-4 py-2.5 rounded-lg bg-primary text-white text-sm inline-flex items-center justify-center gap-1"><span class="material-symbols-outlined text-[16px]">auto_awesome</span>Auto Allocate</button>
-            <button id="reset-plan" class="px-4 py-2.5 rounded-lg border border-outline-variant text-sm inline-flex items-center justify-center gap-1"><span class="material-symbols-outlined text-[16px]">restart_alt</span>Reset Recommended</button>
+            <button id="reset-plan" class="px-4 py-2.5 rounded-lg border border-outline-variant text-sm inline-flex items-center justify-center gap-1"><span class="material-symbols-outlined text-[16px]">restart_alt</span>Reset</button>
           </div>
         </section>
         <section class="bg-surface-container-lowest border border-outline-variant p-lg rounded-xl">
@@ -1817,8 +1817,26 @@ async function render() {
     applyFilter();
   }
   if (state.page === "settings") {
-    const s = await api("settings");
-    app.innerHTML = `<h1 class="text-2xl font-bold mb-4">Settings</h1><pre class="bg-surface border border-outline-variant rounded-xl p-lg soft-lift text-sm">${JSON.stringify(s, null, 2)}</pre>`;
+    app.innerHTML = `
+      <section class="max-w-3xl mx-auto">
+        <div class="bg-surface border border-outline-variant rounded-xl p-xl soft-lift text-center">
+          <div class="w-14 h-14 mx-auto rounded-full bg-surface-container-high flex items-center justify-center mb-4">
+            <span class="material-symbols-outlined text-primary text-[30px]">settings</span>
+          </div>
+          <h1 class="text-headline-lg font-headline-lg text-on-surface mb-2">Settings</h1>
+          <p class="text-body-lg text-on-surface-variant">
+            This section is not available yet in the prototype.
+          </p>
+          <p class="mt-3 text-sm text-on-surface-variant">
+            In the future version, this page can include user management, account preferences, system thresholds, and admin controls.
+          </p>
+          <button data-page="dashboard" class="mobile-nav mt-6 px-4 py-2.5 rounded-lg bg-primary text-white inline-flex items-center gap-2">
+            <span class="material-symbols-outlined text-[18px]">dashboard</span>
+            Back to Dashboard
+          </button>
+        </div>
+      </section>
+    `;
   }
   document.querySelectorAll('.soft-lift').forEach((card) => {
     card.onmouseenter = () => { card.style.transform = 'translateY(-2px)'; card.style.transition='transform .2s ease-out'; };
